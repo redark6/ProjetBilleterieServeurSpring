@@ -7,5 +7,8 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEnt
 
 @Repository
 public interface UserDao extends JpaRepository<UserEntity,Long>{
-	
+
+	UserEntity findByUserName(String userName);
+	int countByUserName(String userName);
+		
 }

@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -34,12 +35,6 @@ public class UserEntity {
 	@Column(name = "username", unique = true)
 	private String userName;
 	
-	@Column(name = "email", unique = true)
-	private String email;
-	
-	@Column(name = "password")
-	private String password;
-	
 	@Column(name = "createddate", updatable = false)
     @Temporal(TemporalType.DATE)
     private Date createdDate;
@@ -47,16 +42,17 @@ public class UserEntity {
 	@Column(name = "enabled")
 	private boolean enabled;
 	
+	@OneToOne(mappedBy = "user")
+	private LoginEntity login;
+	
 	public UserEntity() {}
 	
-	public UserEntity(Long id, String firstName, String lastName, Date birthDate, String userName, String email,String password, boolean enabled) {
+	public UserEntity(Long id, String firstName, String lastName, Date birthDate, String userName, boolean enabled) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
 		this.userName = userName;
-		this.email = email;
-		this.password = password;
 		this.createdDate = Calendar.getInstance().getTime();;
 		this.enabled = enabled;
 	}
@@ -101,22 +97,6 @@ public class UserEntity {
 		this.userName = userName;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 	public Date getCreatedDate() {
 		return createdDate;
 	}
@@ -131,6 +111,14 @@ public class UserEntity {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public LoginEntity getLogin() {
+		return login;
+	}
+
+	public void setLogin(LoginEntity login) {
+		this.login = login;
 	}
 	
 }

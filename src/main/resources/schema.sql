@@ -1,1 +1,2 @@
-CREATE TABLE users(id SERIAL PRIMARY KEY NOT NULL,firstName varchar(50) NOT NULL, lastName varchar(50) NOT NULL, birthDate Date NOT NULL, userName varchar(50) NOT NULL, email varchar(50) NOT NULL, password varchar(256) NOT NULL, createdDate Date default CURRENT_DATE, enabled boolean not null);
+CREATE TABLE users(id SERIAL PRIMARY KEY NOT NULL,firstName varchar(50) NOT NULL, lastName varchar(50) NOT NULL, birthDate Date NOT NULL, userName varchar(50) NOT NULL, createdDate Date default CURRENT_DATE, enabled boolean not null);
+CREATE TABLE logins(id bigint REFERENCES users (id),email varchar(50) NOT NULL, password varchar(256) NOT NULL);

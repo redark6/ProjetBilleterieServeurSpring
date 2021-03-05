@@ -1,16 +1,8 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities;
 
+import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "users")
@@ -49,14 +41,12 @@ public class UserEntity {
 	
 	public UserEntity() {}
 	
-	public UserEntity(Long id, String firstName, String lastName, Date birthDate, String userName, String email,String password, boolean enabled) {
+	public UserEntity(Long id, String firstName, String lastName, Date birthDate, String userName, boolean enabled) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
 		this.userName = userName;
-		this.email = email;
-		this.password = password;
 		this.createdDate = Calendar.getInstance().getTime();;
 		this.enabled = enabled;
 	}

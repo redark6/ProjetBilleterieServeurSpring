@@ -1,26 +1,18 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.validation.Valid;
-
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
+import javax.validation.Valid;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -36,20 +28,20 @@ public class UserController {
 	
 	@PostMapping("/create")
 	@ResponseBody
-	public ResponseEntity<Object> creatRepository(@RequestBody @Valid User user,BindingResult result) throws URISyntaxException{
+	public ResponseEntity<Object> createUser(@RequestBody @Valid User user,BindingResult result) throws URISyntaxException{
 		if (result.hasErrors()) {
 	        List<String> errors = result.getAllErrors().stream()
 	          .map(DefaultMessageSourceResolvable::getDefaultMessage)
 	          .collect(Collectors.toList());
 	        return new ResponseEntity<>(errors, HttpStatus.OK);
 	    } 
-		else {
+	/*	else {
 	    	List<User> users = userService.getUsers();
-	    	
+
 	    	boolean mailAlreadyExist = users.stream().anyMatch(it -> (user.getEmail().equals(it.getEmail())));
 	    	boolean userNameAlreadyExist = users.stream().anyMatch(it -> (user.getUserName().equals(it.getUserName())));
-	    	  	
-	    	if (mailAlreadyExist || userNameAlreadyExist){	
+
+	    	if (mailAlreadyExist || userNameAlreadyExist){
 	    		String error ="{";
 	    		if(mailAlreadyExist) {
 	    			error+="errorMail:"+mailAlreadyExist;
@@ -69,7 +61,9 @@ public class UserController {
 	            return new ResponseEntity<>(HttpStatus.CREATED);
 	        }
 	    	
-	    }
+	    }*/
+		userService.createUser(user.userToDto());
+		return new ResponseEntity<>(HttpStatus.CREATED);
 		
 		//userService.createUser(user.userToDto());
 		//return ResponseEntity.created(new URI("/authentification/"+user.getFirstName())).build();

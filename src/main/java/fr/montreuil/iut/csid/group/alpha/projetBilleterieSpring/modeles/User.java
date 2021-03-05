@@ -1,14 +1,12 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles;
 
-import java.util.Date;
-
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.Email;
-
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
+import java.util.Date;
 
 public class User {
 	
@@ -118,5 +116,4 @@ public class User {
 	public UserDto userToDto() {
 		return new UserDto(this.getFirstName(),this.getLastName(),this.getBirthDate(),this.getUserName(),this.getEmail(),this.getPassword(),new Date(0L),true);
 	}
-	
 }

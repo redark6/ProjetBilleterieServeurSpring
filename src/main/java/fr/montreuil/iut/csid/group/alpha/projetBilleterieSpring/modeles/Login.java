@@ -1,31 +1,15 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.LoginDto;
-
 public class Login {
 
-	private Long id;
 	private String email;
 	private String password;
+	boolean enabled;
 	
-	public Login(Long id, String email, String password) {
-		this.id = id;
+	public Login(String email, String password, boolean enabled) {
 		this.email = email;
 		this.password = password;
-	}
-	
-	public Login(String email, String password) {
-		this.id = null;
-		this.email = email;
-		this.password = password;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+		this.enabled = enabled;
 	}
 
 	public String getEmail() {
@@ -44,9 +28,13 @@ public class Login {
 		this.password = password;
 	}
 	
-	public LoginDto loginToDto() {
-		return new LoginDto(this.getId(),this.getEmail(),this.getPassword());
+	public boolean isEnabled() {
+		return enabled;
 	}
-	
 
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	
 }

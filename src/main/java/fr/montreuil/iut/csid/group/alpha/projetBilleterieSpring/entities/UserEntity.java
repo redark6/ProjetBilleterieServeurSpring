@@ -8,13 +8,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "users")
+@Table(name = "usersinfo")
 public class UserEntity {
 	
 	@Id
@@ -35,26 +37,23 @@ public class UserEntity {
 	@Column(name = "username", unique = true)
 	private String userName;
 	
+	@Column(name = "email", unique = true)
+	private String email;
+	
 	@Column(name = "createddate", updatable = false)
     @Temporal(TemporalType.DATE)
     private Date createdDate;
 	
-	@Column(name = "enabled")
-	private boolean enabled;
-	
-	@OneToOne(mappedBy = "user")
-	private LoginEntity login;
-	
 	public UserEntity() {}
 	
-	public UserEntity(Long id, String firstName, String lastName, Date birthDate, String userName, boolean enabled) {
+	public UserEntity(Long id, String firstName, String lastName, Date birthDate, String userName,String email) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
 		this.userName = userName;
-		this.createdDate = Calendar.getInstance().getTime();;
-		this.enabled = enabled;
+		this.createdDate = Calendar.getInstance().getTime();
+		this.email = email;
 	}
 
 	public Long getId() {
@@ -105,21 +104,13 @@ public class UserEntity {
 		this.createdDate = createdDate;
 	}
 
-	public boolean isEnabled() {
-		return enabled;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public LoginEntity getLogin() {
-		return login;
-	}
-
-	public void setLogin(LoginEntity login) {
-		this.login = login;
-	}
-	
 }
 

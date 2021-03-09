@@ -29,8 +29,8 @@ public class CustomerAuthenticationFilter extends UsernamePasswordAuthentication
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         try {
-            UserCredentials userCredentials = objectMapper.readValue(request.getInputStream(), UserCredentials.class);
-            return this.getAuthenticationManager().authenticate(userCredentials.getAuthentication());
+            UserCredentials userCredential = objectMapper.readValue(request.getInputStream(), UserCredentials.class);
+            return this.getAuthenticationManager().authenticate(userCredential.getAuthentication());
         } catch (IOException e) {
             throw new BadCredentialsException("Wrong json supplied");
         }
@@ -41,3 +41,4 @@ public class CustomerAuthenticationFilter extends UsernamePasswordAuthentication
         SecurityContextHolder.getContext().setAuthentication(authResult);
     }
 }
+

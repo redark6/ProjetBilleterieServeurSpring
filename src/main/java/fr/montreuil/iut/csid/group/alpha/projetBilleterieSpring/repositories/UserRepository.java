@@ -1,15 +1,18 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories;
 
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Repository;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dao.LoginDao;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dao.UserDao;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.LoginEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Login;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
@@ -18,40 +21,34 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
 public class UserRepository {
 
 	private final UserDao userDao;
-	private final LoginDao loginDao;
+	private final JdbcUserDetailsManager jdbcUserDetailsManager;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Autowired
-	public UserRepository(UserDao userDao,LoginDao loginDao) {
+	public UserRepository(JdbcUserDetailsManager jdbcUserDetailsManager, UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder,UserDao userDao) {
 		this.userDao=userDao;
-		this.loginDao=loginDao;
+		this.jdbcUserDetailsManager = jdbcUserDetailsManager;
+		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 	}
 	
-	public List<User> getUsers() {
-		List<UserEntity> users = userDao.findAll();
-		return users.stream()
-				.map(x -> new User(x.getId(),x.getFirstName(),x.getLastName(),x.getBirthDate(),x.getUserName(),x.getCreatedDate(),x.isEnabled()))
-				.collect(Collectors.toList());
+	public Optional<UserDetails> getUser(String email) {
+		return  Optional.of(jdbcUserDetailsManager.loadUserByUsername(email));
 	}
 	
-
 	public void createUserLogin(User user, Login login) {
-		UserEntity userToPushInDb = new UserEntity(user.getId(),user.getFirstName(),user.getLastName(),user.getBirthDate(),user.getUserName(),user.isEnabled());
+		
+		List<GrantedAuthority> grntdAuths = List.of(new SimpleGrantedAuthority("USER"));
+		UserDetails userDetails = new org.springframework.security.core.userdetails.User(login.getEmail(),bCryptPasswordEncoder.encode(login.getPassword()),grntdAuths);
+		jdbcUserDetailsManager.createUser(userDetails);
+		
+		UserEntity userToPushInDb = new UserEntity(user.getId(),user.getFirstName(),user.getLastName(),user.getBirthDate(),user.getUserName(),user.getEmail());		
+		
 		this.userDao.save(userToPushInDb);
 		
-		UserEntity userWithId = this.userDao.findByUserName(userToPushInDb.getUserName());
-		
-		LoginEntity loginToPushInDb = new LoginEntity(login.getId(),login.getEmail(),login.getPassword());
-		
-		loginToPushInDb.setUser(userWithId);
-		
-		userWithId.setLogin(loginToPushInDb);
-	
-		this.loginDao.save(loginToPushInDb);
 	}
 
 	public boolean checkMailExistence(String email) {
-		int duplicate = this.loginDao.countByEmail(email);
-		if(duplicate>0) {
+		if(jdbcUserDetailsManager.userExists(email)) {
 			return true;
 		}
 		return false;

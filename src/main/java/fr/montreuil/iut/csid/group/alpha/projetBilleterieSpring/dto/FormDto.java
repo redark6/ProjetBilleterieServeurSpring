@@ -36,9 +36,13 @@ public class FormDto {
     @Size(min = 8,max = 16,message =  "Le mot de passe doit faire entre 8 et 16 caractères")
 	private String password;
 	
+	@NotBlank(message =  "Mot de passe vide")
+    @Size(min = 8,max = 16,message =  "Le mot de passe doit faire entre 8 et 16 caractères")
+	private String passwordConfirm;
+	
 	private boolean enabled;
 	
-	public FormDto(String firstName, String lastName, Date birthDate, String userName, String email, String password, Date createdDate, boolean enabled) {
+	public FormDto(String firstName, String lastName, Date birthDate, String userName, String email, String password,String passwordConfirm, Date createdDate, boolean enabled) {
 		
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -46,6 +50,7 @@ public class FormDto {
 		this.userName = userName;
 		this.email = email;
 		this.password = password;
+		this.passwordConfirm = passwordConfirm;
 	}
 
 	public String getFirstName() {
@@ -95,12 +100,20 @@ public class FormDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+
+	public void setpPsswordConfirm(String password) {
+		this.passwordConfirm = password;
+	}
 
 	public User getUserFromForm() {
-		return new User(this.getFirstName(),this.getLastName(),this.getBirthDate(),this.getUserName(),new Date(0L),true);
+		return new User(this.getFirstName(),this.getLastName(),this.getBirthDate(),this.getUserName(),this.getEmail(),new Date(0L),true);
 	}
 	
 	public Login getLoginFromForm() {
-		return new Login(this.getEmail(),this.getPassword());
+		return new Login(this.getEmail(),this.getPassword(),true);
 	}
 }

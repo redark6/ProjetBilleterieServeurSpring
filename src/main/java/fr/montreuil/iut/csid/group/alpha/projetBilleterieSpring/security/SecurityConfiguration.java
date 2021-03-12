@@ -16,6 +16,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
+
+import java.util.Collections;
 import java.util.List;
 
 @EnableWebSecurity
@@ -33,12 +35,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.headers().frameOptions().disable(); // for h2 console ( you don't need it )
-
-        http.csrf().disable()
-                .cors().configurationSource(corsConfigurationSource());
-        http.authorizeRequests()
-                .antMatchers("/user/create").permitAll()
+        http.headers().frameOptions().disable();
+        http.csrf().disable();
+        http.cors().configurationSource(corsConfigurationSource());
+        http.authorizeRequests().antMatchers("/login", "/user/create").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -46,7 +46,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new CustomerAuthenticationFilter(authenticationManager(), objectMapper))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
-
+        http.sessionManagement().maximumSessions(1);
+        
     }
 
     CorsConfigurationSource corsConfigurationSource() {
@@ -57,7 +58,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 HttpMethod.POST.name(),
                 HttpMethod.DELETE.name()
         ));
-
+        
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration.applyPermitDefaultValues());
         return source;
@@ -77,4 +80,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public JdbcUserDetailsManager jdbcUserDetailsManager(){
 		return new JdbcUserDetailsManager(dataSource);
 	}
+	
 }

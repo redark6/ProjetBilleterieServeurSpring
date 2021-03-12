@@ -13,11 +13,11 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
 
 public class FormDto {
 	@NotBlank(message =  "Le prénom ne peut être vide")
-	@Size(max = 50,message =  "Le prénom doit être inférieur à 50 caractères")
+	@Size(min = 2,max = 50,message =  "Le prénom doit faire entre 2 et 50 caractères")
 	private String firstName;
 	
 	@NotBlank(message =  "Le nom ne peut être vide")
-	@Size(max = 50,message =  "Le nom doit être inférieur à 50 caractères")
+	@Size(min = 2,max = 50,message =  "Le nom doit doit faire entre 2 et 50 caractères")
 	private String lastName;
 	
     @Past(message =  "Votre date de naissance est incorrect")
@@ -29,7 +29,7 @@ public class FormDto {
 	
 	@NotBlank(message =  "Le mail est vide")
 	@Email(message =  "Le format du mail est invalide")
-	@Size(max = 50,message =  "La taille du mail ne peut éxcéder 50 caractères")
+	@Size(min =5 ,max = 50,message =  "Le mail doit faire entre 5 et 50 caractères")
 	private String email;
 	
 	@NotBlank(message =  "Mot de passe vide")
@@ -40,9 +40,8 @@ public class FormDto {
     @Size(min = 8,max = 16,message =  "Le mot de passe doit faire entre 8 et 16 caractères")
 	private String passwordConfirm;
 	
-	private boolean enabled;
 	
-	public FormDto(String firstName, String lastName, Date birthDate, String userName, String email, String password,String passwordConfirm, Date createdDate, boolean enabled) {
+	public FormDto(String firstName, String lastName, Date birthDate, String userName, String email, String password,String passwordConfirm, Date createdDate) {
 		
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -110,7 +109,7 @@ public class FormDto {
 	}
 
 	public User getUserFromForm() {
-		return new User(this.getFirstName(),this.getLastName(),this.getBirthDate(),this.getUserName(),this.getEmail(),new Date(0L),true);
+		return new User(this.getFirstName(),this.getLastName(),this.getBirthDate(),this.getUserName(),this.getEmail(),new Date(0L));
 	}
 	
 	public Login getLoginFromForm() {

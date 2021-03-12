@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("event")
 public class EventController {
@@ -26,5 +28,10 @@ public class EventController {
         return eventService.findOneEvent(id)
                 .map(x ->ResponseEntity.ok(x))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public List<Event> findAllEvent(){
+        return eventService.findAllEvent();
     }
 }

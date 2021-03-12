@@ -13,9 +13,8 @@ public class User {
 	private String userName;
 	private String email;
 	private Date createdDate;
-	private boolean enabled;
 	
-	public User(Long id,String firstName, String lastName, Date birthDate, String userName, String email,Date createdDate, boolean enabled) {
+	public User(Long id,String firstName, String lastName, Date birthDate, String userName, String email,Date createdDate) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -23,10 +22,9 @@ public class User {
 		this.userName = userName;
 		this.email = email;
 		this.createdDate = createdDate;
-		this.enabled = enabled;
 	}
 	
-	public User(String firstName, String lastName, Date birthDate, String userName,String email ,Date createdDate, boolean enabled) {
+	public User(String firstName, String lastName, Date birthDate, String userName,String email ,Date createdDate) {
 		this.id = null;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -34,7 +32,6 @@ public class User {
 		this.userName = userName;
 		this.email = email;
 		this.createdDate = createdDate;
-		this.enabled = enabled;
 	}
 
 	public Long getId() {
@@ -92,17 +89,9 @@ public class User {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
 	
 	public UserDto userToDto() {
-		return new UserDto(this.id,this.getFirstName(),this.getLastName(),this.getBirthDate(),this.getUserName(),this.getEmail(),this.getCreatedDate(),this.isEnabled());
+		return new UserDto(this.id,this.getFirstName(),this.getLastName(),this.getBirthDate(),this.getUserName(),this.getEmail(),this.getCreatedDate());
 	}
 	
 }

@@ -1,8 +1,10 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+
 
 import javax.validation.Valid;
 
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.FormDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -69,6 +71,17 @@ public class UserController {
 
 	}
 	
+	@GetMapping("test/truc")
+	public void fooMethod(@CookieValue("JSESSIONID") String fooCookie) {
+		System.out.println(fooCookie);
+	    //System.out.println(cookie.getName());
+	}
+	
+	@GetMapping("test/truc2")
+	public void fooMethod2(Principal principal) {
+		System.out.println(principal.getName());
+	    //System.out.println(cookie.getName());
+	}
 	
 	
 }

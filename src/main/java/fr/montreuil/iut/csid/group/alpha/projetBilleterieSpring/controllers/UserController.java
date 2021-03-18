@@ -1,31 +1,21 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
-import java.net.URISyntaxException;
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
-
-
-import javax.validation.Valid;
-
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.FormDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.FormDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
+import javax.validation.Valid;
+import java.net.URISyntaxException;
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -82,10 +72,12 @@ public class UserController {
 		System.out.println(principal.getName());
 	    //System.out.println(cookie.getName());
 	}
-	
-	
+
+	@GetMapping("/logeduser")
+	public ResponseEntity<User> getLogedUser(Principal principal){
+		return userService.getLogedUser(principal.getName())
+				.map(ResponseEntity::ok)
+				.orElse(ResponseEntity.notFound().build());
+
+	}
 }
-
-
-
-

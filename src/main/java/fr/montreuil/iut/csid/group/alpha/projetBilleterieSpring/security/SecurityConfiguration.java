@@ -15,6 +15,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import java.util.Collections;
@@ -43,8 +44,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .logout().permitAll()
+                .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
+                    httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+                })
                 .and()
-                .addFilter(new CustomerAuthenticationFilter(authenticationManager(), objectMapper))
+                .addFilter(new CustomerAuthenticationFilter(authenticationManager(), objectMapper)) // filtre header not body
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
         http.sessionManagement().maximumSessions(1);
         

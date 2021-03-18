@@ -40,15 +40,16 @@ public class UserRepository {
 		return Optional.of(user);
 	}
 	
-	public void createUserLogin(User user, Login login) {
+	public UserEntity createUser(User user, Login login) {
 		
 		List<GrantedAuthority> grntdAuths = List.of(new SimpleGrantedAuthority("USER"));
 		UserDetails userDetails = new org.springframework.security.core.userdetails.User(login.getEmail(),bCryptPasswordEncoder.encode(login.getPassword()),grntdAuths);
 		jdbcUserDetailsManager.createUser(userDetails);
 		
-		UserEntity userToPushInDb = new UserEntity(user.getId(),user.getFirstName(),user.getLastName(),user.getBirthDate(),user.getUserName(),user.getEmail());		
+		UserEntity userEntity = new UserEntity(user.getId(),user.getFirstName(),user.getLastName(),user.getBirthDate(),user.getUserName(),user.getEmail());		
 		
-		this.userDao.save(userToPushInDb);
+		userEntity = this.userDao.save(userEntity);
+		return userEntity;
 	}
 
 	public boolean checkMailExistence(String email) {

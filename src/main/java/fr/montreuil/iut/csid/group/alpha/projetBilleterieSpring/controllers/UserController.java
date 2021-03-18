@@ -1,6 +1,6 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.FormDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,23 +30,17 @@ public class UserController {
 	
 	@PostMapping("/create")
 	@ResponseBody
-	public ResponseEntity<Object> creatRepository(@RequestBody @Valid FormDto signupForm,BindingResult result) throws URISyntaxException{
+	public ResponseEntity<Object> creatRepository(@RequestBody @Valid RegisterFormDto signupForm,BindingResult result) throws URISyntaxException{
 		if (result.hasErrors()) {
 	        
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);      
-	    }
-		
-		else {
+	    }	
+		Map<String, String> errors = userService.attemptCreatingUser(signupForm.getUserFromForm(),signupForm.getLoginFromForm());
 			
-			Map<String, String> errors = userService.attemptCreatingUser(signupForm.getUserFromForm(),signupForm.getLoginFromForm());
-			
-			if(errors.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.CREATED);
-			}
-    		return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
-    		
+		if(errors.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
-        	
+    	return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
 	}
 	
 	@GetMapping("/{email}")

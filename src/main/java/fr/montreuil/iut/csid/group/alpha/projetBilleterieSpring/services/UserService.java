@@ -45,7 +45,7 @@ public class UserService {
 		boolean mailAlreadyExist = this.userRepository.checkMailExistence(email);
 		
     	if(mailAlreadyExist) {
-    		errors.put("mail", "Cet email est déjas pris");
+    		errors.put("email", "Cet email est déjas pris");
     	}
     	if(userNameAlreadyExist) {
     		errors.put("userName", "Ce nom d'utilisateur est déjas pris");

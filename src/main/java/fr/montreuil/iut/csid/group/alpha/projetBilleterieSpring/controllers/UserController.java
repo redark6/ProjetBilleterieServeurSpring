@@ -43,11 +43,7 @@ public class UserController {
 	public ResponseEntity<Object> creatRepository(@RequestBody @Valid FormDto signupForm,BindingResult result) throws URISyntaxException{
 		if (result.hasErrors()) {
 	        
-	        Map<String, String> errors = new HashMap<>();
-            for (FieldError error:result.getFieldErrors()){
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);      
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);      
 	    }
 		
 		else {
@@ -57,7 +53,7 @@ public class UserController {
 			if(errors.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.CREATED);
 			}
-    		return new ResponseEntity<>(errors, HttpStatus.OK);
+    		return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     		
 		}
         	

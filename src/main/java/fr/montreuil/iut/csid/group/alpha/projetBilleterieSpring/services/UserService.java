@@ -1,16 +1,15 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Login;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Login;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -24,6 +23,10 @@ public class UserService {
 	
 	public Optional<UserDetails> getUser(String email){
 		return this.userRepository.getUser(email);
+	}
+
+	public Optional<User> getLogedUser(String email){
+		return this.userRepository.getLogedUser(email);
 	}
 	
 	public Map<String, String> attemptCreatingUser(User user, Login login) {

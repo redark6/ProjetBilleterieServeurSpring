@@ -1,8 +1,9 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories;
 
-import java.util.List;
-import java.util.Optional;
-
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dao.UserDao;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Login;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,10 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Repository;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dao.UserDao;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Login;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepository {
@@ -34,6 +33,12 @@ public class UserRepository {
 	public Optional<UserDetails> getUser(String email) {
 		return  Optional.of(jdbcUserDetailsManager.loadUserByUsername(email));
 	}
+
+	public Optional<User> getLogedUser(String email) {
+		UserEntity userEntity = userDao.getByEmail(email);
+		User user = new User(userEntity.getId(),userEntity.getFirstName(),userEntity.getLastName(),userEntity.getBirthDate(),userEntity.getUserName(),userEntity.getEmail(),userEntity.getCreatedDate());
+		return Optional.of(user);
+	}
 	
 	public void createUserLogin(User user, Login login) {
 		
@@ -44,7 +49,6 @@ public class UserRepository {
 		UserEntity userToPushInDb = new UserEntity(user.getId(),user.getFirstName(),user.getLastName(),user.getBirthDate(),user.getUserName(),user.getEmail());		
 		
 		this.userDao.save(userToPushInDb);
-		
 	}
 
 	public boolean checkMailExistence(String email) {

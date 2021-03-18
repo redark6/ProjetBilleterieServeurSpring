@@ -9,5 +9,6 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEnt
 public interface UserDao extends JpaRepository<UserEntity,Long>{
 
 	int countByUserName(String userName);
+	UserEntity getByEmail(String email);
 		
 }

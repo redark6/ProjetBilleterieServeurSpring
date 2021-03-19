@@ -44,6 +44,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .logout().permitAll()
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
                 .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
                     httpServletResponse.setStatus(HttpServletResponse.SC_OK);
                 })

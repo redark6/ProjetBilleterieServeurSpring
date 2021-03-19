@@ -64,7 +64,6 @@ public class UserService {
 	private boolean checkBirthDate(Date birthDate) {
 		int ageMin=18;
 		int ageMax=122;
-		
 		Date currentDate = new Date();
 		
 		long now = currentDate.getTime();
@@ -75,10 +74,10 @@ public class UserService {
 	    long maxAgeMS = now - (ageMin * yearMS);
 	    long minAgeMS = now - (ageMax * yearMS);
 	    
-	    if(finalBirthDate > maxAgeMS || finalBirthDate < minAgeMS){
-		      return true;
+	    if(finalBirthDate >= maxAgeMS || finalBirthDate <= minAgeMS){
+		      return false;
 		}
-	    return false;
+	    return true;
 	    
 	}
 

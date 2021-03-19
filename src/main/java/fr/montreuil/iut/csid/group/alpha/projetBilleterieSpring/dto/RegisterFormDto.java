@@ -39,6 +39,16 @@ public class RegisterFormDto {
 	@NotBlank(message =  "Mot de passe vide")
     @Size(min = 8,max = 16,message =  "Le mot de passe doit faire entre 8 et 16 caractères")
 	private String passwordConfirm;
+	
+	public RegisterFormDto(String firstName,String lastName,Date birthDate,String userName,String email,String password,String passwordConfirm) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.birthDate = birthDate;
+		this.userName = userName;
+		this.email = email;
+		this.password = password;
+		this.passwordConfirm = passwordConfirm;
+	}
 
 	public String getFirstName() {
 		return firstName;

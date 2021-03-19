@@ -85,10 +85,10 @@ public class UserService {
 	public void createUser(User user,Login login){
 		this.userRepository.createUser(user,login);
 	}
-	
 
-
-		
+	public void patchUser(User user, String email){
+		userRepository.patchUser(user, email);
+	}
 }
 
 

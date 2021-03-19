@@ -67,4 +67,20 @@ public class UserRepository {
 		return false;
 	}
 
+	public void patchUser(User user, String email){
+		UserEntity userEntity = userDao.getByEmail(email);
+
+		if(userEntity.getFirstName() != null)
+			userEntity.setFirstName(user.getFirstName());
+
+		if(userEntity.getLastName() != null)
+			userEntity.setLastName(user.getLastName());
+
+		if(userEntity.getUserName() != null)
+			userEntity.setUserName(user.getUserName());
+
+
+		this.userDao.save(userEntity);
+	}
+
 }

@@ -70,4 +70,10 @@ public class UserController {
 				.orElse(ResponseEntity.notFound().build());
 
 	}
+
+	@PatchMapping("/patch")
+	public ResponseEntity<Object> patchUser(@RequestBody User user, Principal principal){
+		userService.patchUser(user,principal.getName());
+		return ResponseEntity.ok(principal.getName());
+	}
 }

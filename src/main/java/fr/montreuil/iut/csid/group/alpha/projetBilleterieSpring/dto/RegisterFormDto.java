@@ -57,6 +57,10 @@ public class RegisterFormDto {
 		this.lastName = lastName;
 		this.userName = userName;
 	}
+	
+	public RegisterFormDto() {
+		
+	}
 
 	public String getFirstName() {
 		return firstName;

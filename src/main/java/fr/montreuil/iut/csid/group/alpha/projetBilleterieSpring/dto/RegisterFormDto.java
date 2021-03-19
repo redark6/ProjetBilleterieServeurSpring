@@ -5,18 +5,15 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-<<<<<<< Updated upstream:src/main/java/fr/montreuil/iut/csid/group/alpha/projetBilleterieSpring/dto/RegisterFormDto.java
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Login;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
-//@Data lombok
-public class RegisterFormDto {
-=======
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
-public class FormDto {
->>>>>>> Stashed changes:src/main/java/fr/montreuil/iut/csid/group/alpha/projetBilleterieSpring/dto/FormDto.java
+//@Data lombok
+public class RegisterFormDto {
+
+
+
 	@NotBlank(message =  "Le prénom ne peut être vide")
 	@Size(min = 2,max = 50,message =  "Le prénom doit faire entre 2 et 50 caractères")
 	private String firstName;
@@ -55,7 +52,7 @@ public class FormDto {
 		this.passwordConfirm = passwordConfirm;
 	}
 
-	public FormDto(String firstName, String lastName,String userName){
+	public RegisterFormDto(String firstName, String lastName,String userName){
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.userName = userName;

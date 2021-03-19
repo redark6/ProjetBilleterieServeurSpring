@@ -1,31 +1,21 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
-import java.net.URISyntaxException;
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
-
-
-import javax.validation.Valid;
-
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.FormDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
+import javax.validation.Valid;
+import java.net.URISyntaxException;
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -40,27 +30,17 @@ public class UserController {
 	
 	@PostMapping("/create")
 	@ResponseBody
-	public ResponseEntity<Object> creatRepository(@RequestBody @Valid FormDto signupForm,BindingResult result) throws URISyntaxException{
+	public ResponseEntity<Object> creatRepository(@RequestBody @Valid RegisterFormDto signupForm,BindingResult result) throws URISyntaxException{
 		if (result.hasErrors()) {
 	        
-	        Map<String, String> errors = new HashMap<>();
-            for (FieldError error:result.getFieldErrors()){
-                errors.put(error.getField(), error.getDefaultMessage());
-            }
-            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);      
-	    }
-		
-		else {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);      
+	    }	
+		Map<String, String> errors = userService.attemptCreatingUser(signupForm.getUserFromForm(),signupForm.getLoginFromForm());
 			
-			Map<String, String> errors = userService.attemptCreatingUser(signupForm.getUserFromForm(),signupForm.getLoginFromForm());
-			
-			if(errors.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.CREATED);
-			}
-    		return new ResponseEntity<>(errors, HttpStatus.OK);
-    		
+		if(errors.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
-        	
+    	return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
 	}
 	
 	@GetMapping("/{email}")
@@ -82,10 +62,18 @@ public class UserController {
 		System.out.println(principal.getName());
 	    //System.out.println(cookie.getName());
 	}
-	
-	
+
+	@GetMapping("/logeduser")
+	public ResponseEntity<User> getLogedUser(Principal principal){
+		return userService.getLogedUser(principal.getName())
+				.map(ResponseEntity::ok)
+				.orElse(ResponseEntity.notFound().build());
+
+	}
+
+	@PatchMapping("/patch")
+	public ResponseEntity<Object> patchUser(@RequestBody User user, Principal principal){
+		userService.patchUser(user,principal.getName());
+		return ResponseEntity.ok(principal.getName());
+	}
 }
-
-
-
-

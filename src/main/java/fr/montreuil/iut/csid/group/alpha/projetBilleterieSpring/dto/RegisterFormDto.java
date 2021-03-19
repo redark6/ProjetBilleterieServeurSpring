@@ -1,48 +1,48 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 
-import java.util.Date;
-
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
-
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Login;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Login;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
+import java.util.Date;
 
-public class FormDto {
+//@Data lombok
+public class RegisterFormDto {
+
+
+
 	@NotBlank(message =  "Le prénom ne peut être vide")
 	@Size(min = 2,max = 50,message =  "Le prénom doit faire entre 2 et 50 caractères")
 	private String firstName;
-	
+
 	@NotBlank(message =  "Le nom ne peut être vide")
 	@Size(min = 2,max = 50,message =  "Le nom doit doit faire entre 2 et 50 caractères")
 	private String lastName;
-	
+
     @Past(message =  "Votre date de naissance est incorrect")
 	private Date birthDate;
-	
+
 	@NotBlank(message =  "Le nom d'utilisateur ne peut être vide")
 	@Size(min = 4, max = 50,message =  "Le nom d'utilisateur doit faire entre 4 et 50 caractères")
 	private String userName;
-	
+
 	@NotBlank(message =  "Le mail est vide")
 	@Email(message =  "Le format du mail est invalide")
 	@Size(min =5 ,max = 50,message =  "Le mail doit faire entre 5 et 50 caractères")
 	private String email;
-	
+
 	@NotBlank(message =  "Mot de passe vide")
     @Size(min = 8,max = 16,message =  "Le mot de passe doit faire entre 8 et 16 caractères")
 	private String password;
-	
+
 	@NotBlank(message =  "Mot de passe vide")
     @Size(min = 8,max = 16,message =  "Le mot de passe doit faire entre 8 et 16 caractères")
 	private String passwordConfirm;
 	
-	
-	public FormDto(String firstName, String lastName, Date birthDate, String userName, String email, String password,String passwordConfirm, Date createdDate) {
-		
+	public RegisterFormDto(String firstName,String lastName,Date birthDate,String userName,String email,String password,String passwordConfirm) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
@@ -50,6 +50,12 @@ public class FormDto {
 		this.email = email;
 		this.password = password;
 		this.passwordConfirm = passwordConfirm;
+	}
+
+	public RegisterFormDto(String firstName, String lastName,String userName){
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.userName = userName;
 	}
 
 	public String getFirstName() {
@@ -104,7 +110,7 @@ public class FormDto {
 		return passwordConfirm;
 	}
 
-	public void setpPsswordConfirm(String password) {
+	public void setpPasswordConfirm(String password) {
 		this.passwordConfirm = password;
 	}
 

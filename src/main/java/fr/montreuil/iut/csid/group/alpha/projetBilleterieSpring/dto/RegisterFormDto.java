@@ -59,6 +59,7 @@ public class RegisterFormDto {
 	
 	public RegisterFormDto() {}
 
+
 	public String getFirstName() {
 		return firstName;
 	}

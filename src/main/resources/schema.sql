@@ -6,3 +6,16 @@ create table authorities (
 	constraint fk_authorities_users foreign key(username) references users(username)
 );
 create unique index ix_auth_username on authorities (username,authority);
+
+CREATE TABLE event (
+    id integer NOT NULL,
+    titre character varying,
+    type character varying,
+    description character varying,
+    region character varying,
+    date_creation date,
+    prix numeric,
+    nmb_ticket integer
+);
+Insert into event(titre, type, description, region, date_creation, prix, nmb_ticket) values ('Match Football', 'Sport', 'ALLEZ LES BLEUS', 'Cannes', '2019-07-03', 25, 50)
+Insert into event(titre, type, description, region, date_creation, prix, nmb_ticket) values ('Avengers', 'Cinema', 'ALLEZ LES BLEUS', 'Cannes', '2019-07-03', 25, 50)

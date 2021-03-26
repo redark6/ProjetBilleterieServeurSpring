@@ -39,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
         http.csrf().disable();
         http.cors().configurationSource(corsConfigurationSource());
-        http.authorizeRequests().antMatchers("/login", "/user/create","/event/{id}","/event").permitAll()
+        http.authorizeRequests().antMatchers("/login", "user/sessionvalid" , "/user/create","/event/{id}","/event").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -53,7 +53,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilter(new CustomerAuthenticationFilter(authenticationManager(), objectMapper)) // filtre header not body
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
         http.sessionManagement().maximumSessions(1);
-        
     }
 
     CorsConfigurationSource corsConfigurationSource() {
@@ -62,7 +61,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 HttpMethod.GET.name(),
                 HttpMethod.PUT.name(),
                 HttpMethod.POST.name(),
-                HttpMethod.DELETE.name()
+                HttpMethod.DELETE.name(),
+                HttpMethod.PATCH.name()
         ));
         
         configuration.setAllowCredentials(true);

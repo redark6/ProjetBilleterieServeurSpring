@@ -9,12 +9,13 @@ public class User {
 	private Long id;
 	private String firstName;
 	private String lastName;
+
 	private Date birthDate;
 	private String userName;
 	private String email;
 	private Date createdDate;
 	
-	public User(Long id,String firstName, String lastName, Date birthDate, String userName, String email,Date createdDate) {
+	public User(Long id,String firstName, String lastName,  Date birthDate, String userName, String email,Date createdDate) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -104,5 +105,7 @@ public class User {
 	public UserDto userToDto() {
 		return new UserDto(this.id,this.getFirstName(),this.getLastName(),this.getBirthDate(),this.getUserName(),this.getEmail(),this.getCreatedDate());
 	}
+
+	
 	
 }

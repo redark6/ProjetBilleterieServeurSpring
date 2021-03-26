@@ -94,4 +94,6 @@ public class UserDto {
 	public User dtoToUser() {
 		return new User(this.id,this.getFirstName(),this.getLastName(),this.getBirthDate(),this.getUserName(),this.getEmail(),this.getCreatedDate());
 	}
+
+	
 }

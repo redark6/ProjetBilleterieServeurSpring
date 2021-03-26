@@ -6,16 +6,21 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.security.Principal;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -57,10 +62,13 @@ public class UserController {
 	    //System.out.println(cookie.getName());
 	}
 	
-	@GetMapping("test/truc2")
-	public void fooMethod2(Principal principal) {
-		System.out.println(principal.getName());
-	    //System.out.println(cookie.getName());
+	@GetMapping("authority")
+	public List<GrantedAuthority> fooMethod2(Authentication authentication) {
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		List<GrantedAuthority> listAuthorities = new ArrayList<GrantedAuthority>();
+		listAuthorities.addAll(userDetails.getAuthorities());
+		return listAuthorities;
+		
 	}
 
 	@GetMapping("/logeduser")
@@ -72,8 +80,22 @@ public class UserController {
 	}
 
 	@PatchMapping("/patch")
-	public ResponseEntity<Object> patchUser(@RequestBody User user, Principal principal){
-		userService.patchUser(user,principal.getName());
-		return ResponseEntity.ok(principal.getName());
+	@ResponseBody
+	public ResponseEntity<Object> patchUser(@RequestBody @Valid RegisterFormDto patchform,BindingResult result, Principal principal){
+		if (result.hasErrors()) {
+			
+            return new ResponseEntity<>(result.getAllErrors(),HttpStatus.NOT_ACCEPTABLE);      
+	    }	
+		userService.patchUser(patchform.getUsertoPatch(),principal.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	@GetMapping("/sessionvalid")
+    public ResponseEntity<Object> invalidateSession(Principal principal) {
+		return new ResponseEntity<>(HttpStatus.OK);  
+    }
+	
+
+             
+		
 }

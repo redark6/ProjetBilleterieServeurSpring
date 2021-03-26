@@ -79,6 +79,8 @@ public class UserRepository {
 		if(userEntity.getUserName() != null)
 			userEntity.setUserName(user.getUserName());
 
+		if(userEntity.getBirthDate() != null)
+			userEntity.setBirthDate(user.getBirthDate());
 
 		this.userDao.save(userEntity);
 	}

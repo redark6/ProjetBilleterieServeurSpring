@@ -39,11 +39,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
         http.csrf().disable();
         http.cors().configurationSource(corsConfigurationSource());
-        http.authorizeRequests().antMatchers("/login", "/user/create","/event/{id}","/event").permitAll()
+        http.authorizeRequests().antMatchers("/login", "/user/create","/event/{id}","/event","/event/type/{type}","/event/Recent").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .logout().permitAll()
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
                 .logoutSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> {
                     httpServletResponse.setStatus(HttpServletResponse.SC_OK);
                 })
@@ -59,6 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         configuration.setAllowedMethods(List.of(
                 HttpMethod.GET.name(),
                 HttpMethod.PUT.name(),
+                HttpMethod.PATCH.name(),
                 HttpMethod.POST.name(),
                 HttpMethod.DELETE.name()
         ));

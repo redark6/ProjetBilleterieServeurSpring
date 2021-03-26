@@ -30,8 +30,22 @@ public class EventController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+
     @GetMapping
     public List<Event> findAllEvent(){
         return eventService.findAllEvent();
     }
+    
+    @GetMapping("/type/{typename}")
+    public List<Event> findAllEventByType(@PathVariable String typename){
+        return eventService.findAllEventByType(typename);
+    }
+
+    
+    @GetMapping("/Recent")
+    public List<Event> findAllEventRecent(){
+        return eventService.findAllEventRecent();
+    }
+    
+
 }

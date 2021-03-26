@@ -6,15 +6,14 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -52,8 +51,9 @@ public class UserController {
 	}
 	
 	@GetMapping("test/truc")
-	public void fooMethod(@CookieValue("JSESSIONID") String fooCookie) {
-		System.out.println(fooCookie);
+	public void fooMethod(Authentication authentication) {
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		System.out.println("User has authorities: " + userDetails.getAuthorities());
 	    //System.out.println(cookie.getName());
 	}
 	
@@ -73,7 +73,15 @@ public class UserController {
 
 	@PatchMapping("/patch")
 	public ResponseEntity<Object> patchUser(@RequestBody User user, Principal principal){
+		System.out.println("PATCH");
 		userService.patchUser(user,principal.getName());
-		return ResponseEntity.ok(principal.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@GetMapping("/getauthority")
+	public String getAuthority(Authentication authentication){
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		System.out.println("User has authorities: " + userDetails.getAuthorities());
+		return userDetails.getAuthorities().toString();
 	}
 }

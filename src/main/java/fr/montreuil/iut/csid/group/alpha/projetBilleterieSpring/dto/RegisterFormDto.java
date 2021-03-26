@@ -12,7 +12,6 @@ import java.util.Date;
 //@Data lombok
 public class RegisterFormDto {
 
-
 		@NotBlank(message = "Le prénom ne peut être vide")
 		@Size(min = 2, max = 50, message = "Le prénom doit faire entre 2 et 50 caractères")
 		private String firstName;
@@ -41,11 +40,25 @@ public class RegisterFormDto {
 		@Size(min = 8, max = 16, message = "Le mot de passe doit faire entre 8 et 16 caractères")
 		private String passwordConfirm;
 
-		public RegisterFormDto(String firstName, String lastName, String userName) {
-			this.firstName = firstName;
-			this.lastName = lastName;
-			this.userName = userName;
-		}
+	public RegisterFormDto(String firstName,String lastName,Date birthDate,String userName,String email,String password,String passwordConfirm) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.birthDate = birthDate;
+		this.userName = userName;
+		this.email = email;
+		this.password = password;
+		this.passwordConfirm = passwordConfirm;
+	}
+
+	public RegisterFormDto(String firstName, String lastName,String userName){
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.userName = userName;
+	}
+	
+	public RegisterFormDto() {
+		
+	}
 
 		public String getFirstName() {
 			return firstName;

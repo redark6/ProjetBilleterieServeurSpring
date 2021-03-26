@@ -34,4 +34,26 @@ public class EventService {
         Event event = new Event(eventEntity.getId(),eventEntity.getTitre(),eventEntity.getType(),eventEntity.getDescription(),eventEntity.getRegion(),eventEntity.getDate(),eventEntity.getPrix(),eventEntity.getNmbTicket());
         return Optional.of(event);
     }
+
+
+	public List<Event> findAllEventRecent() {
+		List<EventEntity> eventEntities = eventDao.findAllEventRecent();
+        return eventEntities.stream()
+                .map(x -> new Event(x.getId(),x.getTitre(),x.getType(),x.getDescription(),x.getRegion(),x.getDate(),x.getPrix(),x.getNmbTicket()))
+                .collect(Collectors.toList());
+	}
+
+
+	public List<Event> findAllEventByType(String type) {
+		List<EventEntity> eventEntities = eventDao.findAllByType(type);
+        return eventEntities.stream()
+                .map(x -> new Event(x.getId(),x.getTitre(),x.getType(),x.getDescription(),x.getRegion(),x.getDate(),x.getPrix(),x.getNmbTicket()))
+                .collect(Collectors.toList());
+	}
+
+	
+
+
+
+    
 }

@@ -7,13 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -57,10 +59,13 @@ public class UserController {
 	    //System.out.println(cookie.getName());
 	}
 	
-	@GetMapping("test/truc2")
-	public void fooMethod2(Principal principal) {
-		System.out.println(principal.getName());
-	    //System.out.println(cookie.getName());
+	@GetMapping("authority")
+	public List<GrantedAuthority> fooMethod2(Authentication authentication) {
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		List<GrantedAuthority> listAuthorities = new ArrayList<GrantedAuthority>();
+		listAuthorities.addAll(userDetails.getAuthorities());
+		return listAuthorities;
+		
 	}
 
 	@GetMapping("/logeduser")
@@ -77,11 +82,14 @@ public class UserController {
 		userService.patchUser(user,principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	
+	@GetMapping("/sessionvalid")
+    public ResponseEntity<Object> invalidateSession(Principal principal) {
+		return new ResponseEntity<>(HttpStatus.OK);  
+    }
+	
 
-	@GetMapping("/getauthority")
-	public String getAuthority(Authentication authentication){
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		System.out.println("User has authorities: " + userDetails.getAuthorities());
-		return userDetails.getAuthorities().toString();
-	}
+             
+		
 }

@@ -34,7 +34,8 @@ public class User {
 		this.createdDate = createdDate;
 	}
 
-	public User(String firstName, String lastName,String userName, Date birthDate) {
+	public User(String firstName, String lastName,String userName,Date birthDate) {
+
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.userName = userName;

@@ -31,7 +31,7 @@ public class UserController {
 	
 	@PostMapping("/create")
 	@ResponseBody
-	public ResponseEntity<Object> creatRepository(@RequestBody @Valid RegisterFormDto signupForm,BindingResult result) throws URISyntaxException{
+	public ResponseEntity<Object> createRepository(@RequestBody @Valid RegisterFormDto signupForm,BindingResult result) throws URISyntaxException{
 		if (result.hasErrors()) {
 	        
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);      
@@ -82,7 +82,7 @@ public class UserController {
 		userService.patchUser(user,principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	
 	@GetMapping("/sessionvalid")
     public ResponseEntity<Object> invalidateSession(Principal principal) {

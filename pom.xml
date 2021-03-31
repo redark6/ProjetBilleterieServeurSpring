@@ -91,8 +91,9 @@
     <groupId>org.springframework</groupId>
     <artifactId>spring-webmvc</artifactId>
     </dependency>
-		
-		
+
+
+
 	</dependencies>
 
 	<build>
@@ -100,6 +101,12 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<configuration>
+					<propertyFile>src/main/resources/liquibase.properties</propertyFile>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

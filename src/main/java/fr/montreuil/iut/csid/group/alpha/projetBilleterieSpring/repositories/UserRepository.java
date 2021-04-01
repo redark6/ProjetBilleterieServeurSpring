@@ -40,9 +40,9 @@ public class UserRepository {
 		return Optional.of(user);
 	}
 	
-	public UserEntity createUser(User user, Login login) {
+	public UserEntity createUser(User user, Login login, String role) {
 		
-		List<GrantedAuthority> grntdAuths = List.of(new SimpleGrantedAuthority("USER"));
+		List<GrantedAuthority> grntdAuths = List.of(new SimpleGrantedAuthority(role.toUpperCase()));
 		UserDetails userDetails = new org.springframework.security.core.userdetails.User(login.getEmail(),bCryptPasswordEncoder.encode(login.getPassword()),grntdAuths);
 		jdbcUserDetailsManager.createUser(userDetails);
 		

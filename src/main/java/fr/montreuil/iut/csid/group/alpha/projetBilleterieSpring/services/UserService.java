@@ -30,12 +30,12 @@ public class UserService {
 		return this.userRepository.getLogedUser(email);
 	}
 	
-	public Map<String, String> attemptCreatingUser(User user, Login login) {
+	public Map<String, String> attemptCreatingUser(User user, Login login, String role) {
 		
 		Map<String, String> errors = checkFormInput(user.getUserName(),user.getBirthDate(),login.getEmail());
 		
 		if(errors.isEmpty()) {
-			this.createUser(user,login);
+			this.createUser(user,login,role);
 		}
     	
 		return errors;
@@ -81,8 +81,8 @@ public class UserService {
 	    
 	}
 
-	public void createUser(User user,Login login){
-		this.userRepository.createUser(user,login);
+	public void createUser(User user,Login login, String role){
+		this.userRepository.createUser(user,login,role);
 	}
 
 	public void patchUser(User user, String email){

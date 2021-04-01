@@ -36,7 +36,7 @@ public class UserController {
 	        
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);      
 	    }	
-		Map<String, String> errors = userService.attemptCreatingUser(signupForm.getUserFromForm(),signupForm.getLoginFromForm());
+		Map<String, String> errors = userService.attemptCreatingUser(signupForm.getUserFromForm(),signupForm.getLoginFromForm(),signupForm.getRole());
 			
 		if(errors.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.CREATED);

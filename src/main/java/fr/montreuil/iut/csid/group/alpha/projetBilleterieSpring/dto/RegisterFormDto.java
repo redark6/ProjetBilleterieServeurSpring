@@ -12,38 +12,39 @@ import java.util.Date;
 //@Data lombok
 public class RegisterFormDto {
 
-	@NotBlank(message =  "Le prénom ne peut être vide")
-	@Size(min = 2,max = 50,message =  "Le prénom doit faire entre 2 et 50 caractères")
+	@NotBlank(message = "Le prénom ne peut être vide")
+	@Size(min = 2, max = 50, message = "Le prénom doit faire entre 2 et 50 caractères")
 	private String firstName;
 
-	@NotBlank(message =  "Le nom ne peut être vide")
-	@Size(min = 2,max = 50,message =  "Le nom doit doit faire entre 2 et 50 caractères")
+	@NotBlank(message = "Le nom ne peut être vide")
+	@Size(min = 2, max = 50, message = "Le nom doit doit faire entre 2 et 50 caractères")
 	private String lastName;
 	
 	@NotBlank(message =  "Vous devez choisir votre rôle")
 	private String role;
 
-    @Past(message =  "Votre date de naissance est incorrect")
+	@Past(message = "Votre date de naissance est incorrect")
 	private Date birthDate;
 
-	@NotBlank(message =  "Le nom d'utilisateur ne peut être vide")
-	@Size(min = 4, max = 50,message =  "Le nom d'utilisateur doit faire entre 4 et 50 caractères")
+	@NotBlank(message = "Le nom d'utilisateur ne peut être vide")
+	@Size(min = 4, max = 50, message = "Le nom d'utilisateur doit faire entre 4 et 50 caractères")
 	private String userName;
 
-	@NotBlank(message =  "Le mail est vide")
-	@Email(message =  "Le format du mail est invalide")
-	@Size(min =5 ,max = 50,message =  "Le mail doit faire entre 5 et 50 caractères")
+	@NotBlank(message = "Le mail est vide")
+	@Email(message = "Le format du mail est invalide")
+	@Size(min = 5, max = 50, message = "Le mail doit faire entre 5 et 50 caractères")
 	private String email;
 
-	@NotBlank(message =  "Mot de passe vide")
-    @Size(min = 8,max = 16,message =  "Le mot de passe doit faire entre 8 et 16 caractères")
+	@NotBlank(message = "Mot de passe vide")
+	@Size(min = 8, max = 16, message = "Le mot de passe doit faire entre 8 et 16 caractères")
 	private String password;
 
-	@NotBlank(message =  "Mot de passe vide")
-    @Size(min = 8,max = 16,message =  "Le mot de passe doit faire entre 8 et 16 caractères")
+	@NotBlank(message = "Mot de passe vide")
+	@Size(min = 8, max = 16, message = "Le mot de passe doit faire entre 8 et 16 caractères")
 	private String passwordConfirm;
 	
 	public RegisterFormDto(String firstName,String lastName,String role,Date birthDate,String userName,String email,String password,String passwordConfirm) {
+
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.role= role;
@@ -54,14 +55,15 @@ public class RegisterFormDto {
 		this.passwordConfirm = passwordConfirm;
 	}
 
-	public RegisterFormDto(String firstName, String lastName,String userName,Date birthDate){
+	public RegisterFormDto(String firstName, String lastName, String userName, Date birthDate) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.userName = userName;
 		this.birthDate = birthDate;
 	}
-	
-	public RegisterFormDto() {}
+
+	public RegisterFormDto() {
+	}
 
 
 	public String getFirstName() {
@@ -119,24 +121,28 @@ public class RegisterFormDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public String getPasswordConfirm() {
 		return passwordConfirm;
 	}
+
 
 	public void setpPasswordConfirm(String password) {
 		this.passwordConfirm = password;
 	}
 
 	public User getUserFromForm() {
-		return new User(this.getFirstName(),this.getLastName(),this.getBirthDate(),this.getUserName(),this.getEmail(),new Date(0L));
+		return new User(this.getFirstName(), this.getLastName(), this.getBirthDate(), this.getUserName(), this.getEmail(), new Date(0L));
 	}
-	
-	public User getUsertoPatch() {
-		return new User(this.getFirstName(),this.getLastName(),this.getUserName(),this.getBirthDate());
-	}
-	
+
 	public Login getLoginFromForm() {
-		return new Login(this.getEmail(),this.getPassword(),true);
+		return new Login(this.getEmail(), this.getPassword(), true);
+	}
+
+
+	public User getUsertoPatch() {
+		return new User(this.getFirstName(), this.getLastName(), this.getUserName(), this.getBirthDate());
 	}
 }
+
+

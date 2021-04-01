@@ -1,9 +1,8 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 
-import java.util.Date;
-
-
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
+
+import java.util.Date;
 
 public class UserDto {
 	
@@ -33,6 +32,17 @@ public class UserDto {
 		this.userName = userName;
 		this.email =email;
 		this.createdDate = createdDate;
+	}
+
+	public UserDto(String firstName, String lastName,String userName, Date birthDate) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.userName = userName;
+		this.birthDate = birthDate;
+	}
+
+	public UserDto(){
+
 	}
 	
 	public Long getId() {

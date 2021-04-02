@@ -1,6 +1,7 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Organiser;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,10 +77,18 @@ public class UserController {
 
 	}
 
+
 	@PatchMapping("/patch")
 	public ResponseEntity<Object> patchUser(@RequestBody User user, Principal principal){
 		System.out.println("PATCH");
 		userService.patchUser(user,principal.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@PostMapping("/upgradeToOrganiser")
+	public ResponseEntity<Object> upgradeOrganiser(@RequestBody Organiser organiser, Principal principal){
+
+		userService.upgradeOrganiser(organiser,principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 

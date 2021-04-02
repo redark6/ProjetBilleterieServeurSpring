@@ -1,8 +1,13 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dao.AuthoritiesDao;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dao.OrganiserDao;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dao.UserDao;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.AuthorityEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.OrganiserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Login;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Organiser;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,14 +25,18 @@ import java.util.Optional;
 public class UserRepository {
 
 	private final UserDao userDao;
+	private final OrganiserDao organiserDao;
+	private final AuthoritiesDao authoritiesDao;
 	private final JdbcUserDetailsManager jdbcUserDetailsManager;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	@Autowired
-	public UserRepository(JdbcUserDetailsManager jdbcUserDetailsManager, UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder,UserDao userDao) {
+	public UserRepository(JdbcUserDetailsManager jdbcUserDetailsManager, UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder, UserDao userDao, OrganiserDao organiserDao, OrganiserDao organiserDao1, AuthoritiesDao authoritiesDao) {
 		this.userDao=userDao;
 		this.jdbcUserDetailsManager = jdbcUserDetailsManager;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+		this.organiserDao = organiserDao1;
+		this.authoritiesDao = authoritiesDao;
 	}
 	
 	public Optional<UserDetails> getUser(String email) {
@@ -41,8 +50,13 @@ public class UserRepository {
 	}
 	
 	public UserEntity createUser(User user, Login login, String role) {
-		
-		List<GrantedAuthority> grntdAuths = List.of(new SimpleGrantedAuthority(role.toUpperCase()));
+		if (role.equals("Organisateur")){
+			role="ORG";
+		}
+		else{
+			role="USER";
+		}
+		List<GrantedAuthority> grntdAuths = List.of(new SimpleGrantedAuthority(role));
 		UserDetails userDetails = new org.springframework.security.core.userdetails.User(login.getEmail(),bCryptPasswordEncoder.encode(login.getPassword()),grntdAuths);
 		jdbcUserDetailsManager.createUser(userDetails);
 		
@@ -84,5 +98,21 @@ public class UserRepository {
 
 		this.userDao.save(userEntity);
 	}
+
+    public void upgradeOrganiser(Organiser organiser, String email) {
+		this.organiserDao.save(new OrganiserEntity(email,organiser.getJobTitle(),organiser.getPhoneNumber(),organiser.getWebsite(),organiser.getCompany(),organiser.getBlog(),organiser.getProAddress(),organiser.getProCity(),organiser.getProCountry()));
+
+	}
+
+    public void patchAuthority(String email) {
+		Optional<AuthorityEntity> authorityEntity = authoritiesDao.findById(email);
+		if (authorityEntity.isPresent()) {
+			AuthorityEntity authEntity = authorityEntity.get();
+			authEntity.setAuthority("ORG");
+			authoritiesDao.save(authEntity);
+		}
+
+	}
+
 
 }

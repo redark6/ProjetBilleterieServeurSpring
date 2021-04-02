@@ -1,9 +1,11 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserTransactionalService;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.security.Principal;
@@ -33,18 +34,17 @@ public class UserController {
 	
 	@PostMapping("/create")
 	@ResponseBody
-	public ResponseEntity<Object> creatRepository(@RequestBody @Valid RegisterFormDto signupForm,BindingResult result) throws URISyntaxException{
+	public ResponseEntity<Object> createRepository(@RequestBody @Valid RegisterFormDto signupForm,BindingResult result) throws URISyntaxException{
 		if (result.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);      
 	    }	
 		Map<String, String> errors = userTransactionalService.createUser(signupForm);
-		
 		if(errors.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
     	return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
 	}
-	
+
 	@GetMapping("authority")
 	public List<GrantedAuthority> getUserAuthorities() {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -65,12 +65,18 @@ public class UserController {
 
 	@PatchMapping("/patch")
 	@ResponseBody
-	public ResponseEntity<Object> patchUser(@RequestBody @Valid UserDto updateForm,BindingResult result){
+	public ResponseEntity<Object> updateUserInformations(@RequestBody @Valid UserDto updateForm,BindingResult result){
 		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		userTransactionalService.updateUserInformations(updateForm,principal.getName());
+		return new ResponseEntity<>(HttpStatus.OK);  
+	}
+
+	@PostMapping("/upgradeToOrganiser")
+	public ResponseEntity<Object> upgradeOrganiser(@RequestBody OrganiserDto organiser, Principal principal){
+		userTransactionalService.upgradeOrganiser(organiser,principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/sessionvalid")
     public ResponseEntity<Object> invalidateSession() {
 		return new ResponseEntity<>(HttpStatus.OK);  

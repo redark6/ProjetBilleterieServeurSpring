@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+        
+		<changeSet  author="alpha"  id="8">  
+		    <renameColumn
+		            columnDataType="VARCHAR"  
+		            newColumnName="title"  
+		            oldColumnName="titre"     
+		            tableName="event"/>
+		    <renameColumn
+		            columnDataType="VARCHAR"  
+		            newColumnName="category"  
+		            oldColumnName="type"     
+		            tableName="event"/>
+		    <renameColumn
+		            columnDataType="date"  
+		            newColumnName="creationDate"  
+		            oldColumnName="date_creation"     
+		            tableName="event"/> 
+		   <renameColumn
+		            columnDataType="numeric"  
+		            newColumnName="price"  
+		            oldColumnName="prix"     
+		            tableName="event"/>
+		   <renameColumn
+		            columnDataType="INTEGER"  
+		            newColumnName="nbOfTicket"  
+		            oldColumnName="nmb_ticket"     
+		            tableName="event"/>
+		   <addColumn tableName="event">
+		   	<column name="startDate" type="date"/>
+		   	<column name="endDate" type="date"/>
+		   </addColumn>
+		   <modifyDataType tableName="event" columnName="title" newDataType="VARCHAR(100)"/>
+		   <modifyDataType tableName="event" columnName="category" newDataType="INTEGER"/>
+		   <modifyDataType tableName="event" columnName="title" newDataType="VARCHAR(4000)"/>
+		   <modifyDataType tableName="event" columnName="region" newDataType="VARCHAR(50)"/>
+		</changeSet>
+		
+		<changeSet author="alpha" id="8">
+        		<createTable tableName="categories">
+                        <column name="id" type="integer">
+                                <constraints nullable="false" primaryKey="true" primaryKeyName="oragniser_pkey"/>
+                        </column>
+                        <column name="category" type="varchar(20)">
+                        	<constraints nullable="false"/>
+                        </column> 
+                </createTable>
+         <addForeignKeyConstraint baseColumnNames="category" baseTableName="event" constraintName="fk_category_event" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="categories" validate="true"/>   
+                
+        </changeSet>
+		
+
+
+
+</databaseChangeLog>

@@ -5,7 +5,6 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResult
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventTransactionalService;
 
 import java.text.ParseException;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,5 +50,5 @@ public class EventController {
     	return eventTransactionalService.searchEventsWithFilters(search,catgory,startDate,endDate,minPrice,maxPrice,page,eventsPerPage);
     }
     
-    
+
 }

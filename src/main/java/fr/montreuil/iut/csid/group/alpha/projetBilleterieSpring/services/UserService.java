@@ -1,34 +1,44 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.AuthorityRepository;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.OrganiserRepository;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.stereotype.Service;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.AuthorityEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.LoginEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.OrganiserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
 
 @Service
 public class UserService {
 
 	private final UserRepository userRepository;
+	private final AuthorityRepository authorityRepository;
+	private final OrganiserRepository organiserRepository;
 	private final JdbcUserDetailsManager jdbcUserDetailsManager;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
 	
 	@Autowired
-	public UserService(JdbcUserDetailsManager jdbcUserDetailsManager, UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder,UserRepository userRepository) {
+	public UserService(JdbcUserDetailsManager jdbcUserDetailsManager, UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder,UserRepository userRepository,AuthorityRepository authorityRepository,OrganiserRepository organiserRepository) {
 		this.userRepository=userRepository;
+		this.authorityRepository = authorityRepository;
+		this.organiserRepository = organiserRepository;
 		this.jdbcUserDetailsManager = jdbcUserDetailsManager;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 	}
@@ -86,10 +96,15 @@ public class UserService {
 
 	}
 	
-	public Map<String, String> createUser(UserEntity user, LoginEntity login) {
+	public Map<String, String> createUser(UserEntity user, LoginEntity login,String role) {
 		Map<String, String> errors = checkFormInput(user.getUserName(), user.getBirthDate(), login.getEmail());
 		if (errors.isEmpty()) {
-			List<GrantedAuthority> grntdAuths = List.of(new SimpleGrantedAuthority("USER"));
+			if (role.equals("Organisateur")){
+				role="ORG";
+			}else{
+				role="USER";
+			}
+			List<GrantedAuthority> grntdAuths = List.of(new SimpleGrantedAuthority(role));
 			UserDetails userDetails = new org.springframework.security.core.userdetails.User(login.getEmail(),bCryptPasswordEncoder.encode(login.getPassword()),grntdAuths);
 			
 			jdbcUserDetailsManager.createUser(userDetails);
@@ -101,8 +116,37 @@ public class UserService {
 
 	public void updateUserInformations(UserEntity user, String email){
 		UserEntity userEntity = userRepository.getByEmail(email).get();
-		userEntity.setFirstName(user.getFirstName());
-		userEntity.setLastName(user.getLastName());
-		userEntity.setUserName(user.getUserName());
+
+		if(user.getFirstName() != null)
+			userEntity.setFirstName(user.getFirstName());
+
+		if(user.getLastName() != null)
+			userEntity.setLastName(user.getLastName());
+
+		if(user.getUserName() != null)
+			userEntity.setUserName(user.getUserName());
+
+		if(user.getBirthDate() != null)
+			userEntity.setBirthDate(user.getBirthDate());
 	}
+
+	public void upgradeOrganiser(OrganiserEntity organiser, String email) {
+		saveOrganiserInfo(organiser);
+		patchAuthority(email);
+	}
+	
+    public void patchAuthority(String email) {
+		Optional<AuthorityEntity> authorityEntity = authorityRepository.findById(email);
+		if (authorityEntity.isPresent()) {
+			AuthorityEntity authEntity = authorityEntity.get();
+			authEntity.setAuthority("ORG");
+			authorityRepository.save(authEntity);
+		}
+	}
+    
+    public void saveOrganiserInfo(OrganiserEntity organiser) {
+		this.organiserRepository.save(organiser);
+
+	}
+
 }

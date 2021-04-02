@@ -23,8 +23,8 @@ public class UserDto {
 		this.createdDate = createdDate;
 	}
 
-	public UserDto() {
-		
+	public UserDto(){
+
 	}
 	
 	public Long getId() {

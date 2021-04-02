@@ -1,16 +1,22 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
+import java.security.Principal;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.LoginEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.OrganiserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
 
 @Service
@@ -25,7 +31,7 @@ public class UserTransactionalService {
 	}
 	
 	public Map<String, String> createUser(RegisterFormDto registerForm){
-		return userService.createUser(registerFormDtoToUserEntity(registerForm), registerFormDtoToLoginEntity(registerForm));
+		return userService.createUser(registerFormDtoToUserEntity(registerForm), registerFormDtoToLoginEntity(registerForm), registerForm.getRole());
 	}
 	
 	public void updateUserInformations(UserDto user, String email) {
@@ -34,6 +40,11 @@ public class UserTransactionalService {
 	
 	public Optional<UserDto> getCurrentThreadUser(String email) {
 		return entityToDto(this.userService.getCurrentThreadUser(email));
+	}
+	
+	public void upgradeOrganiser(OrganiserDto organiser, String identifiant){
+		organiser.setId(identifiant);
+		this.userService.upgradeOrganiser(dtoToEntity(organiser),identifiant);
 	}
 	
 	private UserDto entityToDto(UserEntity userEntity) {
@@ -80,4 +91,19 @@ public class UserTransactionalService {
 		res.setPassword(registerForm.getPassword());
 		return res;
 	}
+	
+	private OrganiserEntity dtoToEntity(OrganiserDto organiser) {
+		OrganiserEntity res = new OrganiserEntity();
+		res.setId(organiser.getId());
+		res.setJob_title(organiser.getJobTitle());
+		res.setPhone_number(organiser.getPhoneNumber());
+		res.setWebsite(organiser.getWebsite());
+		res.setCompany(organiser.getCompany());
+		res.setBlog(organiser.getBlog());
+		res.setPro_address(organiser.getProAddress());
+		res.setPro_city(organiser.getProCity());
+		res.setPro_country(organiser.getProCountry());
+		return res;
+	}
+	
 }

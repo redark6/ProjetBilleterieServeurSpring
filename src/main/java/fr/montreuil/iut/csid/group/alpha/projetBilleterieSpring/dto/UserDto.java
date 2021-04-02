@@ -2,9 +2,6 @@ package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 
 import java.util.Date;
 
-
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
-
 public class UserDto {
 	
 	private Long id;
@@ -15,24 +12,19 @@ public class UserDto {
 	private String email;
 	private Date createdDate;
 	
-	public UserDto(Long id, String firstName, String lastName, Date birthDate, String userName,String email , Date createdDate ) {
+	public UserDto(Long id, String firstName, String lastName, Date birthDate, String userName, String email,
+			Date createdDate) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
 		this.userName = userName;
-		this.email =email;
+		this.email = email;
 		this.createdDate = createdDate;
 	}
-	
-	public UserDto(String firstName, String lastName, Date birthDate, String userName, String email ,Date createdDate) {
-		this.id = null;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.birthDate = birthDate;
-		this.userName = userName;
-		this.email =email;
-		this.createdDate = createdDate;
+
+	public UserDto() {
+		
 	}
 	
 	public Long getId() {
@@ -91,7 +83,4 @@ public class UserDto {
 		this.createdDate = createdDate;
 	}
 
-	public User dtoToUser() {
-		return new User(this.id,this.getFirstName(),this.getLastName(),this.getBirthDate(),this.getUserName(),this.getEmail(),this.getCreatedDate());
-	}
 }

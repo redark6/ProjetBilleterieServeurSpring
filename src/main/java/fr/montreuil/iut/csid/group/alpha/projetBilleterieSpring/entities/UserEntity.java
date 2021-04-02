@@ -45,12 +45,6 @@ public class UserEntity {
 		this.email = email;
 	}
 
-	public UserEntity(String firstName, String lastName,String userName){
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.userName = userName;
-	}
-
 	public Long getId() {
 		return id;
 	}

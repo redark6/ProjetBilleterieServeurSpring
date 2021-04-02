@@ -1,7 +1,5 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Login;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -116,15 +114,4 @@ public class RegisterFormDto {
 		this.passwordConfirm = password;
 	}
 
-	public User getUserFromForm() {
-		return new User(this.getFirstName(),this.getLastName(),this.getBirthDate(),this.getUserName(),this.getEmail(),new Date(0L));
-	}
-	
-	public User getUsertoPatch() {
-		return new User(this.getFirstName(),this.getLastName(),this.getUserName(),this.getBirthDate());
-	}
-	
-	public Login getLoginFromForm() {
-		return new Login(this.getEmail(),this.getPassword(),true);
-	}
 }

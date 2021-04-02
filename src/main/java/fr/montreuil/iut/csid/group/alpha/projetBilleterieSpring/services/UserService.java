@@ -1,6 +1,7 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Login;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Organiser;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +89,13 @@ public class UserService {
 	public void patchUser(User user, String email){
 		userRepository.patchUser(user, email);
 	}
+
+	public void upgradeOrganiser(Organiser organiser, String email) {
+		this.userRepository.upgradeOrganiser(organiser,email);
+		this.userRepository.patchAuthority(email);
+	}
+
+
 }
 
 

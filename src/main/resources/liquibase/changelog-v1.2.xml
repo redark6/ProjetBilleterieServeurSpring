@@ -40,6 +40,7 @@
 		   <modifyDataType tableName="event" columnName="category" newDataType="INTEGER"/>
 		   <modifyDataType tableName="event" columnName="title" newDataType="VARCHAR(4000)"/>
 		   <modifyDataType tableName="event" columnName="region" newDataType="VARCHAR(50)"/>
+		   <renameTable newTableName="events" oldTableName="event"/>
 		</changeSet>
 		
 		<changeSet author="alpha" id="8">

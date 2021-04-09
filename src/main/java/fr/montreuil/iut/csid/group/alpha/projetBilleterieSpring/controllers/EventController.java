@@ -39,7 +39,7 @@ public class EventController {
     @GetMapping("/search")
     public SearchResultDto searchEventsWithFilters(
     	@RequestParam(value = "search", required = false) String search,
-    	@RequestParam(value = "category", required = false) String catgory,
+    	@RequestParam(value = "category", required = false, defaultValue = "-1") int catgory,
     	@RequestParam(value = "startDate", required = false) String startDate,
     	@RequestParam(value = "endDate", required = false ) String endDate,
     	@RequestParam(value = "minPrice", required = false, defaultValue = "-1") int minPrice,

@@ -19,7 +19,7 @@
 		            tableName="event"/>
 		    <renameColumn
 		            columnDataType="date"  
-		            newColumnName="creationDate"  
+		            newColumnName="creationdate"  
 		            oldColumnName="date_creation"     
 		            tableName="event"/> 
 		   <renameColumn
@@ -29,12 +29,12 @@
 		            tableName="event"/>
 		   <renameColumn
 		            columnDataType="INTEGER"  
-		            newColumnName="nbOfTicket"  
+		            newColumnName="nbofticket"  
 		            oldColumnName="nmb_ticket"     
 		            tableName="event"/>
 		   <addColumn tableName="event">
-		   	<column name="startDate" type="date"/>
-		   	<column name="endDate" type="date"/>
+		   	<column name="startdate" type="date"/>
+		   	<column name="enddate" type="date"/>
 		   </addColumn>
 		   <modifyDataType tableName="event" columnName="title" newDataType="VARCHAR(100)"/>
 		   <modifyDataType tableName="event" columnName="category" newDataType="INTEGER"/>
@@ -43,16 +43,16 @@
 		   <renameTable newTableName="events" oldTableName="event"/>
 		</changeSet>
 		
-		<changeSet author="alpha" id="8">
+		<changeSet author="alpha" id="9">
         		<createTable tableName="categories">
                         <column name="id" type="integer">
-                                <constraints nullable="false" primaryKey="true" primaryKeyName="oragniser_pkey"/>
+                                <constraints nullable="false" primaryKey="true" primaryKeyName="categories_pkey"/>
                         </column>
                         <column name="category" type="varchar(20)">
                         	<constraints nullable="false"/>
                         </column> 
                 </createTable>
-         <addForeignKeyConstraint baseColumnNames="category" baseTableName="event" constraintName="fk_category_event" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="categories" validate="true"/>   
+         <addForeignKeyConstraint baseColumnNames="category" baseTableName="events" constraintName="fk_category_event" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="categories" validate="true"/>   
                 
         </changeSet>
 		

@@ -29,8 +29,8 @@ public class CriteriaBuilderHelper<T> {
         query.select(root);
     }
     
-	public void optionalAddEqual(String fieldName, Object fieldValue) {
-		if(fieldValue != null) {
+	public void optionalAddEqual(String fieldName, int fieldValue) {
+		if(fieldValue != -1) {
 			predicates.add(builder.equal(root.get(fieldName), fieldValue));
 		}
 	}

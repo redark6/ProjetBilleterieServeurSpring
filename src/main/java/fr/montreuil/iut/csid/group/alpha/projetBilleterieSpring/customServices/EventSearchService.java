@@ -25,7 +25,7 @@ public class EventSearchService {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	public SearchResultDto<EventEntity> findEventsByCriterias(String search,String category,Date startDate,Date endDate,int minPrice,int maxPrice,int page,int eventsPerPage) {
+	public SearchResultDto<EventEntity> findEventsByCriterias(String search,int category,Date startDate,Date endDate,int minPrice,int maxPrice,int page,int eventsPerPage) {
 		
 		CriteriaBuilderHelper<EventEntity> h = new CriteriaBuilderHelper<>(entityManager,EventEntity.class,"events");
 		Map<String,Object> params = new HashMap<>();

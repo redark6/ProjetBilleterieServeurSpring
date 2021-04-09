@@ -72,7 +72,8 @@ public class UserController {
 	}
 
 	@PostMapping("/upgradeToOrganiser")
-	public ResponseEntity<Object> upgradeOrganiser(@RequestBody OrganiserDto organiser, Principal principal){
+	public ResponseEntity<Object> upgradeOrganiser(@RequestBody OrganiserDto organiser){
+		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		userTransactionalService.upgradeOrganiser(organiser,principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

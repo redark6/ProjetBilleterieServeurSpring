@@ -16,7 +16,7 @@ public class EventEntity {
     private String title;
 
     @Column(name = "category")
-    private String category;
+    private int category;
 
     @Column(name = "description")
     private String description;
@@ -39,7 +39,7 @@ public class EventEntity {
     @Column(name = "nbofticket")
     private int nbOfTicket;
 
-    public EventEntity(Long id, String title, String category, String description, String region, Date creationDate, Date startDate, Date endDate, float price, int nbOfTicket) {
+    public EventEntity(Long id, String title, int category, String description, String region, Date creationDate, Date startDate, Date endDate, float price, int nbOfTicket) {
 		this.id = id;
 		this.title = title;
 		this.category = category;
@@ -71,11 +71,11 @@ public class EventEntity {
 		this.title = title;
 	}
 
-	public String getCategory() {
+	public int getCategory() {
 		return category;
 	}
 
-	public void setCategory(String category) {
+	public void setCategory(int category) {
 		this.category = category;
 	}
 

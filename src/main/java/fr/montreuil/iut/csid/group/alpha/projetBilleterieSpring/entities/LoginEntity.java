@@ -1,15 +1,11 @@
-package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles;
+package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities;
 
-public class Login {
-
+public class LoginEntity {
 	private String email;
 	private String password;
 	boolean enabled;
 	
-	public Login(String email, String password, boolean enabled) {
-		this.email = email;
-		this.password = password;
-		this.enabled = enabled;
+	public LoginEntity() {
 	}
 
 	public String getEmail() {
@@ -36,5 +32,4 @@ public class Login {
 		this.enabled = enabled;
 	}
 
-	
 }

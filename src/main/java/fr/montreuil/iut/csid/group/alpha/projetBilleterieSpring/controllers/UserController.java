@@ -1,14 +1,16 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Organiser;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.User;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserTransactionalService;
+
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -23,46 +25,29 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
+    private final UserTransactionalService userTransactionalService;
 	
 	@Autowired
-	public UserController(UserService userService) {
-		this.userService=userService;
+	public UserController(UserTransactionalService userTransactionalService) {
+		this.userTransactionalService=userTransactionalService;
 	}
 	
 	@PostMapping("/create")
 	@ResponseBody
 	public ResponseEntity<Object> createRepository(@RequestBody @Valid RegisterFormDto signupForm,BindingResult result) throws URISyntaxException{
 		if (result.hasErrors()) {
-	        
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);      
 	    }	
-		Map<String, String> errors = userService.attemptCreatingUser(signupForm.getUserFromForm(),signupForm.getLoginFromForm(),signupForm.getRole());
-			
+		Map<String, String> errors = userTransactionalService.createUser(signupForm);
 		if(errors.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
     	return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
 	}
-	
-	@GetMapping("/{email}")
-	public ResponseEntity<UserDetails> getUser(@PathVariable String email){
-		return userService.getUser(email)
-				.map(ResponseEntity::ok)
-				.orElse(ResponseEntity.notFound().build());
 
-	}
-	
-	@GetMapping("test/truc")
-	public void fooMethod(Authentication authentication) {
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-		System.out.println("User has authorities: " + userDetails.getAuthorities());
-	    //System.out.println(cookie.getName());
-	}
-	
 	@GetMapping("authority")
-	public List<GrantedAuthority> fooMethod2(Authentication authentication) {
-		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+	public List<GrantedAuthority> getUserAuthorities() {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<GrantedAuthority> listAuthorities = new ArrayList<GrantedAuthority>();
 		listAuthorities.addAll(userDetails.getAuthorities());
 		return listAuthorities;
@@ -70,31 +55,31 @@ public class UserController {
 	}
 
 	@GetMapping("/logeduser")
-	public ResponseEntity<User> getLogedUser(Principal principal){
-		return userService.getLogedUser(principal.getName())
+	public ResponseEntity<UserDto> getCurrentThreadUser(){
+		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return userTransactionalService.getCurrentThreadUser(principal.getName())
 				.map(ResponseEntity::ok)
 				.orElse(ResponseEntity.notFound().build());
 
 	}
 
-
 	@PatchMapping("/patch")
-	public ResponseEntity<Object> patchUser(@RequestBody User user, Principal principal){
-		System.out.println("PATCH");
-		userService.patchUser(user,principal.getName());
-		return new ResponseEntity<>(HttpStatus.OK);
+	@ResponseBody
+	public ResponseEntity<Object> updateUserInformations(@RequestBody @Valid UserDto updateForm,BindingResult result){
+		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		userTransactionalService.updateUserInformations(updateForm,principal.getName());
+		return new ResponseEntity<>(HttpStatus.OK);  
 	}
 
 	@PostMapping("/upgradeToOrganiser")
-	public ResponseEntity<Object> upgradeOrganiser(@RequestBody Organiser organiser, Principal principal){
-
-		userService.upgradeOrganiser(organiser,principal.getName());
+	public ResponseEntity<Object> upgradeOrganiser(@RequestBody OrganiserDto organiser){
+		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		userTransactionalService.upgradeOrganiser(organiser,principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
-	
 	@GetMapping("/sessionvalid")
-    public ResponseEntity<Object> invalidateSession(Principal principal) {
+    public ResponseEntity<Object> invalidateSession() {
 		return new ResponseEntity<>(HttpStatus.OK);  
     }
 	

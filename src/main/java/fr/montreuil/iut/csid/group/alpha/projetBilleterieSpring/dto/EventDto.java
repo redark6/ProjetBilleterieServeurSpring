@@ -1,96 +1,115 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Event;
-
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class EventDto {
 
     private Long id;
-    private String titre;
-    private String type;
+    private String title;
+    private int category;
     private String description;
     private String region;
-    private LocalDateTime date;
-    private float prix;
-    private int nmbTicket;
+    private Date creationDate;
+    private Date startDate;
+    private Date endDate;
+    private float price;
+    private int nbOfTicket;
+    
+    public EventDto(Long id, String title, int category, String description, String region, Date creationDate,
+			Date startDate, Date endDate, float price, int nbOfTicket) {
+		this.id = id;
+		this.title = title;
+		this.category = category;
+		this.description = description;
+		this.region = region;
+		this.creationDate = creationDate;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.price = price;
+		this.nbOfTicket = nbOfTicket;
+	}
 
-    public EventDto(Long id, String titre, String type, String description, String region, LocalDateTime date, float prix, int nmbTicket) {
-        this.id = id;
-        this.titre = titre;
-        this.type = type;
-        this.description = description;
-        this.region = region;
-        this.date = date;
-        this.prix = prix;
-        this.nmbTicket = nmbTicket;
+	public EventDto() {
     }
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getTitre() {
-        return titre;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setTitre(String titre) {
-        this.titre = titre;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public int getCategory() {
+		return category;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setCategory(int category) {
+		this.category = category;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public String getRegion() {
-        return region;
-    }
+	public String getRegion() {
+		return region;
+	}
 
-    public void setRegion(String region) {
-        this.region = region;
-    }
+	public void setRegion(String region) {
+		this.region = region;
+	}
 
-    public LocalDateTime getDate() {
-        return date;
-    }
+	public Date getCreationDate() {
+		return creationDate;
+	}
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
+	}
 
-    public float getPrix() {
-        return prix;
-    }
+	public Date getStartDate() {
+		return startDate;
+	}
 
-    public void setPrix(int prix) {
-        this.prix = prix;
-    }
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
 
-    public int getNmbTicket() {
-        return nmbTicket;
-    }
+	public Date getEndDate() {
+		return endDate;
+	}
 
-    public void setNmbTicket(int nmbTicket) {
-        this.nmbTicket = nmbTicket;
-    }
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
 
-    public Event dtoToEvent(){
-        return new Event(this.id,this.getTitre(),this.getType(),this.getDescription(),this.getRegion(),this.getDate(),this.getPrix(),this.getNmbTicket());
-    }
+	public float getPrice() {
+		return price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
+	}
+
+	public int getNbOfTicket() {
+		return nbOfTicket;
+	}
+
+	public void setNbOfTicket(int nbOfTicket) {
+		this.nbOfTicket = nbOfTicket;
+	}
+
 }

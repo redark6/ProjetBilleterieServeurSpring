@@ -1,8 +1,5 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 
-
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.modeles.Organiser;
-
 public class OrganiserDto {
 
     private String id;
@@ -37,16 +34,6 @@ public class OrganiserDto {
         this.proCountry = pro_country;
     }
 
-    public OrganiserDto( String job_title, String phone_number, String website, String company, String blog, String pro_address, String pro_city, String pro_country) {
-        this.jobTitle = job_title;
-        this.phoneNumber = phone_number;
-        this.website = website;
-        this.company = company;
-        this.blog = blog;
-        this.proAddress = pro_address;
-        this.proCity = pro_city;
-        this.proCountry = pro_country;
-    }
 
     public String getId() {
         return id;
@@ -119,11 +106,6 @@ public class OrganiserDto {
     public void setProCountry(String proCountry) {
         this.proCountry = proCountry;
     }
-
-    public Organiser dtoToOrganiser() {
-        return new Organiser(this.getId(),this.getJobTitle(),this.getPhoneNumber(),this.getWebsite(),this.getCompany(),this.getBlog(),this.getProAddress(),this.getProCity(),this.getProCountry());
-    }
-
 
 }
 

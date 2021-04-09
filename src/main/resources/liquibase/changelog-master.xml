@@ -77,5 +77,6 @@
 
 
     <include  file="liquibase/changelog-v1.0.xml"/>
+    <include  file="liquibase/changelog-v1.2.xml"/>
 
 </databaseChangeLog>

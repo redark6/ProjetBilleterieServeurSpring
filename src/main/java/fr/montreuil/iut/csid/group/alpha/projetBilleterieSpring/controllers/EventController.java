@@ -3,17 +3,13 @@ package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventTransactionalService;
-
-import java.text.ParseException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.text.ParseException;
 
 /**
  * SOLID: map http protocol to java Dto and delegate all methods to eventService
@@ -27,6 +23,12 @@ public class EventController {
     @Autowired
     public EventController(EventTransactionalService eventTransactionalService) {
         this.eventTransactionalService = eventTransactionalService;
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<EventDto> createEvent(@RequestBody EventDto eventDto) throws URISyntaxException {
+        eventTransactionalService.createEvent(eventDto);
+        return ResponseEntity.created(new URI("event/created")).build();
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,7 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -45,7 +46,7 @@ public class EventEntity {
 		this.category = category;
 		this.description = description;
 		this.region = region;
-		this.creationDate = creationDate;
+		this.creationDate = Calendar.getInstance().getTime();
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.price = price;

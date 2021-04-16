@@ -1,6 +1,8 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +44,7 @@ public class CommentService {
 		return comment;
 	}
 	
-	public List<CommentEntity> getComments(String user, Long eventId, String orderBy) {
+	public List<CommentEntity> getComments(Long eventId, String orderBy) {
 		List<CommentEntity> resultListe;
 		switch (orderBy) {
 		case "dateAsc":
@@ -58,11 +60,12 @@ public class CommentService {
 			resultListe = commentRepository.getByEventIdAndParentCommentOrderByCreationDateHoursDesc(eventId, null);
 			break;
 		}
+
 		getCommentsChilddren(resultListe);
-		return null;
+		return resultListe;
 	}
 	
-	private List<CommentEntity> getCommentsChilddren(List<CommentEntity> listCommentParent){
+	private void getCommentsChilddren(List<CommentEntity> listCommentParent){
 		int listSize = listCommentParent.size();
 		for(int i = 0; i < listSize; i++) {
 			CommentEntity comment = listCommentParent.get(i);
@@ -71,16 +74,14 @@ public class CommentService {
 				getCommentsChilddren(comment.getCommentChildren());
 			}
 		}
-		
-		return null;
 	}
 	
 	private void fillCommentEntity(CommentEntity comment) {
 		UserEntity entity = userRepository.getByEmail(comment.getAuthor()).get();
-		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String user = principal.getName();
-		comment.setOwnedByCurrentUser( (comment.getAuthor() == user)?true :false );
-		comment.setAuthor(entity.getUserName());
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String user = authentication.getName();
+		comment.setOwnedByCurrentUser( comment.getAuthor().equals(user) ? true :false );
+		comment.setUserName(entity.getUserName());
 		comment.setAvatar("avatar");
 		comment.setCommentChildren(commentRepository.getByEventIdAndParentCommentOrderByCreationDateHoursDesc(comment.getEventId(), comment.getId()));
 		Optional<CommentLikeEntity> like = commentLikeRepository.getByCommentIdAndUserId(comment.getId(), user);

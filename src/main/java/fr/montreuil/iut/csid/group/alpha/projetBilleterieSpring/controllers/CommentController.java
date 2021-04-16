@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +22,7 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CommentDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.CommentTransactionnalService;
 
 @RestController
-@RequestMapping("comment")
+@RequestMapping("/comment")
 public class CommentController {
 	
     private final CommentTransactionnalService commentTransactionnalService;
@@ -31,17 +33,13 @@ public class CommentController {
     }
 	
 	@PostMapping()
-    public ResponseEntity<CommentDto> addComment(@RequestBody CommentDto comment){
-		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		this.commentTransactionnalService.addComment(comment,principal.getName());
-		return null;
+    public CommentDto addComment(@RequestBody CommentDto comment,Principal principal){
+		return this.commentTransactionnalService.addComment(comment,principal.getName());
     }
 	
 	@GetMapping("/{eventId}")
-	public ResponseEntity<List<CommentDto>> getComments(@PathVariable Long eventId,@RequestParam(value = "orderBy", required = false, defaultValue = "dateDesc")String orderBy) {
-		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		this.commentTransactionnalService.getComments(principal.getName(), eventId,orderBy);
-		return null;
+	public List<CommentDto> getComments(@PathVariable Long eventId,@RequestParam(value = "orderBy", required = false, defaultValue = "dateDesc")String orderBy) {
+		return this.commentTransactionnalService.getComments(eventId,orderBy);
 	}
 	
 	@PutMapping("/{commentId}")

@@ -7,6 +7,7 @@ public class CommentDto {
 	
 	private Long id;
 	private String author;
+	private String userName;
 	private String avatar;
 	private Date creationDateHours;
 	private Long parentComment;
@@ -143,6 +144,14 @@ public class CommentDto {
 
 	public void setReportedByUser(boolean isReportedByUser) {
 		this.isReportedByUser = isReportedByUser;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 }

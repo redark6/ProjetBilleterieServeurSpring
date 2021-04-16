@@ -40,19 +40,6 @@ public class EventEntity {
     @Column(name = "nbofticket")
     private int nbOfTicket;
 
-    public EventEntity(Long id, String title, int category, String description, String region, Date creationDate, Date startDate, Date endDate, float price, int nbOfTicket) {
-		this.id = id;
-		this.title = title;
-		this.category = category;
-		this.description = description;
-		this.region = region;
-		this.creationDate = Calendar.getInstance().getTime();
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.price = price;
-		this.nbOfTicket = nbOfTicket;
-	}
-
     public EventEntity() {
     }
 
@@ -100,8 +87,8 @@ public class EventEntity {
 		return creationDate;
 	}
 
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
+	public void setCreationDate() {
+		this.creationDate = Calendar.getInstance().getTime();
 	}
 
 	public Date getStartDate() {

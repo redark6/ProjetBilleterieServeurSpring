@@ -39,10 +39,9 @@ public class EventTransactionalService {
 		return entityToDto(entity);
 	}
 
-	public EventEntity createEvent(EventDto eventDto){
-		EventEntity eventEntity = new EventEntity(eventDto.getId(),eventDto.getTitle(),eventDto.getCategory(),eventDto.getDescription(),eventDto.getRegion(),eventDto.getCreationDate(),eventDto.getStartDate(),eventDto.getEndDate(),eventDto.getPrice(),eventDto.getNbOfTicket());
-		eventRepository.save(eventEntity);
-		return eventEntity;
+	public EventDto createEvent(EventDto eventDto){
+		EventEntity Entity = eventRepository.save(DtoToEntity(eventDto));
+		return entityToDto(Entity);
 	}
 
 	public SearchResultDto<EventDto> searchEventsWithFilters(String search, int category, String startDate, String endDate,
@@ -83,6 +82,20 @@ public class EventTransactionalService {
 	private SearchResultDto<EventDto> entitiesToDtos(SearchResultDto<EventEntity> src) {
 		return new SearchResultDto<>(src.getSearched(), entitiesToDtos(src.getEventList()), src.getCurrentPage(),
 				src.getNumberOfPages());
+	}
+	
+	private EventEntity DtoToEntity(EventDto dto) {
+		EventEntity res = new EventEntity();
+		res.setTitle(dto.getTitle());
+		res.setCategory(dto.getCategory());
+		res.setDescription(dto.getDescription());
+		res.setRegion(dto.getRegion());
+		res.setCreationDate();
+		res.setStartDate(dto.getStartDate());
+		res.setEndDate(dto.getEndDate());
+		res.setPrice(dto.getPrice());
+		res.setNbOfTicket(dto.getNbOfTicket());
+		return res;
 	}
 
 }

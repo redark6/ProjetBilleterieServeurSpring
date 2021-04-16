@@ -5,7 +5,6 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterForm
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserTransactionalService;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,8 +54,7 @@ public class UserController {
 	}
 
 	@GetMapping("/logeduser")
-	public ResponseEntity<UserDto> getCurrentThreadUser(){
-		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<UserDto> getCurrentThreadUser(Principal principal){
 		return userTransactionalService.getCurrentThreadUser(principal.getName())
 				.map(ResponseEntity::ok)
 				.orElse(ResponseEntity.notFound().build());

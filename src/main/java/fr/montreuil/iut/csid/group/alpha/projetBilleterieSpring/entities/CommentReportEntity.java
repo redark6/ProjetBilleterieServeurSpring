@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "commentsReport")
+@Table(name = "commentsreport")
 public class CommentReportEntity {
 	
 	@Id
@@ -16,10 +16,10 @@ public class CommentReportEntity {
 	@Column(name = "id", unique = true)
 	private Long id;
 	
-	@Column(name = "commentId" )
+	@Column(name = "commentid" )
 	private Long commentId;
 	
-	@Column(name = "userId" )
+	@Column(name = "userid" )
 	private String userId;
 	
 	public CommentReportEntity() {}

@@ -1,5 +1,6 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,8 +29,8 @@ public class CommentTransactionnalService {
     	return entityToDto(commentService.addComment(dtoToEntity(comment,user)));
     }
 	
-	public List<CommentDto> getComments(String user,Long eventId,String orderBy) {
-		return entitiesToDtos(commentService.getComments(user,eventId,orderBy));
+	public List<CommentDto> getComments(Long eventId,String orderBy) {
+		return entitiesToDtos(commentService.getComments(eventId,orderBy));
 
 	}
 	
@@ -66,6 +67,7 @@ public class CommentTransactionnalService {
 		CommentDto res = new CommentDto();
 		res.setId(entity.getId());
 		res.setAuthor(entity.getAuthor());
+		res.setUserName(entity.getUserName());
 		res.setAvatar(entity.getAvatar());
 		res.setCreationDateHours(entity.getCreationDateHours());
 		res.setParentComment(entity.getParentComment());
@@ -83,6 +85,10 @@ public class CommentTransactionnalService {
 	}
 	
 	private List<CommentDto> entitiesToDtos(List<CommentEntity> commentEntities) {
+		if(commentEntities == null ) {
+			List<CommentDto> emptyList = new ArrayList<CommentDto>();
+			return emptyList; 
+		}
 		return commentEntities.stream().map(x -> entityToDto(x)).collect(Collectors.toList());
 	}
 	

@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "commentsLike")
+@Table(name = "commentslike")
 public class CommentLikeEntity {
 	
 	@Id
@@ -16,13 +16,13 @@ public class CommentLikeEntity {
 	@Column(name = "id", unique = true)
 	private Long id;
 	
-	@Column(name = "commentId" )
+	@Column(name = "commentid" )
 	private Long commentId;
 	
-	@Column(name = "userId" )
+	@Column(name = "userid" )
 	private String userId;
 	
-	@Column(name = "likeType")
+	@Column(name = "liketype")
 	private int likeType;
 	
 	public CommentLikeEntity() {

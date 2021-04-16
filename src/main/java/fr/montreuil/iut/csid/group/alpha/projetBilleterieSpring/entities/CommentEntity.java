@@ -22,27 +22,29 @@ public class CommentEntity {
 	
 	@Column(name = "author")
 	private String author;
-	
-	@Column(name = "crationDateHours", updatable = false)
+
+	@Column(name = "creationdatehours")
     @Temporal(TemporalType.DATE)
 	private Date creationDateHours;
 	
-	@Column(name = "parentComment")
+	@Column(name = "parentcomment")
 	private Long parentComment;
 	
-	@Column(name = "eventId")
+	@Column(name = "eventid")
 	private Long eventId;
 	
 	@Column(name = "comment")
 	private String comment;
 	
-	@Column(name = "lastModificationDateHours")
+	@Column(name = "lastmodificationdatehours")
     @Temporal(TemporalType.DATE)
 	private Date lastModification;
 	
-	@Column(name = "isBlocked")
+	@Column(name = "isblocked")
 	private boolean isBlocked;
 	
+	@javax.persistence.Transient
+	private String userName;
 	@javax.persistence.Transient
 	private String avatar;
 	@javax.persistence.Transient
@@ -178,6 +180,14 @@ public class CommentEntity {
 
 	public void setReportedByUser(boolean isReportedByUser) {
 		this.isReportedByUser = isReportedByUser;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	
 

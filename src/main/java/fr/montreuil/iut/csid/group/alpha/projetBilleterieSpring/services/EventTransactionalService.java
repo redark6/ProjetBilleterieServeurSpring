@@ -1,5 +1,14 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices.EventSearchService;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.EventRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,6 +55,11 @@ public class EventTransactionalService {
 		return entityToDto(entity);
 	}
 
+	public EventDto createEvent(EventDto eventDto){
+		EventEntity Entity = eventRepository.save(DtoToEntity(eventDto));
+		return entityToDto(Entity);
+	}
+
 	public SearchResultDto<EventDto> searchEventsWithFilters(String search, int category, String startDate, String endDate,
 			int minPrice, int maxPrice, int page, int eventsPerPage) throws ParseException {
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -84,6 +98,20 @@ public class EventTransactionalService {
 	private SearchResultDto<EventDto> entitiesToDtos(SearchResultDto<EventEntity> src) {
 		return new SearchResultDto<>(src.getSearched(), entitiesToDtos(src.getEventList()), src.getCurrentPage(),
 				src.getNumberOfPages());
+	}
+	
+	private EventEntity DtoToEntity(EventDto dto) {
+		EventEntity res = new EventEntity();
+		res.setTitle(dto.getTitle());
+		res.setCategory(dto.getCategory());
+		res.setDescription(dto.getDescription());
+		res.setRegion(dto.getRegion());
+		res.setCreationDate();
+		res.setStartDate(dto.getStartDate());
+		res.setEndDate(dto.getEndDate());
+		res.setPrice(dto.getPrice());
+		res.setNbOfTicket(dto.getNbOfTicket());
+		return res;
 	}
 
 

@@ -1,5 +1,14 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices.EventSearchService;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.EventRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,17 +16,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices.EventSearchService;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.EventRepository;
 
 /**
  * SOLID: This class do only one thing : start database transaction and manage
@@ -39,6 +37,12 @@ public class EventTransactionalService {
 	public Optional<EventDto> findEvent(Long id) {
 		Optional<EventEntity> entity = eventRepository.findById(id);
 		return entityToDto(entity);
+	}
+
+	public EventEntity createEvent(EventDto eventDto){
+		EventEntity eventEntity = new EventEntity(eventDto.getId(),eventDto.getTitle(),eventDto.getCategory(),eventDto.getDescription(),eventDto.getRegion(),eventDto.getCreationDate(),eventDto.getStartDate(),eventDto.getEndDate(),eventDto.getPrice(),eventDto.getNbOfTicket());
+		eventRepository.save(eventEntity);
+		return eventEntity;
 	}
 
 	public SearchResultDto<EventDto> searchEventsWithFilters(String search, int category, String startDate, String endDate,

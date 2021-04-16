@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.RatingEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +32,13 @@ public class EventTransactionalService {
 
 	public final EventRepository eventRepository;
 	public final EventSearchService eventSearchService;
+	public final RatingRepository ratingRepository;
 
 	@Autowired
-	public EventTransactionalService(EventRepository eventRepository, EventSearchService eventSearchService) {
+	public EventTransactionalService(EventRepository eventRepository, EventSearchService eventSearchService, RatingRepository ratingRepository) {
 		this.eventRepository = eventRepository;
 		this.eventSearchService = eventSearchService;
+		this.ratingRepository = ratingRepository;
 	}
 
 	public Optional<EventDto> findEvent(Long id) {
@@ -80,5 +85,6 @@ public class EventTransactionalService {
 		return new SearchResultDto<>(src.getSearched(), entitiesToDtos(src.getEventList()), src.getCurrentPage(),
 				src.getNumberOfPages());
 	}
+
 
 }

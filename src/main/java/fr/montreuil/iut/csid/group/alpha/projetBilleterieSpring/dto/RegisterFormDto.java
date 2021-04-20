@@ -3,6 +3,7 @@ package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -40,6 +41,9 @@ public class RegisterFormDto {
 	@NotBlank(message = "Mot de passe vide")
 	@Size(min = 8, max = 16, message = "Le mot de passe doit faire entre 8 et 16 caractères")
 	private String passwordConfirm;
+	
+	@NotNull
+	private boolean useTerms;
 	
 	public RegisterFormDto(String firstName,String lastName,String role,Date birthDate,String userName,String email,String password,String passwordConfirm) {
 

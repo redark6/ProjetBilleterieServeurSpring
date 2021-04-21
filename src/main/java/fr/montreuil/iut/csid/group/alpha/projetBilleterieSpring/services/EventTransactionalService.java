@@ -17,6 +17,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.RatingEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.RatingRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices.EventSearchService;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.EventRepository;
+
 /**
  * SOLID: This class do only one thing : start database transaction and manage
  * entity to dto conversion out of the transaction
@@ -27,11 +41,13 @@ public class EventTransactionalService {
 
 	public final EventRepository eventRepository;
 	public final EventSearchService eventSearchService;
+	public final RatingRepository ratingRepository;
 
 	@Autowired
-	public EventTransactionalService(EventRepository eventRepository, EventSearchService eventSearchService) {
+	public EventTransactionalService(EventRepository eventRepository, EventSearchService eventSearchService, RatingRepository ratingRepository) {
 		this.eventRepository = eventRepository;
 		this.eventSearchService = eventSearchService;
+		this.ratingRepository = ratingRepository;
 	}
 
 	public Optional<EventDto> findEvent(Long id) {
@@ -97,5 +113,6 @@ public class EventTransactionalService {
 		res.setNbOfTicket(dto.getNbOfTicket());
 		return res;
 	}
+
 
 }

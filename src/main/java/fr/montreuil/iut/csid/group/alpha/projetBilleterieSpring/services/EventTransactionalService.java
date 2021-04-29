@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 /**
  * SOLID: This class do only one thing : start database transaction and manage
  * entity to dto conversion out of the transaction
@@ -45,14 +46,14 @@ public class EventTransactionalService {
 	}
 
 	public SearchResultDto<EventDto> searchEventsWithFilters(String search, int category, String startDate, String endDate,
-			int minPrice, int maxPrice, int page, int eventsPerPage) throws ParseException {
+			int minPrice, int maxPrice, String orderBy, int page, int eventsPerPage) throws ParseException {
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date finalStartDate = null;
 		Date finalEndDate = null;
 		if(startDate != null) {finalStartDate = formatter.parse(startDate);}
 		if(endDate != null){finalEndDate = formatter.parse(endDate);}
 		SearchResultDto<EventEntity> res = eventSearchService.findEventsByCriterias(search, category, finalStartDate,
-				finalEndDate, minPrice, maxPrice, page, eventsPerPage);
+				finalEndDate, minPrice, maxPrice,orderBy, page, eventsPerPage);
 		return entitiesToDtos(res);
 	}
 
@@ -80,7 +81,7 @@ public class EventTransactionalService {
 	}
 
 	private SearchResultDto<EventDto> entitiesToDtos(SearchResultDto<EventEntity> src) {
-		return new SearchResultDto<>(src.getSearched(), entitiesToDtos(src.getEventList()), src.getCurrentPage(),
+		return new SearchResultDto<>(src.getSearched(), src.getNumberFound(), entitiesToDtos(src.getEventList()), src.getCurrentPage(),
 				src.getNumberOfPages());
 	}
 	
@@ -97,5 +98,6 @@ public class EventTransactionalService {
 		res.setNbOfTicket(dto.getNbOfTicket());
 		return res;
 	}
+
 
 }

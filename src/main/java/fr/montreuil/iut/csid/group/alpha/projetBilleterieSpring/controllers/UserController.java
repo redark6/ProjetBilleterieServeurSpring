@@ -8,6 +8,8 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserTra
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,13 +46,14 @@ public class UserController {
     	return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
 	}
 
-	@GetMapping("authority")
+	@GetMapping("/authority")
 	public List<GrantedAuthority> getUserAuthorities() {
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<GrantedAuthority> listAuthorities = new ArrayList<GrantedAuthority>();
-		listAuthorities.addAll(userDetails.getAuthorities());
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			listAuthorities.addAll(authentication.getAuthorities());
+		}
 		return listAuthorities;
-		
 	}
 
 	@GetMapping("/logeduser")
@@ -78,10 +81,12 @@ public class UserController {
 
 	@GetMapping("/sessionvalid")
     public ResponseEntity<Object> invalidateSession() {
-		return new ResponseEntity<>(HttpStatus.OK);  
+		boolean isAuth=false;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			isAuth=true;
+		}
+		return new ResponseEntity<>(isAuth,HttpStatus.OK);  
     }
-	
-
-             
 		
 }

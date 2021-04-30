@@ -13,7 +13,7 @@ import java.security.Principal;
 
 
 @RestController
-@RequestMapping("rate")
+@RequestMapping("/rate")
 public class RatingController {
 
     private final RatingService ratingService;

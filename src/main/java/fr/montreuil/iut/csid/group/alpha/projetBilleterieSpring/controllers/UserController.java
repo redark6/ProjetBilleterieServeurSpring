@@ -58,9 +58,13 @@ public class UserController {
 
 	@GetMapping("/logeduser")
 	public ResponseEntity<UserDto> getCurrentThreadUser(Principal principal){
-		return userTransactionalService.getCurrentThreadUser(principal.getName())
-				.map(ResponseEntity::ok)
-				.orElse(ResponseEntity.notFound().build());
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if(!(authentication instanceof AnonymousAuthenticationToken)) {
+			return userTransactionalService.getCurrentThreadUser(principal.getName())
+					.map(ResponseEntity::ok)
+					.orElse(ResponseEntity.notFound().build());
+		}
+		return new ResponseEntity<>(HttpStatus.OK); 
 
 	}
 

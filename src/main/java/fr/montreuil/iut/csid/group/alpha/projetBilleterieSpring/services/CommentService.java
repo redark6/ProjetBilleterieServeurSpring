@@ -44,20 +44,26 @@ public class CommentService {
 		return comment;
 	}
 	
-	public List<CommentEntity> getComments(Long eventId, String orderBy) {
+	public List<CommentEntity> getComments(Long eventId,Long idParent, String orderBy) {
 		List<CommentEntity> resultListe;
+		if(idParent ==-1) {
+			idParent = null;
+		}
 		switch (orderBy) {
-		case "dateAsc":
-			resultListe = commentRepository.getByEventIdAndParentCommentOrderByCreationDateHoursAsc(eventId, null);
-			break;
 		case "dateDesc":
-			resultListe = commentRepository.getByEventIdAndParentCommentOrderByCreationDateHoursDesc(eventId, null);
+			resultListe = commentRepository.getByEventIdAndParentCommentOrderByCreationDateHoursAsc(eventId, idParent);
+			break;
+		case "dateAsc":
+			resultListe = commentRepository.getByEventIdAndParentCommentOrderByCreationDateHoursDesc(eventId, idParent);
 			break;
 		case "likeAsc":
-			resultListe = commentRepository.getCommentOrderByLikeDesc(eventId, null);
+			if(idParent == null) {
+				idParent = -1L;
+			}
+			resultListe = commentRepository.getCommentOrderByLikeDesc(eventId, idParent);
 			break;
 		default:
-			resultListe = commentRepository.getByEventIdAndParentCommentOrderByCreationDateHoursDesc(eventId, null);
+			resultListe = commentRepository.getByEventIdAndParentCommentOrderByCreationDateHoursDesc(eventId, idParent);
 			break;
 		}
 
@@ -85,6 +91,7 @@ public class CommentService {
 		comment.setAvatar("avatar");
 		comment.setCommentChildren(commentRepository.getByEventIdAndParentCommentOrderByCreationDateHoursDesc(comment.getEventId(), comment.getId()));
 		Optional<CommentLikeEntity> like = commentLikeRepository.getByCommentIdAndUserId(comment.getId(), user);
+		
 		if(!like.isEmpty()) {
 			comment.setIsLikeOrDislikeByUser(like.get().getLikeType());
 		}
@@ -128,8 +135,10 @@ public class CommentService {
 		Optional<CommentLikeEntity> entity = commentLikeRepository.getByCommentIdAndUserId(likeEntity.getCommentId(), likeEntity.getUserId());
 		if(entity.isEmpty()) {
 			commentLikeRepository.save(likeEntity);
+			System.out.println("la");
 		}
 		else {
+			System.out.println("ici");
 			CommentLikeEntity entityToSave = entity.get();
 			if(entityToSave.getLikeType() == likeEntity.getLikeType() ) {
 				entityToSave.setLikeType(0);

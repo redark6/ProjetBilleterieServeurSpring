@@ -15,12 +15,12 @@ public class EventImageEntity {
     private int eventid;
 
     @Column(name= "image")
-    private Byte[] image;
+    private byte[] image;
 
     public EventImageEntity() {
     }
 
-    public EventImageEntity(int id, int eventid, Byte[] image) {
+    public EventImageEntity(int id, int eventid, byte[] image) {
         this.id = id;
         this.eventid = eventid;
         this.image = image;
@@ -42,11 +42,11 @@ public class EventImageEntity {
         this.eventid = eventid;
     }
 
-    public Byte[] getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(Byte[] image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 }

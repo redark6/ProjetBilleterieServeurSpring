@@ -1,5 +1,6 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.AuthorityRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.OrganiserRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
@@ -45,6 +46,10 @@ public class UserService {
 
 	public Optional<UserEntity> getCurrentThreadUser(String email) {
 		return userRepository.getByEmail(email);
+	}
+
+	public Optional<OrganiserEntity> getCurrentThreadOrganiser(String name) {
+		return organiserRepository.getById(name);
 	}
 
 	public Map<String, String> checkFormInput(String userName, Date birthDate, String email) {
@@ -149,5 +154,28 @@ public class UserService {
 		this.organiserRepository.save(organiser);
 
 	}
+
+	public void updateOrganiserInformations(OrganiserEntity organiser, String name) {
+		OrganiserEntity organiserEntity = organiserRepository.findById(name).get();
+
+		if (organiser.getJobTitle()!= null)
+			organiserEntity.setJobTitle(organiser.getJobTitle());
+		if (organiser.getPhoneNumber()!= null)
+			organiserEntity.setPhoneNumber(organiser.getPhoneNumber());
+		if (organiser.getWebsite()!= null)
+			organiserEntity.setWebsite(organiser.getWebsite());
+		if (organiser.getCompany()!= null)
+			organiserEntity.setCompany(organiser.getCompany());
+		if (organiser.getBlog()!= null)
+			organiserEntity.setBlog(organiser.getBlog());
+		if (organiser.getProAddress()!= null)
+			organiserEntity.setProAddress(organiser.getProAddress());
+		if (organiser.getProCity()!= null)
+			organiserEntity.setProCity(organiser.getProCity());
+		if(organiser.getProCountry()!= null)
+			organiserEntity.setProCountry(organiser.getProCountry());
+
+	}
+
 
 }

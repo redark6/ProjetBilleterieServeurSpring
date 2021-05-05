@@ -14,10 +14,10 @@ public class OrganiserEntity {
     private String id;
 
     @Column(name = "job_title")
-    private String job_title;
+    private String jobTitle;
 
     @Column(name = "phone_number")
-    private String phone_number;
+    private String phoneNumber;
 
     @Column(name = "website")
     private String website;
@@ -29,26 +29,26 @@ public class OrganiserEntity {
     private String blog;
 
     @Column(name = "pro_address")
-    private String pro_address;
+    private String proAddress;
 
     @Column(name = "pro_city")
-    private String pro_city;
+    private String proCity;
 
     @Column(name = "pro_country")
-    private String pro_country;
+    private String proCountry;
 
     public OrganiserEntity(){}
 
     public OrganiserEntity(String id, String job_title, String phone_number, String website, String company, String blog, String pro_address, String pro_city, String pro_country) {
         this.id = id;
-        this.job_title = job_title;
-        this.phone_number = phone_number;
+        this.jobTitle = job_title;
+        this.phoneNumber = phone_number;
         this.website = website;
         this.company = company;
         this.blog = blog;
-        this.pro_address = pro_address;
-        this.pro_city = pro_city;
-        this.pro_country = pro_country;
+        this.proAddress = pro_address;
+        this.proCity = pro_city;
+        this.proCountry = pro_country;
     }
 
     public String getId() {
@@ -59,20 +59,20 @@ public class OrganiserEntity {
         this.id = id;
     }
 
-    public String getJob_title() {
-        return job_title;
+    public String getJobTitle() {
+        return jobTitle;
     }
 
-    public void setJob_title(String job_title) {
-        this.job_title = job_title;
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getWebsite() {
@@ -99,28 +99,28 @@ public class OrganiserEntity {
         this.blog = blog;
     }
 
-    public String getPro_address() {
-        return pro_address;
+    public String getProAddress() {
+        return proAddress;
     }
 
-    public void setPro_address(String pro_address) {
-        this.pro_address = pro_address;
+    public void setProAddress(String proAddress) {
+        this.proAddress = proAddress;
     }
 
-    public String getPro_city() {
-        return pro_city;
+    public String getProCity() {
+        return proCity;
     }
 
-    public void setPro_city(String pro_city) {
-        this.pro_city = pro_city;
+    public void setProCity(String proCity) {
+        this.proCity = proCity;
     }
 
-    public String getPro_country() {
-        return pro_country;
+    public String getProCountry() {
+        return proCountry;
     }
 
-    public void setPro_country(String pro_country) {
-        this.pro_country = pro_country;
+    public void setProCountry(String proCountry) {
+        this.proCountry = proCountry;
     }
 
 

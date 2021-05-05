@@ -74,20 +74,37 @@ public class UserController {
 
 	}
 
+	@GetMapping("/logedorganiser")
+	public ResponseEntity<OrganiserDto> getCurrentThreadOrganiser(Principal principal){
+		return userTransactionalService.getCurrentThreadOrganiser(principal.getName())
+				.map(ResponseEntity::ok)
+				.orElse(ResponseEntity.notFound().build());
+
+	}
+
 	@PatchMapping("/patch")
 	@ResponseBody
 	public ResponseEntity<Object> updateUserInformations(@RequestBody @Valid UserDto updateForm,BindingResult result){
-		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication();
 		userTransactionalService.updateUserInformations(updateForm,principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);  
 	}
 
 	@PostMapping("/upgradeToOrganiser")
-	public ResponseEntity<Object> upgradeOrganiser(@RequestBody OrganiserDto organiser){
-		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<Object> upgradeOrganiser(@RequestBody OrganiserDto organiser, Principal principal){
 		userTransactionalService.upgradeOrganiser(organiser,principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+
+	@PatchMapping("/patchOrganiser")
+	@ResponseBody
+	public ResponseEntity<Object> updateOrganiserInformations(@RequestBody @Valid OrganiserDto updateForm,BindingResult result){
+		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication();
+		userTransactionalService.updateOrganiserInformations(updateForm,principal.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+
 
 	@GetMapping("/sessionvalid")
     public ResponseEntity<Object> invalidateSession() {

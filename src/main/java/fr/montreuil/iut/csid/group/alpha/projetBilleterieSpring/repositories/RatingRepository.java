@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface RatingRepository extends JpaRepository<RatingEntity,Integer> {
 
     @Query(value = "select avg(rating) from rating where event_id = ?1 ", nativeQuery = true)
-    Optional<Integer> getNote(Long id);
+    Optional<Double> getNote(Long id);
 
     Optional<RatingEntity> findByUserIdAndEventId(String name,Long id );
 

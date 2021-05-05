@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -98,10 +99,19 @@ public class UserController {
 		return new ResponseEntity<>(isAuth,HttpStatus.OK);  
     }
 	
-	@PatchMapping("/patchpicture")
-	public ResponseEntity<Object> patchProfilPicture(@RequestBody MultipartFile  picture){
+	@PostMapping("/patchpicture")
+	public ResponseEntity<UserDto> patchProfilPicture(@RequestParam("myFile") MultipartFile picture){
+		System.out.println(picture);
 		boolean result = imageService.saveProfilePicture(picture);
-		return null;
+		
+		if(result) {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+				return userTransactionalService.getCurrentThreadUser(authentication.getName())
+						.map(ResponseEntity::ok)
+						.orElse(ResponseEntity.notFound().build());
+			 }
+		
+		return new ResponseEntity<>(null,HttpStatus.EXPECTATION_FAILED);  
 	}
 		
 }

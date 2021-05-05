@@ -1,6 +1,9 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Type;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -32,6 +35,10 @@ public class UserEntity {
 	@Column(name = "createddate", updatable = false)
     @Temporal(TemporalType.DATE)
     private Date createdDate;
+	
+	@Column(name = "profilpicture")
+	@Type(type="org.hibernate.type.BinaryType")
+	private byte[] profilPicture;
 	
 	public UserEntity() {}
 	
@@ -99,6 +106,14 @@ public class UserEntity {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public byte[] getProfilPicture() {
+		return profilPicture;
+	}
+
+	public void setProfilPicture(byte[] profilPicture) {
+		this.profilPicture = profilPicture;
 	}
 
 }

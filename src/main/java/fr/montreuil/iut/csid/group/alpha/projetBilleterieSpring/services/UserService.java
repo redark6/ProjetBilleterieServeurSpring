@@ -109,6 +109,7 @@ public class UserService {
 			
 			jdbcUserDetailsManager.createUser(userDetails);
 			UserEntity userEntity = new UserEntity(user.getId(),user.getFirstName(),user.getLastName(),user.getBirthDate(),user.getUserName(),user.getEmail());		
+			userEntity.setProfilPicture(null);
 			userEntity = this.userRepository.save(userEntity);
 		}
 		return errors;

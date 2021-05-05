@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 @Service
 @Transactional
@@ -31,22 +32,11 @@ public class ImageService {
 			
 			UserEntity entity = userRepository.getByEmail(authentication.getName()).get();
 			
-		    Byte[] byteObjects = new Byte[picture.getBytes().length];
-
-		    int i = 0;
-
-		    for (byte b : picture.getBytes()){
-		        byteObjects[i++] = b;
-		    }
-
-		    //recipe.setImage(byteObjects);
-
-		    //recipeRepository.save(recipe);
+		    entity.setProfilPicture(picture.getBytes());
+		    userRepository.save(entity);
 		    return true;
-		} catch (IOException e) {
-		    //todo handle better
-		    //log.error("Error occurred", e);
 
+		} catch (IOException e) {
 		    return false;
 		}
 	}

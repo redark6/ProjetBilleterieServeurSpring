@@ -1,5 +1,6 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 
+import java.util.Base64;
 import java.util.Date;
 
 public class UserDto {
@@ -11,6 +12,7 @@ public class UserDto {
 	private String userName;
 	private String email;
 	private Date createdDate;
+	private String profilPicture;
 	
 	public UserDto(Long id, String firstName, String lastName, Date birthDate, String userName, String email,
 			Date createdDate) {
@@ -81,6 +83,22 @@ public class UserDto {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public String getProfilPicture() {
+		return profilPicture;
+	}
+
+	public void setProfilPicture(byte[] profilPicture) {
+		if(profilPicture != null) {
+			StringBuilder base64 = new StringBuilder("data:image/png;base64,");
+	        base64.append(Base64.getEncoder().encodeToString(profilPicture));
+			this.profilPicture = base64.toString();
+		}
+		else {
+			this.profilPicture = null;
+		}
+
 	}
 
 }

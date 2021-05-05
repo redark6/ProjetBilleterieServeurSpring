@@ -17,19 +17,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.RatingEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.RatingRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices.EventSearchService;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.EventRepository;
 
 /**
  * SOLID: This class do only one thing : start database transaction and manage
@@ -41,13 +28,11 @@ public class EventTransactionalService {
 
 	public final EventRepository eventRepository;
 	public final EventSearchService eventSearchService;
-	public final RatingRepository ratingRepository;
 
 	@Autowired
-	public EventTransactionalService(EventRepository eventRepository, EventSearchService eventSearchService, RatingRepository ratingRepository) {
+	public EventTransactionalService(EventRepository eventRepository, EventSearchService eventSearchService) {
 		this.eventRepository = eventRepository;
 		this.eventSearchService = eventSearchService;
-		this.ratingRepository = ratingRepository;
 	}
 
 	public Optional<EventDto> findEvent(Long id) {
@@ -61,14 +46,14 @@ public class EventTransactionalService {
 	}
 
 	public SearchResultDto<EventDto> searchEventsWithFilters(String search, int category, String startDate, String endDate,
-			int minPrice, int maxPrice, int page, int eventsPerPage) throws ParseException {
+			int minPrice, int maxPrice, String orderBy, int page, int eventsPerPage) throws ParseException {
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date finalStartDate = null;
 		Date finalEndDate = null;
 		if(startDate != null) {finalStartDate = formatter.parse(startDate);}
 		if(endDate != null){finalEndDate = formatter.parse(endDate);}
 		SearchResultDto<EventEntity> res = eventSearchService.findEventsByCriterias(search, category, finalStartDate,
-				finalEndDate, minPrice, maxPrice, page, eventsPerPage);
+				finalEndDate, minPrice, maxPrice,orderBy, page, eventsPerPage);
 		return entitiesToDtos(res);
 	}
 
@@ -96,7 +81,7 @@ public class EventTransactionalService {
 	}
 
 	private SearchResultDto<EventDto> entitiesToDtos(SearchResultDto<EventEntity> src) {
-		return new SearchResultDto<>(src.getSearched(), entitiesToDtos(src.getEventList()), src.getCurrentPage(),
+		return new SearchResultDto<>(src.getSearched(), src.getNumberFound(), entitiesToDtos(src.getEventList()), src.getCurrentPage(),
 				src.getNumberOfPages());
 	}
 	

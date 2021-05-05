@@ -1,6 +1,7 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -39,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
         http.csrf().disable();
         http.cors().configurationSource(corsConfigurationSource());
-        http.authorizeRequests().antMatchers("/login", "/user/create","/event/{id}","/event/search","/comment/{id}","/event/type/{type}","/event/Recent","/rate","/rate/{id}").permitAll()
+        http.authorizeRequests().antMatchers("/login", "/user/logeduser", "/user/create","/user/sessionvalid", "/user/authority" ,"/event/{id}","/event/search","/comment/{id}","/event/type/{type}","/event/Recent","/rate/{id}").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -51,10 +52,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 })
                 .and()
                 .addFilter(new CustomerAuthenticationFilter(authenticationManager(), objectMapper)) // filtre header not body
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
-        http.sessionManagement().maximumSessions(1);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .maximumSessions(1);
     }
-
+    
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedMethods(List.of(

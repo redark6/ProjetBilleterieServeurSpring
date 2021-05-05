@@ -29,8 +29,8 @@ public class CommentTransactionnalService {
     	return entityToDto(commentService.addComment(dtoToEntity(comment,user)));
     }
 	
-	public List<CommentDto> getComments(Long eventId,String orderBy) {
-		return entitiesToDtos(commentService.getComments(eventId,orderBy));
+	public List<CommentDto> getComments(Long eventId,Long idParent ,String orderBy) {
+		return entitiesToDtos(commentService.getComments(eventId,idParent,orderBy));
 
 	}
 	

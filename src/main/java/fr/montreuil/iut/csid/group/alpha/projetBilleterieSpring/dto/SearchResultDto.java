@@ -6,12 +6,14 @@ import java.util.List;
  */
 public class SearchResultDto<T> {
 	private String searched;
+	private int numberFound;
 	private List<T> dataList;
 	private int currentPage;
 	private int numberOfPages;
 	
-	public SearchResultDto(String searched,List<T> dataList,int currentPage,int numberOfPages) {
+	public SearchResultDto(String searched,int numberFound,List<T> dataList,int currentPage,int numberOfPages) {
 		this.searched =searched;
+		this.numberFound = numberFound;
 		this.dataList = dataList;
 		this.currentPage = currentPage;
 		this.numberOfPages = numberOfPages;
@@ -23,6 +25,14 @@ public class SearchResultDto<T> {
 
 	public void setSearched(String searched) {
 		this.searched = searched;
+	}
+
+	public int getNumberFound() {
+		return numberFound;
+	}
+
+	public void setNumberFound(int numberFound) {
+		this.numberFound = numberFound;
 	}
 
 	public List<T> getEventList() {

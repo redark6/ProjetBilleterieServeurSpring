@@ -1,24 +1,18 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventTransactionalService;
-import java.security.Principal;
 import java.text.ParseException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.text.ParseException;
 
 
 /**
@@ -56,10 +50,11 @@ public class EventController {
     	@RequestParam(value = "endDate", required = false ) String endDate,
     	@RequestParam(value = "minPrice", required = false, defaultValue = "-1") int minPrice,
     	@RequestParam(value = "maxPrice", required = false, defaultValue = "-1") int maxPrice,
+    	@RequestParam(value = "orderBy", required = false, defaultValue = "recent") String orderBy,
     	@RequestParam(value = "page", required = false, defaultValue ="1") int page,
     	@RequestParam(value = "eventsPerPage", required = false, defaultValue ="20") int eventsPerPage
     ) throws ParseException{
-    	return eventTransactionalService.searchEventsWithFilters(search,catgory,startDate,endDate,minPrice,maxPrice,page,eventsPerPage);
+    	return eventTransactionalService.searchEventsWithFilters(search,catgory,startDate,endDate,minPrice,maxPrice,orderBy,page,eventsPerPage);
     }
 
 

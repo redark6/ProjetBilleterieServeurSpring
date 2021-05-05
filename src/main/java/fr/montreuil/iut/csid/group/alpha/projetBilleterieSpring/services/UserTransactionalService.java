@@ -56,6 +56,7 @@ public class UserTransactionalService {
 		res.setUserName(userEntity.getUserName());
 		res.setEmail(userEntity.getEmail());
 		res.setCreatedDate(userEntity.getCreatedDate());
+		res.setProfilPicture(userEntity.getProfilPicture());
 		return res;
 	}
 	

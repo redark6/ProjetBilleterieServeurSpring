@@ -24,15 +24,16 @@ public class RatingController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Integer> getNote(@PathVariable Long id){
+    public ResponseEntity<Double> getNote(@PathVariable Long id){
         return ratingService.getNote(id)
                 .map(x ->ResponseEntity.ok(x))
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/{id}/{email}")
-    public ResponseEntity<Integer> getNote(@PathVariable Long id, @PathVariable String email){
-        return ratingService.getUserNote(id,email)
+
+    @GetMapping("/userRating/{id}")
+    public ResponseEntity<Integer> getUserNote(@PathVariable Long id, Principal principal){
+        return ratingService.getUserNote(id, principal.getName())
                 .map(x ->ResponseEntity.ok(x))
                 .orElse(ResponseEntity.notFound().build());
     }

@@ -23,7 +23,7 @@ public class RatingService {
         this.ratingRepository = ratingRepository;
     }
 
-    public Optional<Integer> getNote(Long id) {
+    public Optional<Double> getNote(Long id) {
         return ratingRepository.getNote(id);
     }
 

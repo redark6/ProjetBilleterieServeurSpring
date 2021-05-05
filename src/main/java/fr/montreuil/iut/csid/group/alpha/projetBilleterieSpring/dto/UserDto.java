@@ -90,9 +90,15 @@ public class UserDto {
 	}
 
 	public void setProfilPicture(byte[] profilPicture) {
-		StringBuilder base64 = new StringBuilder("data:image/png;base64,");
-        base64.append(Base64.getEncoder().encodeToString(profilPicture));
-		this.profilPicture = base64.toString();
+		if(profilPicture != null) {
+			StringBuilder base64 = new StringBuilder("data:image/png;base64,");
+	        base64.append(Base64.getEncoder().encodeToString(profilPicture));
+			this.profilPicture = base64.toString();
+		}
+		else {
+			this.profilPicture = null;
+		}
+
 	}
 
 }

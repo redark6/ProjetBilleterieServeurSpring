@@ -1,11 +1,13 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class EventImageDto {
     private int id;
     private int eventid;
-    private Byte[] image;
+    private MultipartFile image;
 
-    public EventImageDto(int id, int eventid, Byte[] image) {
+    public EventImageDto(int id, int eventid, MultipartFile image) {
         this.id = id;
         this.eventid = eventid;
         this.image = image;
@@ -27,11 +29,11 @@ public class EventImageDto {
         this.eventid = eventid;
     }
 
-    public Byte[] getImage() {
+    public MultipartFile getImage() {
         return image;
     }
 
-    public void setImage(Byte[] image) {
+    public void setImage(MultipartFile image) {
         this.image = image;
     }
 }

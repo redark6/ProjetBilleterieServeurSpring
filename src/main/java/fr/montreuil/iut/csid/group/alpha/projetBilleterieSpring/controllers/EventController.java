@@ -1,18 +1,17 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventImageDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventTransactionalService;
-import java.text.ParseException;
-
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
 
-
-import java.net.URI;
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 
 
 /**
@@ -23,16 +22,23 @@ import java.net.URISyntaxException;
 public class EventController {
 
     private final EventTransactionalService eventTransactionalService;
+    private final ImageService imageService;
 
     @Autowired
-    public EventController(EventTransactionalService eventTransactionalService) {
+    public EventController(EventTransactionalService eventTransactionalService, ImageService imageService) {
         this.eventTransactionalService = eventTransactionalService;
+        this.imageService = imageService;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<EventDto> createEvent(@RequestBody EventDto eventDto) throws URISyntaxException {
-        eventTransactionalService.createEvent(eventDto);
-        return ResponseEntity.created(new URI("event/created")).build();
+    public EventDto createEvent(@RequestBody EventDto eventDto) throws URISyntaxException {
+        return eventTransactionalService.createEvent(eventDto);
+        //return ResponseEntity.created(new URI("event/created")).build();
+    }
+
+    @PostMapping("/eventimagepost")
+    public EventImageDto createImageEvent(@RequestBody EventImageDto eventImageDto) throws IOException {
+        return imageService.crateEventImage(eventImageDto);
     }
 
     @GetMapping("/{id}")

@@ -8,6 +8,7 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.ImageSe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -37,8 +38,9 @@ public class EventController {
     }
 
     @PostMapping("/eventimagepost")
-    public EventImageDto createImageEvent(@RequestBody EventImageDto eventImageDto) throws IOException {
-        return imageService.crateEventImage(eventImageDto);
+    
+    public void createImageEvent(@RequestParam("imageFile") MultipartFile picture,@RequestParam("eventId") int id) throws IOException {
+         imageService.crateEventImage(picture,id);
     }
 
     @GetMapping("/{id}")

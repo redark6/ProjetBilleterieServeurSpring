@@ -43,9 +43,8 @@ public class ImageService {
 		}
 	}
 
-	public EventImageDto crateEventImage(EventImageDto eventImageDto) throws IOException {
-		EventImageEntity eventImageEntity = eventImageRepository.save(dtoToEntity(eventImageDto));
-		return eventImageDto;
+	public void crateEventImage(MultipartFile picture, int eventId) throws IOException {
+		EventImageEntity eventImageEntity = eventImageRepository.save(new EventImageEntity(0,eventId,picture.getBytes()));
 	}
 
 	private EventImageEntity dtoToEntity(EventImageDto eventImageDto) throws IOException {

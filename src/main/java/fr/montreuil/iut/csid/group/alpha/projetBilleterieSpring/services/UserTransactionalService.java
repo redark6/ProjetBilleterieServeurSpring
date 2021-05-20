@@ -1,17 +1,15 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
-import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CommentDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
@@ -26,7 +24,7 @@ public class UserTransactionalService {
 	public final UserService userService;
 
 	@Autowired
-	public UserTransactionalService(UserService userService) {
+	public UserTransactionalService(UserService userService,EventCommentService eventCommentService) {
 		this.userService = userService;
 	}
 	
@@ -40,6 +38,10 @@ public class UserTransactionalService {
 	
 	public Optional<UserDto> getCurrentThreadUser(String email) {
 		return entityToDto(this.userService.getCurrentThreadUser(email));
+	}
+
+	public Optional<OrganiserDto> getCurrentThreadOrganiser(String name) {
+		return organiserEntityToDto(this.userService.getCurrentThreadOrganiser(name));
 	}
 	
 	public void upgradeOrganiser(OrganiserDto organiser, String identifiant){
@@ -56,10 +58,29 @@ public class UserTransactionalService {
 		res.setUserName(userEntity.getUserName());
 		res.setEmail(userEntity.getEmail());
 		res.setCreatedDate(userEntity.getCreatedDate());
+		res.setProfilPicture(userEntity.getProfilPicture());
 		return res;
 	}
 	
 	private Optional<UserDto> entityToDto(Optional<UserEntity> entity) {
+		return entity.map(x -> entityToDto(x));
+	}
+
+	private OrganiserDto entityToDto(OrganiserEntity organiser) {
+		OrganiserDto res = new OrganiserDto();
+		res.setId(organiser.getId());
+		res.setJobTitle(organiser.getJobTitle());
+		res.setPhoneNumber(organiser.getPhoneNumber());
+		res.setWebsite(organiser.getWebsite());
+		res.setCompany(organiser.getCompany());
+		res.setBlog(organiser.getBlog());
+		res.setProAddress(organiser.getProAddress());
+		res.setProCity(organiser.getProCity());
+		res.setProCountry(organiser.getProCountry());
+		return res;
+	}
+
+	private Optional<OrganiserDto> organiserEntityToDto(Optional<OrganiserEntity> entity) {
 		return entity.map(x -> entityToDto(x));
 	}
 
@@ -95,15 +116,20 @@ public class UserTransactionalService {
 	private OrganiserEntity dtoToEntity(OrganiserDto organiser) {
 		OrganiserEntity res = new OrganiserEntity();
 		res.setId(organiser.getId());
-		res.setJob_title(organiser.getJobTitle());
-		res.setPhone_number(organiser.getPhoneNumber());
+		res.setJobTitle(organiser.getJobTitle());
+		res.setPhoneNumber(organiser.getPhoneNumber());
 		res.setWebsite(organiser.getWebsite());
 		res.setCompany(organiser.getCompany());
 		res.setBlog(organiser.getBlog());
-		res.setPro_address(organiser.getProAddress());
-		res.setPro_city(organiser.getProCity());
-		res.setPro_country(organiser.getProCountry());
+		res.setProAddress(organiser.getProAddress());
+		res.setProCity(organiser.getProCity());
+		res.setProCountry(organiser.getProCountry());
 		return res;
 	}
-	
+
+	public void updateOrganiserInformations(OrganiserDto organiser, String name) {
+		this.userService.updateOrganiserInformations(dtoToEntity(organiser), name);
+	}
+
+
 }

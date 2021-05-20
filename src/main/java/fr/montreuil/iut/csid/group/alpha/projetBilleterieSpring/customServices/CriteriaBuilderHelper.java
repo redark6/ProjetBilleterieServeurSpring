@@ -64,4 +64,26 @@ public class CriteriaBuilderHelper<T> {
 			predicates.add(builder.lessThanOrEqualTo(root.get("endDate"), endDate));
 		}
 	}
+
+	public void OrderBy(String orderBy) {
+		switch (orderBy) {
+		case "recent":
+			query.orderBy(builder.asc(root.get("startDate")));
+			break;
+		case "former":
+			query.orderBy(builder.desc(root.get("startDate")));
+			break;
+		case "incprice":
+			query.orderBy(builder.asc(root.get("price")));
+			break;
+		case "decprice":
+			query.orderBy(builder.desc(root.get("price")));
+			break;
+		default:
+			query.orderBy(builder.asc(root.get("startDate")));
+			break;
+		}
+		
+		
+	}
 }

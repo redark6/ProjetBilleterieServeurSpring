@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="alpha" id="17">
+    <createTable tableName="eventimages">
+        <column autoIncrement="true" name="id" type="integer">
+            <constraints nullable="false" primaryKey="true" primaryKeyName="eventimages_pkey"/>
+        </column>
+        <column name="eventid" type="integer"/>
+        <column name="image" type="bytea"/>
+    </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="eventid" baseTableName="eventimages" constraintName="fk_eventimage_event" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="events" validate="true"/>
+
+    </changeSet>
+</databaseChangeLog>

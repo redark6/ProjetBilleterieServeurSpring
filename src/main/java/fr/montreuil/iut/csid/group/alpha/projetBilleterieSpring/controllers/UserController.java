@@ -1,18 +1,24 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventCommentDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventCommentService;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.ImageService;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserTransactionalService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.security.Principal;
@@ -25,10 +31,14 @@ import java.util.Map;
 public class UserController {
 
     private final UserTransactionalService userTransactionalService;
+    private final ImageService imageService;
+    private final EventCommentService eventCommentService;
 	
 	@Autowired
-	public UserController(UserTransactionalService userTransactionalService) {
+	public UserController(UserTransactionalService userTransactionalService,ImageService imageService,EventCommentService eventCommentService) {
 		this.userTransactionalService=userTransactionalService;
+		this.imageService = imageService;
+		this.eventCommentService = eventCommentService;
 	}
 	
 	@PostMapping("/create")
@@ -44,18 +54,31 @@ public class UserController {
     	return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
 	}
 
-	@GetMapping("authority")
+	@GetMapping("/authority")
 	public List<GrantedAuthority> getUserAuthorities() {
-		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		List<GrantedAuthority> listAuthorities = new ArrayList<GrantedAuthority>();
-		listAuthorities.addAll(userDetails.getAuthorities());
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			listAuthorities.addAll(authentication.getAuthorities());
+		}
 		return listAuthorities;
-		
 	}
 
 	@GetMapping("/logeduser")
 	public ResponseEntity<UserDto> getCurrentThreadUser(Principal principal){
-		return userTransactionalService.getCurrentThreadUser(principal.getName())
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if(!(authentication instanceof AnonymousAuthenticationToken)) {
+			return userTransactionalService.getCurrentThreadUser(principal.getName())
+					.map(ResponseEntity::ok)
+					.orElse(ResponseEntity.notFound().build());
+		}
+		return new ResponseEntity<>(HttpStatus.OK); 
+
+	}
+
+	@GetMapping("/logedorganiser")
+	public ResponseEntity<OrganiserDto> getCurrentThreadOrganiser(Principal principal){
+		return userTransactionalService.getCurrentThreadOrganiser(principal.getName())
 				.map(ResponseEntity::ok)
 				.orElse(ResponseEntity.notFound().build());
 
@@ -64,24 +87,54 @@ public class UserController {
 	@PatchMapping("/patch")
 	@ResponseBody
 	public ResponseEntity<Object> updateUserInformations(@RequestBody @Valid UserDto updateForm,BindingResult result){
-		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication();
 		userTransactionalService.updateUserInformations(updateForm,principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);  
 	}
 
 	@PostMapping("/upgradeToOrganiser")
-	public ResponseEntity<Object> upgradeOrganiser(@RequestBody OrganiserDto organiser){
-		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	public ResponseEntity<Object> upgradeOrganiser(@RequestBody OrganiserDto organiser, Principal principal){
 		userTransactionalService.upgradeOrganiser(organiser,principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
+	@PatchMapping("/patchOrganiser")
+	@ResponseBody
+	public ResponseEntity<Object> updateOrganiserInformations(@RequestBody @Valid OrganiserDto updateForm,BindingResult result){
+		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication();
+		userTransactionalService.updateOrganiserInformations(updateForm,principal.getName());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+
+
 	@GetMapping("/sessionvalid")
     public ResponseEntity<Object> invalidateSession() {
-		return new ResponseEntity<>(HttpStatus.OK);  
+		boolean isAuth=false;
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			isAuth=true;
+		}
+		return new ResponseEntity<>(isAuth,HttpStatus.OK);  
     }
 	
-
-             
+	@PostMapping("/patchpicture")
+	public ResponseEntity<UserDto> patchProfilPicture(@RequestParam("myFile") MultipartFile picture){
+		System.out.println(picture);
+		boolean result = imageService.saveProfilePicture(picture);
 		
+		if(result) {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+				return userTransactionalService.getCurrentThreadUser(authentication.getName())
+						.map(ResponseEntity::ok)
+						.orElse(ResponseEntity.notFound().build());
+			 }
+		
+		return new ResponseEntity<>(null,HttpStatus.EXPECTATION_FAILED);  
+	}
+	
+	@GetMapping("/usercomments")
+	public List<EventCommentDto> getCurrentUserComments(Principal principal) {
+		return eventCommentService.getCurrentUserComments(principal.getName());
+	}
 }

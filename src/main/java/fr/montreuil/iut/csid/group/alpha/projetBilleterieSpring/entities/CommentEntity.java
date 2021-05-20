@@ -24,7 +24,7 @@ public class CommentEntity {
 	private String author;
 
 	@Column(name = "creationdatehours")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
 	private Date creationDateHours;
 	
 	@Column(name = "parentcomment")
@@ -37,7 +37,7 @@ public class CommentEntity {
 	private String comment;
 	
 	@Column(name = "lastmodificationdatehours")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
 	private Date lastModification;
 	
 	@Column(name = "isblocked")

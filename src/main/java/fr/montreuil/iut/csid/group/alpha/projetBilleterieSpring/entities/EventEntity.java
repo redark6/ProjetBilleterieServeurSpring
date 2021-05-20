@@ -23,7 +23,7 @@ public class EventEntity {
     private String description;
 
     @Column(name = "region")
-    private String region;
+    private int region;
 
     @Column(name = "creationdate")
     private Date creationDate;
@@ -75,11 +75,11 @@ public class EventEntity {
 		this.description = description;
 	}
 
-	public String getRegion() {
+	public int getRegion() {
 		return region;
 	}
 
-	public void setRegion(String region) {
+	public void setRegion(int region) {
 		this.region = region;
 	}
 

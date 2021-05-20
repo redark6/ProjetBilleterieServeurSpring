@@ -17,9 +17,12 @@ public interface CommentRepository extends JpaRepository<CommentEntity,Long> {
 	//List<CommentEntity> getByEventIdAndParentCommentOrderByCreationDateHoursDesc(Long eventId,Long parentComment);
 	
 	@Query(value = "SELECT * FROM comments as c where c.eventId = ?1 and  c.parentComment = ?2"
-				  +"ORDER BY (select count(cl.likeType) from commentsLike as cl where cl.likeType = 1 and cl.commentId = c.id) DESC"
+				  +" ORDER BY (select count(cl.likeType) from commentsLike as cl where cl.likeType = 1 and cl.commentId = c.id) DESC"
 			, nativeQuery = true)
 	List<CommentEntity> getCommentOrderByLikeDesc(Long eventId,Long parentComment);
+	
+	List<CommentEntity> getByAuthorOrderByCreationDateHoursAsc(String user);
+
 }
 
 

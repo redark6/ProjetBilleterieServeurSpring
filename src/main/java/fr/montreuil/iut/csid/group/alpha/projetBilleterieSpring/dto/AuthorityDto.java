@@ -1,8 +1,6 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 
 
-import liquibase.pro.packaged.A;
-
 public class AuthorityDto{
 
         private String id;

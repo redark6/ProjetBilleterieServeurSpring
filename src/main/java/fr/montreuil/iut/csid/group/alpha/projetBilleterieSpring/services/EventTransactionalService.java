@@ -45,14 +45,14 @@ public class EventTransactionalService {
 		return entityToDto(Entity);
 	}
 
-	public SearchResultDto<EventDto> searchEventsWithFilters(String search, int category, String startDate, String endDate,
+	public SearchResultDto<EventDto> searchEventsWithFilters(String search, int category, int region,String startDate, String endDate,
 			int minPrice, int maxPrice, String orderBy, int page, int eventsPerPage) throws ParseException {
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date finalStartDate = null;
 		Date finalEndDate = null;
 		if(startDate != null) {finalStartDate = formatter.parse(startDate);}
 		if(endDate != null){finalEndDate = formatter.parse(endDate);}
-		SearchResultDto<EventEntity> res = eventSearchService.findEventsByCriterias(search, category, finalStartDate,
+		SearchResultDto<EventEntity> res = eventSearchService.findEventsByCriterias(search, category, region, finalStartDate,
 				finalEndDate, minPrice, maxPrice,orderBy, page, eventsPerPage);
 		return entitiesToDtos(res);
 	}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="alpha" id="18">
+    <createTable tableName="regions">
+        <column name="regionid" type="integer">
+        	<constraints nullable="false" primaryKey="true" primaryKeyName="regionid_pkey"/>
+        </column>
+        <column name="regionname" type="varchar(100)"/>
+    </createTable>
+
+	<modifyDataType tableName="events" columnName="region" newDataType="integer"/>
+	
+	<addForeignKeyConstraint baseColumnNames="region" baseTableName="events" constraintName="fk_regionevent_event" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="regionid" referencedTableName="regions" validate="true"/>   
+	
+    </changeSet>
+</databaseChangeLog>

@@ -1,5 +1,6 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices.BASE64DecodedMultipartFile;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventImageDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventImageEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -47,6 +49,11 @@ public class ImageService {
 		EventImageEntity eventImageEntity = eventImageRepository.save(new EventImageEntity(0,eventId,picture.getBytes()));
 	}
 
+	public Optional<EventImageEntity> getEventImage(int eventId){
+		EventImageEntity eventImageEntity = eventImageRepository.findByEventid(eventId).get();
+		return Optional.of(eventImageEntity);
+	}
+
 	private EventImageEntity dtoToEntity(EventImageDto eventImageDto) throws IOException {
 		EventImageEntity eie = new EventImageEntity();
 		eie.setId(eventImageDto.getId());
@@ -54,5 +61,17 @@ public class ImageService {
 		eie.setImage(eventImageDto.getImage().getBytes());
 		return eie;
 	}
+
+	private EventImageDto entityToDto(EventImageEntity eventImageEntity){
+		EventImageDto eid = new EventImageDto();
+		eid.setId(eventImageEntity.getId());
+		eid.setEventid(eventImageEntity.getEventid());
+		BASE64DecodedMultipartFile base64DecodedMultipartFile = new BASE64DecodedMultipartFile(eventImageEntity.getImage());
+		eid.setImage(base64DecodedMultipartFile);
+		System.out.println(eid.getImage());
+		return eid;
+	}
+
+
 
 }

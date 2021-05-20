@@ -85,5 +85,6 @@
     <include  file="liquibase/changelog-v1.6.xml"/>
     <include  file="liquibase/changelog-v2.1.sql"/>
     <include file="liquibase/changelog-v1.7.xml"/>
+    <include  file="liquibase/changelog-v2.2.sql"/>
 
 </databaseChangeLog>

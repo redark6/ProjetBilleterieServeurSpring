@@ -31,7 +31,10 @@ public class CommentTransactionnalService {
 	
 	public List<CommentDto> getComments(Long eventId,Long idParent ,String orderBy) {
 		return entitiesToDtos(commentService.getComments(eventId,idParent,orderBy));
-
+	}
+	
+	public List<CommentDto> getCurrentUserComments(String user) {
+		return entitiesToDtos(commentService.getCurrentUserComments(user));
 	}
 	
 	public CommentDto updateComment(CommentDto comment,String user,Long commentId) {

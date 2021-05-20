@@ -20,6 +20,9 @@ public interface CommentRepository extends JpaRepository<CommentEntity,Long> {
 				  +" ORDER BY (select count(cl.likeType) from commentsLike as cl where cl.likeType = 1 and cl.commentId = c.id) DESC"
 			, nativeQuery = true)
 	List<CommentEntity> getCommentOrderByLikeDesc(Long eventId,Long parentComment);
+	
+	List<CommentEntity> getByAuthorOrderByCreationDateHoursAsc(String user);
+
 }
 
 

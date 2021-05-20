@@ -40,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
         http.csrf().disable();
         http.cors().configurationSource(corsConfigurationSource());
-        http.authorizeRequests().antMatchers("/login", "/user/logeduser", "/user/create","/user/sessionvalid", "/user/authority" ,"/event/{id}","/event/search","/comment/{id}","/event/type/{type}","/event/Recent","/rate/{id}").permitAll()
+        http.authorizeRequests().antMatchers("/login", "/user/logeduser", "/user/create","/user/sessionvalid", "/user/authority" ,"/event/{id}","/event/search","/comment/{id}","/event/type/{type}","/event/Recent","/rate/{id}","/commondata/regions").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

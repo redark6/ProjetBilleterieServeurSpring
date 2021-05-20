@@ -8,14 +8,14 @@ public class EventDto {
     private String title;
     private int category;
     private String description;
-    private String region;
+    private int region;
     private Date creationDate;
     private Date startDate;
     private Date endDate;
     private float price;
     private int nbOfTicket;
     
-    public EventDto(Long id, String title, int category, String description, String region, Date creationDate,
+    public EventDto(Long id, String title, int category, String description, int region, Date creationDate,
 			Date startDate, Date endDate, float price, int nbOfTicket) {
 		this.id = id;
 		this.title = title;
@@ -64,11 +64,11 @@ public class EventDto {
 		this.description = description;
 	}
 
-	public String getRegion() {
+	public int getRegion() {
 		return region;
 	}
 
-	public void setRegion(String region) {
+	public void setRegion(int region) {
 		this.region = region;
 	}
 

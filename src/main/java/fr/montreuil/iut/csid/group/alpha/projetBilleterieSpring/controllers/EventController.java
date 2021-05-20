@@ -54,6 +54,7 @@ public class EventController {
     public SearchResultDto searchEventsWithFilters(
     	@RequestParam(value = "search", required = false) String search,
     	@RequestParam(value = "category", required = false, defaultValue = "-1") int catgory,
+    	@RequestParam(value = "region", required = false, defaultValue = "-1") int region,
     	@RequestParam(value = "startDate", required = false) String startDate,
     	@RequestParam(value = "endDate", required = false ) String endDate,
     	@RequestParam(value = "minPrice", required = false, defaultValue = "-1") int minPrice,
@@ -62,7 +63,7 @@ public class EventController {
     	@RequestParam(value = "page", required = false, defaultValue ="1") int page,
     	@RequestParam(value = "eventsPerPage", required = false, defaultValue ="20") int eventsPerPage
     ) throws ParseException{
-    	return eventTransactionalService.searchEventsWithFilters(search,catgory,startDate,endDate,minPrice,maxPrice,orderBy,page,eventsPerPage);
+    	return eventTransactionalService.searchEventsWithFilters(search,catgory,region,startDate,endDate,minPrice,maxPrice,orderBy,page,eventsPerPage);
     }
 
 

@@ -68,7 +68,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         ));
         
         configuration.setAllowCredentials(true);
-        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        configuration.setAllowedOrigins(Collections.singletonList("http://alpha.csid.agilitejoviale.fr"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration.applyPermitDefaultValues());
         return source;

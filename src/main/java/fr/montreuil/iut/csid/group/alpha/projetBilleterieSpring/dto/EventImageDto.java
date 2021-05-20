@@ -7,6 +7,10 @@ public class EventImageDto {
     private int eventid;
     private MultipartFile image;
 
+    public EventImageDto(){
+
+    }
+
     public EventImageDto(int id, int eventid, MultipartFile image) {
         this.id = id;
         this.eventid = eventid;
@@ -34,6 +38,8 @@ public class EventImageDto {
     }
 
     public void setImage(MultipartFile image) {
+        MultipartFile multipartFile;
+
         this.image = image;
     }
 }

@@ -1,8 +1,8 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventImageDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventImageEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventTransactionalService;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +38,15 @@ public class EventController {
     }
 
     @PostMapping("/eventimagepost")
-    
     public void createImageEvent(@RequestParam("imageFile") MultipartFile picture,@RequestParam("eventId") int id) throws IOException {
          imageService.crateEventImage(picture,id);
+    }
+
+    @GetMapping("/eventimageget")
+    public ResponseEntity<EventImageEntity> getImageEvent(@RequestParam int eventId){
+        return imageService.getEventImage(eventId)
+                .map(x ->ResponseEntity.ok(x))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}")

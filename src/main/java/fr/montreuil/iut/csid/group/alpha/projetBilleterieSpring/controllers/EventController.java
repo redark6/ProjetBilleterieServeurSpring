@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.text.ParseException;
 
 
@@ -32,8 +33,8 @@ public class EventController {
     }
 
     @PostMapping("/create")
-    public EventDto createEvent(@RequestBody EventDto eventDto) throws URISyntaxException {
-        return eventTransactionalService.createEvent(eventDto);
+    public EventDto createEvent(@RequestBody EventDto eventDto, Principal principal) throws URISyntaxException {
+        return eventTransactionalService.createEvent(eventDto ,principal.getName());
         //return ResponseEntity.created(new URI("event/created")).build();
     }
 

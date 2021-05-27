@@ -4,6 +4,7 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices.E
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -100,4 +101,34 @@ public class EventTransactionalService {
 	}
 
 
+    public void updateEvent(EventDto eventDto) {
+    }
+
+	public void updateEvent(EventDto event, Long id){
+
+		EventEntity eventEntity = eventRepository.findById(id).get();
+
+		if(event.getTitle() != null)
+			eventEntity.setTitle(event.getTitle());
+
+		if(event.getCategory() != 0)
+			eventEntity.setCategory(event.getCategory());
+
+		if(event.getDescription() != null)
+			eventEntity.setDescription(event.getDescription());
+
+		if(event.getNbOfTicket() != 0)
+			eventEntity.setNbOfTicket(event.getNbOfTicket());
+
+		eventRepository.save(eventEntity);
+	}
+
+	public boolean isOwner(Long eventId, String userId) {
+		EventEntity eventEntity = eventRepository.findById(eventId).get();
+
+		if (eventEntity.getUserId().equals(userId))
+			return true;
+		
+		return false;
+	}
 }

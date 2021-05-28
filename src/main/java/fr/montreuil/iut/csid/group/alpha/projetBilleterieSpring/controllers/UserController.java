@@ -1,8 +1,10 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventCommentDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventCommentService;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.ImageService;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserTransactionalService;
 
@@ -13,7 +15,6 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +23,6 @@ import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
@@ -32,11 +32,13 @@ public class UserController {
 
     private final UserTransactionalService userTransactionalService;
     private final ImageService imageService;
+    private final EventCommentService eventCommentService;
 	
 	@Autowired
-	public UserController(UserTransactionalService userTransactionalService,ImageService imageService) {
+	public UserController(UserTransactionalService userTransactionalService,ImageService imageService,EventCommentService eventCommentService) {
 		this.userTransactionalService=userTransactionalService;
 		this.imageService = imageService;
+		this.eventCommentService = eventCommentService;
 	}
 	
 	@PostMapping("/create")
@@ -130,5 +132,9 @@ public class UserController {
 		
 		return new ResponseEntity<>(null,HttpStatus.EXPECTATION_FAILED);  
 	}
-		
+	
+	@GetMapping("/usercomments")
+	public List<EventCommentDto> getCurrentUserComments(Principal principal) {
+		return eventCommentService.getCurrentUserComments(principal.getName());
+	}
 }

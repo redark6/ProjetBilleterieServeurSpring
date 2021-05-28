@@ -1,5 +1,6 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CommentDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
@@ -22,7 +24,7 @@ public class UserTransactionalService {
 	public final UserService userService;
 
 	@Autowired
-	public UserTransactionalService(UserService userService) {
+	public UserTransactionalService(UserService userService,EventCommentService eventCommentService) {
 		this.userService = userService;
 	}
 	

@@ -41,8 +41,8 @@ public class EventTransactionalService {
 		return entityToDto(entity);
 	}
 
-	public EventDto createEvent(EventDto eventDto){
-		EventEntity Entity = eventRepository.save(DtoToEntity(eventDto));
+	public EventDto createEvent(EventDto eventDto, String username){
+		EventEntity Entity = eventRepository.save(DtoToEntity(eventDto,username));
 		return entityToDto(Entity);
 	}
 
@@ -86,7 +86,7 @@ public class EventTransactionalService {
 				src.getNumberOfPages());
 	}
 	
-	private EventEntity DtoToEntity(EventDto dto) {
+	private EventEntity DtoToEntity(EventDto dto, String username) {
 		EventEntity res = new EventEntity();
 		res.setTitle(dto.getTitle());
 		res.setCategory(dto.getCategory());
@@ -97,12 +97,12 @@ public class EventTransactionalService {
 		res.setEndDate(dto.getEndDate());
 		res.setPrice(dto.getPrice());
 		res.setNbOfTicket(dto.getNbOfTicket());
+		res.setUserId(username);
 		return res;
 	}
 
 
-    public void updateEvent(EventDto eventDto) {
-    }
+
 
 	public void updateEvent(EventDto event, Long id){
 
@@ -131,4 +131,5 @@ public class EventTransactionalService {
 		
 		return false;
 	}
+
 }

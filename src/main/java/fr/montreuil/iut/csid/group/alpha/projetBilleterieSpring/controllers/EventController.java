@@ -38,8 +38,8 @@ public class EventController {
     }
 
     @PostMapping("/create")
-    public EventDto createEvent(@RequestBody EventDto eventDto) throws URISyntaxException {
-        return eventTransactionalService.createEvent(eventDto);
+    public EventDto createEvent(@RequestBody EventDto eventDto, Principal principal) throws URISyntaxException {
+        return eventTransactionalService.createEvent(eventDto ,principal.getName());
         //return ResponseEntity.created(new URI("event/created")).build();
     }
 
@@ -80,18 +80,15 @@ public class EventController {
 
     @PatchMapping("/patch/{id}")
     @ResponseBody
-    public ResponseEntity<Object> updateEvent(@RequestBody @Valid EventDto eventDto,Long id){
+    public ResponseEntity<Object> updateEvent(@RequestBody @Valid EventDto eventDto,@PathVariable Long id){
         eventTransactionalService.updateEvent(eventDto,id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/{eventId}")
+    @GetMapping("/isOwner/{eventId}")
     @ResponseBody
-    public boolean isOwner(@PathVariable Long id, Principal principal){
-        return eventTransactionalService.isOwner(id,principal.getName());
+    public boolean isOwner(@PathVariable Long eventId, Principal principal){
+        return eventTransactionalService.isOwner(eventId,principal.getName());
     }
-
-
-    
 
 }

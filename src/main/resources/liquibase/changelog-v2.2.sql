@@ -1,15 +1,104 @@
 --liquibase formatted sql
 
---changeset nvoxland:1
-create table rating (
-    id SERIAL PRIMARY KEY,
-    user_id varchar(50),
-    event_id int,
-    rating integer,
-     CONSTRAINT fk_user_id_rating
-          FOREIGN KEY(user_id)
-          REFERENCES users(username),
-     CONSTRAINT fk_event_id_rating
-           FOREIGN KEY(event_id)
-           REFERENCES events(id)
-);
+--changeset nvoxland:4
+
+INSERT INTO regions VALUES (1,'Aisne');
+INSERT INTO regions VALUES (2,'Allier');
+INSERT INTO regions VALUES (3,'Hautes-Alpes');
+INSERT INTO regions VALUES (4,'Alpes-de-Haute-Provence');
+INSERT INTO regions VALUES (5,'Alpes-Maritimes');
+INSERT INTO regions VALUES (6,'Ardèche');
+INSERT INTO regions VALUES (7,'Ardennes');
+INSERT INTO regions VALUES (8,'Ariège');
+INSERT INTO regions VALUES (9,'Aube');
+INSERT INTO regions VALUES (10,'Aude');
+INSERT INTO regions VALUES (11,'Aveyron');
+INSERT INTO regions VALUES (12,'Bouches-du-Rhône');
+INSERT INTO regions VALUES (13,'Calvados');
+INSERT INTO regions VALUES (14,'Cantal');
+INSERT INTO regions VALUES (15,'Charente');
+INSERT INTO regions VALUES (16,'Charente-Maritime');
+INSERT INTO regions VALUES (17,'Cher');
+INSERT INTO regions VALUES (18,'Corrèze');
+INSERT INTO regions VALUES (19,'Corse-du-sud');
+INSERT INTO regions VALUES (20,'Haute-corse');
+INSERT INTO regions VALUES (21,'Côte-d''or');
+INSERT INTO regions VALUES (22,'Côtes-d''armor');
+INSERT INTO regions VALUES (23,'Creuse');
+INSERT INTO regions VALUES (24,'Dordogne');
+INSERT INTO regions VALUES (25,'Doubs');
+INSERT INTO regions VALUES (26,'Drôme');
+INSERT INTO regions VALUES (27,'Eure');
+INSERT INTO regions VALUES (28,'Eure-et-Loir');
+INSERT INTO regions VALUES (29,'Finistère');
+INSERT INTO regions VALUES (30,'Gard');
+INSERT INTO regions VALUES (31,'Haute-Garonne');
+INSERT INTO regions VALUES (32,'Gers');
+INSERT INTO regions VALUES (33,'Gironde');
+INSERT INTO regions VALUES (34,'Hérault');
+INSERT INTO regions VALUES (35,'Ile-et-Vilaine');
+INSERT INTO regions VALUES (36,'Indre');
+INSERT INTO regions VALUES (37,'Indre-et-Loire');
+INSERT INTO regions VALUES (38,'Isère');
+INSERT INTO regions VALUES (39,'Jura');
+INSERT INTO regions VALUES (40,'Landes');
+INSERT INTO regions VALUES (41,'Loir-et-Cher');
+INSERT INTO regions VALUES (42,'Loire');
+INSERT INTO regions VALUES (43,'Haute-Loire');
+INSERT INTO regions VALUES (44,'Loire-Atlantique');
+INSERT INTO regions VALUES (45,'Loiret');
+INSERT INTO regions VALUES (46,'Lot');
+INSERT INTO regions VALUES (47,'Lot-et-Garonne');
+INSERT INTO regions VALUES (48,'Lozère');
+INSERT INTO regions VALUES (49,'Maine-et-Loire');
+INSERT INTO regions VALUES (50,'Manche');
+INSERT INTO regions VALUES (51,'Marne');
+INSERT INTO regions VALUES (52,'Haute-Marne');
+INSERT INTO regions VALUES (53,'Mayenne');
+INSERT INTO regions VALUES (54,'Meurthe-et-Moselle');
+INSERT INTO regions VALUES (55,'Meuse');
+INSERT INTO regions VALUES (56,'Morbihan');
+INSERT INTO regions VALUES (57,'Moselle');
+INSERT INTO regions VALUES (58,'Nièvre');
+INSERT INTO regions VALUES (59,'Nord');
+INSERT INTO regions VALUES (60,'Oise');
+INSERT INTO regions VALUES (61,'Orne');
+INSERT INTO regions VALUES (62,'Pas-de-Calais');
+INSERT INTO regions VALUES (63,'Puy-de-Dôme');
+INSERT INTO regions VALUES (64,'Pyrénées-Atlantiques');
+INSERT INTO regions VALUES (65,'Hautes-Pyrénées');
+INSERT INTO regions VALUES (66,'Pyrénées-Orientales');
+INSERT INTO regions VALUES (67,'Bas-Rhin');
+INSERT INTO regions VALUES (68,'Haut-Rhin');
+INSERT INTO regions VALUES (69,'Rhône');
+INSERT INTO regions VALUES (70,'Haute-Saône');
+INSERT INTO regions VALUES (71,'Saône-et-Loire');
+INSERT INTO regions VALUES (72,'Sarthe');
+INSERT INTO regions VALUES (73,'Savoie');
+INSERT INTO regions VALUES (74,'Haute-Savoie');
+INSERT INTO regions VALUES (75,'Paris');
+INSERT INTO regions VALUES (76,'Seine-Maritime');
+INSERT INTO regions VALUES (77,'Seine-et-Marne');
+INSERT INTO regions VALUES (78,'Yvelines');
+INSERT INTO regions VALUES (79,'Deux-Sèvres');
+INSERT INTO regions VALUES (80,'Somme');
+INSERT INTO regions VALUES (81,'Tarn');
+INSERT INTO regions VALUES (82,'Tarn-et-Garonne');
+INSERT INTO regions VALUES (83,'Var');
+INSERT INTO regions VALUES (84,'Vaucluse');
+INSERT INTO regions VALUES (85,'Vendée');
+INSERT INTO regions VALUES (86,'Vienne');
+INSERT INTO regions VALUES (87,'Haute-Vienne');
+INSERT INTO regions VALUES (88,'Vosges');
+INSERT INTO regions VALUES (89,'Yonne');
+INSERT INTO regions VALUES (90,'Territoire de Belfort');
+INSERT INTO regions VALUES (91,'Essonne');
+INSERT INTO regions VALUES (92,'Hauts-de-Seine');
+INSERT INTO regions VALUES (93,'Seine-Saint-Denis');
+INSERT INTO regions VALUES (94,'Val-de-Marne');
+INSERT INTO regions VALUES (95,'Val-d''oise');
+INSERT INTO regions VALUES (96,'Mayotte');
+INSERT INTO regions VALUES (97,'Guadeloupe');
+INSERT INTO regions VALUES (98,'Guyane');
+INSERT INTO regions VALUES (99,'Martinique');
+INSERT INTO regions VALUES (100,'Réunion');

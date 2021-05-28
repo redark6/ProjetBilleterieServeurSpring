@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CommentDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CommentEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CommentLikeEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CommentReportEntity;
@@ -69,6 +70,10 @@ public class CommentService {
 
 		getCommentsChilddren(resultListe);
 		return resultListe;
+	}
+	
+	public List<CommentEntity> getCurrentUserComments(String user) {
+		return commentRepository.getByAuthorOrderByCreationDateHoursAsc(user);
 	}
 	
 	private void getCommentsChilddren(List<CommentEntity> listCommentParent){
@@ -149,5 +154,6 @@ public class CommentService {
 			commentLikeRepository.save(entityToSave);
 		}
 	}
+
 
 }

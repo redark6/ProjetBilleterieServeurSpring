@@ -24,6 +24,10 @@ public class RatingService {
     }
 
     public Optional<Double> getNote(Long id) {
+    	Optional<Double> rate = ratingRepository.getNote(id);
+    	if(rate.isEmpty()) {
+    		return Optional.of(0.0d);
+    	}
         return ratingRepository.getNote(id);
     }
 

@@ -4,7 +4,6 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices.E
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -132,4 +131,8 @@ public class EventTransactionalService {
 		return false;
 	}
 
+	public List<EventDto> getUserEvents(String name) {
+		List<EventEntity> userEventsEntities = eventRepository.findAllByUserId(name);
+		return entitiesToDtos(userEventsEntities);
+	}
 }

@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.Principal;
 import java.text.ParseException;
+import java.util.List;
 
 
 /**
@@ -97,5 +98,13 @@ public class EventController {
     public boolean isOwner(@PathVariable Long eventId, Principal principal){
         return eventTransactionalService.isOwner(eventId,principal.getName());
     }
+
+    @GetMapping("/myevent")
+    @ResponseBody
+    public List<EventDto> userEvents(Principal principal){
+        return eventTransactionalService.getUserEvents(principal.getName());
+    }
+
+
 
 }

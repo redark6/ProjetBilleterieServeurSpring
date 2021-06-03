@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface EventImageRepository extends JpaRepository<EventImageEntity, String> {
+public interface EventImageRepository extends JpaRepository<EventImageEntity, Integer> {
 
     Optional<EventImageEntity> findByEventid(int eventid);
 }

@@ -71,6 +71,19 @@ public class ImageService {
 		return eid;
 	}
 
+	public void modifyImageEvent(MultipartFile picture, int id) throws IOException {
+		Optional<EventImageEntity> img = this.eventImageRepository.findById(id);
+		if(img.isEmpty()) {
+			eventImageRepository.save(new EventImageEntity(0,id,picture.getBytes()));
+		}
+		else {
+			EventImageEntity image = img.get();
+			image.setImage(picture.getBytes());
+			eventImageRepository.save(image);
+		}
+		
+	}
+
 
 
 }

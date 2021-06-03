@@ -5,6 +5,7 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResult
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventTransactionalService;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +50,12 @@ public class EventController {
                 .map(imageByteArray ->ResponseEntity.ok().contentLength(imageByteArray.length).contentType(MediaType.IMAGE_JPEG).body(imageByteArray))
                 .orElse(ResponseEntity.notFound().build());
     }
+    
+    @PatchMapping("/eventimagemodify")
+    public ResponseEntity<Object> modifyImageEvent(@RequestParam("imageFile") MultipartFile picture,@RequestParam("eventId") int id) throws IOException{
+        imageService.modifyImageEvent(picture,id);
+        return new ResponseEntity<>(null,HttpStatus.OK);  
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<EventDto> findEvent(@PathVariable Long id){
@@ -73,7 +80,5 @@ public class EventController {
     	return eventTransactionalService.searchEventsWithFilters(search,catgory,region,startDate,endDate,minPrice,maxPrice,orderBy,page,eventsPerPage);
     }
 
-
-    
 
 }

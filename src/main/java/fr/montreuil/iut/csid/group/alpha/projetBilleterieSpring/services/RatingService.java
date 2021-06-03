@@ -1,6 +1,6 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.Rating;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RatingDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.RatingEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +31,14 @@ public class RatingService {
         return ratingRepository.getNote(id);
     }
 
-    public void rate(Rating rating) {
-        Optional<RatingEntity> ratingEntityOptional =ratingRepository.findByUserIdAndEventId(rating.getUserId(), (long) rating.getEventId());
+    public void rate(RatingDto ratingDto) {
+        Optional<RatingEntity> ratingEntityOptional =ratingRepository.findByUserIdAndEventId(ratingDto.getUserId(), (long) ratingDto.getEventId());
         if (ratingEntityOptional.isEmpty()){
-            ratingRepository.save(new RatingEntity(Long.valueOf(rating.getEventId()),rating.getUserId(),rating.getRating()));
+            ratingRepository.save(new RatingEntity(Long.valueOf(ratingDto.getEventId()), ratingDto.getUserId(), ratingDto.getRating()));
         }
         else{
             RatingEntity ratingEntity = ratingEntityOptional.get();
-            ratingEntity.setRating(rating.getRating());
+            ratingEntity.setRating(ratingDto.getRating());
             ratingRepository.save(ratingEntity);
         }
     }

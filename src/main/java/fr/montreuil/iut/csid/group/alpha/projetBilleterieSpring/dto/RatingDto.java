@@ -1,6 +1,6 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 
-public class Rating {
+public class RatingDto {
 
     private int eventId;
 
@@ -8,9 +8,9 @@ public class Rating {
 
     private int rating;
 
-    public Rating() { }
+    public RatingDto() { }
 
-    public Rating(int eventId, String userId, int rate) {
+    public RatingDto(int eventId, String userId, int rate) {
         this.eventId = eventId;
         this.rating = rate;
         this.userId=userId;

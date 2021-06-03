@@ -1,12 +1,10 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.Rating;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RatingDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -39,8 +37,8 @@ public class RatingController {
     }
 
     @PostMapping()
-    public ResponseEntity<Object> postNote(@RequestBody Rating rating){
-        ratingService.rate(rating);
+    public ResponseEntity<Object> postNote(@RequestBody RatingDto ratingDto){
+        ratingService.rate(ratingDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

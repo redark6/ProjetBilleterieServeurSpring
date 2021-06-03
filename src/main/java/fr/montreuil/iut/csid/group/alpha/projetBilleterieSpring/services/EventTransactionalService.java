@@ -101,4 +101,38 @@ public class EventTransactionalService {
 	}
 
 
+
+
+	public void updateEvent(EventDto event, Long id){
+
+		EventEntity eventEntity = eventRepository.findById(id).get();
+
+		if(event.getTitle() != null)
+			eventEntity.setTitle(event.getTitle());
+
+		if(event.getCategory() != 0)
+			eventEntity.setCategory(event.getCategory());
+
+		if(event.getDescription() != null)
+			eventEntity.setDescription(event.getDescription());
+
+		if(event.getNbOfTicket() != 0)
+			eventEntity.setNbOfTicket(event.getNbOfTicket());
+
+		eventRepository.save(eventEntity);
+	}
+
+	public boolean isOwner(Long eventId, String userId) {
+		EventEntity eventEntity = eventRepository.findById(eventId).get();
+
+		if (eventEntity.getUserId().equals(userId))
+			return true;
+		
+		return false;
+	}
+
+	public List<EventDto> getUserEvents(String name) {
+		List<EventEntity> userEventsEntities = eventRepository.findAllByUserId(name);
+		return entitiesToDtos(userEventsEntities);
+	}
 }

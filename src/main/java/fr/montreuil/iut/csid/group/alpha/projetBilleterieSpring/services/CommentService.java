@@ -93,7 +93,7 @@ public class CommentService {
 		String user = authentication.getName();
 		comment.setOwnedByCurrentUser( comment.getAuthor().equals(user) ? true :false );
 		comment.setUserName(entity.getUserName());
-		comment.setAvatar("avatar");
+		comment.setAvatar(entity.getProfilPicture());
 		comment.setCommentChildren(commentRepository.getByEventIdAndParentCommentOrderByCreationDateHoursDesc(comment.getEventId(), comment.getId()));
 		Optional<CommentLikeEntity> like = commentLikeRepository.getByCommentIdAndUserId(comment.getId(), user);
 		

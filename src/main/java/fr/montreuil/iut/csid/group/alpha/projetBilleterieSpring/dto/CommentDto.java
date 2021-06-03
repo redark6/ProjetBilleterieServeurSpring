@@ -1,5 +1,6 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -46,9 +47,17 @@ public class CommentDto {
 		return avatar;
 	}
 
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
+	public void setAvatar(byte[] avatar) {
+		if(avatar != null) {
+			StringBuilder base64 = new StringBuilder("data:image/png;base64,");
+	        base64.append(Base64.getEncoder().encodeToString(avatar));
+			this.avatar = base64.toString();
+		}
+		else {
+			this.avatar = null;
+		}
 	}
+	
 
 	public Date getCreationDateHours() {
 		return creationDateHours;

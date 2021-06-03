@@ -40,7 +40,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
         http.csrf().disable();
         http.cors().configurationSource(corsConfigurationSource());
-        http.authorizeRequests().antMatchers("/login", "/user/logeduser", "/user/create","/user/sessionvalid", "/user/authority" ,"/event/{id}","/event/search","/comment/{id}","/event/type/{type}","/event/Recent","/rate/{id}","/commondata/regions","/event/isOwner/{eventId}","/event/isOwner/{eventId}/{email}","/event/patch/{eventId}").permitAll()
+
+        http.authorizeRequests().antMatchers("/login", "/user/logeduser", "/user/create","/user/sessionvalid", "/user/authority" ,"/event/{id}","/event/search","/comment/{id}","/event/type/{type}","/event/Recent","/rate/{id}","/commondata/regions","/event/isOwner/{eventId}","/event/isOwner/{eventId}/{email}","/event/patch/{eventId}","/event/eventimageget").permitAll()
+
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -68,7 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         ));
         
         configuration.setAllowCredentials(true);
-        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        configuration.setAllowedOrigins(Collections.singletonList("http://alpha.csid.agilitejoviale.fr"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration.applyPermitDefaultValues());
         return source;

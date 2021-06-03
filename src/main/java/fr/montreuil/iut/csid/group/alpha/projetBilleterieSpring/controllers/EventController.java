@@ -2,16 +2,17 @@ package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventImageEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventTransactionalService;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.text.ParseException;
 
 
@@ -32,8 +33,8 @@ public class EventController {
     }
 
     @PostMapping("/create")
-    public EventDto createEvent(@RequestBody EventDto eventDto) throws URISyntaxException {
-        return eventTransactionalService.createEvent(eventDto);
+    public EventDto createEvent(@RequestBody EventDto eventDto, Principal principal) throws URISyntaxException {
+        return eventTransactionalService.createEvent(eventDto ,principal.getName());
         //return ResponseEntity.created(new URI("event/created")).build();
     }
 
@@ -43,9 +44,9 @@ public class EventController {
     }
 
     @GetMapping("/eventimageget")
-    public ResponseEntity<EventImageEntity> getImageEvent(@RequestParam int eventId){
+    public ResponseEntity<byte[]> getImageEvent(@RequestParam int eventId){
         return imageService.getEventImage(eventId)
-                .map(x ->ResponseEntity.ok(x))
+                .map(imageByteArray ->ResponseEntity.ok().contentLength(imageByteArray.length).contentType(MediaType.IMAGE_JPEG).body(imageByteArray))
                 .orElse(ResponseEntity.notFound().build());
     }
 

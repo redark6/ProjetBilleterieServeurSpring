@@ -49,9 +49,8 @@ public class ImageService {
 		EventImageEntity eventImageEntity = eventImageRepository.save(new EventImageEntity(0,eventId,picture.getBytes()));
 	}
 
-	public Optional<EventImageEntity> getEventImage(int eventId){
-		EventImageEntity eventImageEntity = eventImageRepository.findByEventid(eventId).get();
-		return Optional.of(eventImageEntity);
+	public Optional<byte[]> getEventImage(int eventId){
+		return eventImageRepository.findByEventid(eventId).map(EventImageEntity::getImage);
 	}
 
 	private EventImageEntity dtoToEntity(EventImageDto eventImageDto) throws IOException {

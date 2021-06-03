@@ -14,9 +14,10 @@ public class EventDto {
     private Date endDate;
     private float price;
     private int nbOfTicket;
+    private String userId;
     
     public EventDto(Long id, String title, int category, String description, int region, Date creationDate,
-			Date startDate, Date endDate, float price, int nbOfTicket) {
+			Date startDate, Date endDate, float price, int nbOfTicket, String userId) {
 		this.id = id;
 		this.title = title;
 		this.category = category;
@@ -27,6 +28,7 @@ public class EventDto {
 		this.endDate = endDate;
 		this.price = price;
 		this.nbOfTicket = nbOfTicket;
+		this.userId = userId;
 	}
 
 	public EventDto() {
@@ -112,4 +114,11 @@ public class EventDto {
 		this.nbOfTicket = nbOfTicket;
 	}
 
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 }

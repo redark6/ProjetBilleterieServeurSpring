@@ -40,6 +40,9 @@ public class EventEntity {
     @Column(name = "nbofticket")
     private int nbOfTicket;
 
+    @Column(name = "user_id")
+	private String userId;
+
     public EventEntity() {
     }
 
@@ -123,5 +126,11 @@ public class EventEntity {
 		this.nbOfTicket = nbOfTicket;
 	}
 
+	public String getUserId() {
+		return userId;
+	}
 
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 }

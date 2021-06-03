@@ -132,7 +132,7 @@ public class EventTransactionalService {
 	}
 
 	public List<EventDto> getUserEvents(String name) {
-		List<EventEntity> userEventsEntities = eventRepository.findAllByUserId(name);
+		List<EventEntity> userEventsEntities = eventRepository.findTitleAndCreationDateAndRegionAndCategoryByUserId(name);
 		return entitiesToDtos(userEventsEntities);
 	}
 }

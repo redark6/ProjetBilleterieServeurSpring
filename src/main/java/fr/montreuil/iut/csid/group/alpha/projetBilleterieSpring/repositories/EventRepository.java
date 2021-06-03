@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<EventEntity, Long> {
 
 
-    @Query(value = "select titre, creationDate, region, category  from events where user_id = ?1 ", nativeQuery = true)
+    @Query(value = "select title, creationDate, region, category  from events where user_id = ?1 ", nativeQuery = true)
     List<EventEntity> findAllByUserId(String name);
 }

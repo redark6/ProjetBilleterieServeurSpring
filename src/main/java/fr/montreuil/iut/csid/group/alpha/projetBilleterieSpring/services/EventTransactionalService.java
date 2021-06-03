@@ -40,8 +40,8 @@ public class EventTransactionalService {
 		return entityToDto(entity);
 	}
 
-	public EventDto createEvent(EventDto eventDto){
-		EventEntity Entity = eventRepository.save(DtoToEntity(eventDto));
+	public EventDto createEvent(EventDto eventDto, String username){
+		EventEntity Entity = eventRepository.save(DtoToEntity(eventDto,username));
 		return entityToDto(Entity);
 	}
 
@@ -85,7 +85,7 @@ public class EventTransactionalService {
 				src.getNumberOfPages());
 	}
 	
-	private EventEntity DtoToEntity(EventDto dto) {
+	private EventEntity DtoToEntity(EventDto dto, String username) {
 		EventEntity res = new EventEntity();
 		res.setTitle(dto.getTitle());
 		res.setCategory(dto.getCategory());
@@ -96,8 +96,43 @@ public class EventTransactionalService {
 		res.setEndDate(dto.getEndDate());
 		res.setPrice(dto.getPrice());
 		res.setNbOfTicket(dto.getNbOfTicket());
+		res.setUserId(username);
 		return res;
 	}
 
 
+
+
+	public void updateEvent(EventDto event, Long id){
+
+		EventEntity eventEntity = eventRepository.findById(id).get();
+
+		if(event.getTitle() != null)
+			eventEntity.setTitle(event.getTitle());
+
+		if(event.getCategory() != 0)
+			eventEntity.setCategory(event.getCategory());
+
+		if(event.getDescription() != null)
+			eventEntity.setDescription(event.getDescription());
+
+		if(event.getNbOfTicket() != 0)
+			eventEntity.setNbOfTicket(event.getNbOfTicket());
+
+		eventRepository.save(eventEntity);
+	}
+
+	public boolean isOwner(Long eventId, String userId) {
+		EventEntity eventEntity = eventRepository.findById(eventId).get();
+
+		if (eventEntity.getUserId().equals(userId))
+			return true;
+		
+		return false;
+	}
+
+	public List<EventDto> getUserEvents(String name) {
+		List<EventEntity> userEventsEntities = eventRepository.findTitleAndCreationDateAndRegionAndCategoryByUserId(name);
+		return entitiesToDtos(userEventsEntities);
+	}
 }

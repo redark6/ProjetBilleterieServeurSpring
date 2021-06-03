@@ -2,17 +2,21 @@ package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventImageEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventTransactionalService;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.text.ParseException;
+import java.util.List;
 
 
 /**
@@ -32,8 +36,8 @@ public class EventController {
     }
 
     @PostMapping("/create")
-    public EventDto createEvent(@RequestBody EventDto eventDto) throws URISyntaxException {
-        return eventTransactionalService.createEvent(eventDto);
+    public EventDto createEvent(@RequestBody EventDto eventDto, Principal principal) throws URISyntaxException {
+        return eventTransactionalService.createEvent(eventDto ,principal.getName());
         //return ResponseEntity.created(new URI("event/created")).build();
     }
 
@@ -43,10 +47,16 @@ public class EventController {
     }
 
     @GetMapping("/eventimageget")
-    public ResponseEntity<EventImageEntity> getImageEvent(@RequestParam int eventId){
+    public ResponseEntity<byte[]> getImageEvent(@RequestParam int eventId){
         return imageService.getEventImage(eventId)
-                .map(x ->ResponseEntity.ok(x))
+                .map(imageByteArray ->ResponseEntity.ok().contentLength(imageByteArray.length).contentType(MediaType.IMAGE_JPEG).body(imageByteArray))
                 .orElse(ResponseEntity.notFound().build());
+    }
+    
+    @PatchMapping("/eventimagemodify")
+    public ResponseEntity<Object> modifyImageEvent(@RequestParam("imageFile") MultipartFile picture,@RequestParam("eventId") int id) throws IOException{
+        imageService.modifyImageEvent(picture,id);
+        return new ResponseEntity<>(null,HttpStatus.OK);  
     }
 
     @GetMapping("/{id}")
@@ -72,7 +82,23 @@ public class EventController {
     	return eventTransactionalService.searchEventsWithFilters(search,catgory,region,startDate,endDate,minPrice,maxPrice,orderBy,page,eventsPerPage);
     }
 
+    @PatchMapping("/patch/{id}")
+    @ResponseBody
+    public ResponseEntity<Object> updateEvent(@RequestBody @Valid EventDto eventDto,@PathVariable Long id){
+        eventTransactionalService.updateEvent(eventDto,id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
-    
+    @GetMapping("/isOwner/{eventId}")
+    @ResponseBody
+    public boolean isOwner(@PathVariable Long eventId, Principal principal){
+        return eventTransactionalService.isOwner(eventId,principal.getName());
+    }
+
+    @GetMapping("/myevent")
+    @ResponseBody
+    public List<EventDto> userEvents(Principal principal){
+        return eventTransactionalService.getUserEvents(principal.getName());
+    }
 
 }

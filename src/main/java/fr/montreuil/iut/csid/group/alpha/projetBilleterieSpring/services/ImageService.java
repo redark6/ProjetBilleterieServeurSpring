@@ -49,9 +49,8 @@ public class ImageService {
 		EventImageEntity eventImageEntity = eventImageRepository.save(new EventImageEntity(0,eventId,picture.getBytes()));
 	}
 
-	public Optional<EventImageEntity> getEventImage(int eventId){
-		EventImageEntity eventImageEntity = eventImageRepository.findByEventid(eventId).get();
-		return Optional.of(eventImageEntity);
+	public Optional<byte[]> getEventImage(int eventId){
+		return eventImageRepository.findByEventid(eventId).map(EventImageEntity::getImage);
 	}
 
 	private EventImageEntity dtoToEntity(EventImageDto eventImageDto) throws IOException {
@@ -70,6 +69,19 @@ public class ImageService {
 		eid.setImage(base64DecodedMultipartFile);
 		System.out.println(eid.getImage());
 		return eid;
+	}
+
+	public void modifyImageEvent(MultipartFile picture, int id) throws IOException {
+		Optional<EventImageEntity> img = this.eventImageRepository.findById(id);
+		if(img.isEmpty()) {
+			eventImageRepository.save(new EventImageEntity(0,id,picture.getBytes()));
+		}
+		else {
+			EventImageEntity image = img.get();
+			image.setImage(picture.getBytes());
+			eventImageRepository.save(image);
+		}
+		
 	}
 
 

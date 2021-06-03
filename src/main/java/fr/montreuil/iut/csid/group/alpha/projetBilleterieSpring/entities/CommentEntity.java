@@ -46,7 +46,7 @@ public class CommentEntity {
 	@javax.persistence.Transient
 	private String userName;
 	@javax.persistence.Transient
-	private String avatar;
+	private byte[] avatar;
 	@javax.persistence.Transient
 	private boolean isOwnedByCurrentUser;
 	@javax.persistence.Transient
@@ -126,12 +126,12 @@ public class CommentEntity {
 		this.isBlocked = isBlocked;
 	}
 
-	public String getAvatar() {
+	public byte[] getAvatar() {
 		return avatar;
 	}
 
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
+	public void setAvatar(byte[] bs) {
+		this.avatar = bs;
 	}
 
 	public boolean isOwnedByCurrentUser() {

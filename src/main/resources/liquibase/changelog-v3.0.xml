@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+
+    <changeSet author="alpha" id="30">
+
+        <addColumn
+                tableName="events" >
+            <column name="user_id"
+                    type="VARCHAR(50)"
+            />
+        </addColumn>
+
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="events" constraintName="fk_events_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="username" referencedTableName="users" validate="true"/>
+
+    </changeSet>
+</databaseChangeLog>

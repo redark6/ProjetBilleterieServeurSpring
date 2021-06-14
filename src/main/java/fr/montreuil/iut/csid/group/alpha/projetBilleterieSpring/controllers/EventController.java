@@ -1,6 +1,7 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RatingDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventTransactionalService;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.ImageService;
@@ -100,5 +101,10 @@ public class EventController {
     public List<EventDto> userEvents(Principal principal){
         return eventTransactionalService.getUserEvents(principal.getName());
     }
-
+    
+    @PatchMapping("/patchalternatifdescription/{id}")
+    public ResponseEntity<Object> patchAlternatifDescription(@RequestBody String content, @PathVariable Long id,Principal principal){
+    	this.eventTransactionalService.patchAlternatifDescription(id,principal.getName(),content);
+    	return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

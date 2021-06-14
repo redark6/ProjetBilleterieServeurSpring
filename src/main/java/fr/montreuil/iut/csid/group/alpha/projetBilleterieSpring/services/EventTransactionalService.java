@@ -1,10 +1,16 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices.EventSearchService;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CustomEventDescriptionDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CustomEventDescriptionEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CustomEventDescriptionRepository;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CustomEventDescriptionRightRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.EventRepository;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,16 +34,32 @@ public class EventTransactionalService {
 
 	public final EventRepository eventRepository;
 	public final EventSearchService eventSearchService;
+	public final CustomEventDescriptionRepository customEventDescriptionRepository;
+	public final CustomEventDescriptionRightRepository customEventDescriptionRightRepository;
+	public final UserRepository userRepository;
+	
 
 	@Autowired
-	public EventTransactionalService(EventRepository eventRepository, EventSearchService eventSearchService) {
+	public EventTransactionalService(EventRepository eventRepository, EventSearchService eventSearchService,CustomEventDescriptionRepository customEventDescriptionRepository, CustomEventDescriptionRightRepository customEventDescriptionRightRepository,UserRepository userRepository) {
 		this.eventRepository = eventRepository;
 		this.eventSearchService = eventSearchService;
+		this.customEventDescriptionRepository = customEventDescriptionRepository;
+		this.customEventDescriptionRightRepository = customEventDescriptionRightRepository;
+		this.userRepository = userRepository;
 	}
 
 	public Optional<EventDto> findEvent(Long id) {
 		Optional<EventEntity> entity = eventRepository.findById(id);
-		return entityToDto(entity);
+		List<CustomEventDescriptionEntity> customDescriptions = customEventDescriptionRepository.findByEventId(id);
+		
+        for (int i = 0; i < customDescriptions.size(); i++) {
+            customDescriptions.get(i).setUserName(userRepository.getByEmail(customDescriptions.get(i).getUserId()).get().getUserName());
+        }
+		
+		List<CustomEventDescriptionDto> customDescriptionDto = entityToDtoCustomDesc(customDescriptions);
+		Optional<EventDto> dto = entityToDto(entity);
+		dto.get().setCustomeDescription(customDescriptionDto);
+		return dto;
 	}
 
 	public EventDto createEvent(EventDto eventDto, String username){
@@ -135,4 +157,37 @@ public class EventTransactionalService {
 		List<EventEntity> userEventsEntities = eventRepository.findTitleAndCreationDateAndRegionAndCategoryByUserIdOrderByCreationDateDesc(name);
 		return entitiesToDtos(userEventsEntities);
 	}
+
+	public void patchAlternatifDescription(Long id, String name, String content) {
+		
+		
+		if(!customEventDescriptionRightRepository.findByEventIdAndUserId(id, name).isEmpty()) {
+			Optional<CustomEventDescriptionEntity> desc =  this.customEventDescriptionRepository.findByEventIdAndUserId(id,name);
+			
+			if(!desc.isEmpty()) {
+				CustomEventDescriptionEntity description = desc.get();
+				description.setDescription(content);
+				this.customEventDescriptionRepository.save(description);	
+			}else {
+				CustomEventDescriptionEntity description = new CustomEventDescriptionEntity();				
+				description.setEventId(id);
+				description.setUserId(name);
+				description.setDescription(content);
+				this.customEventDescriptionRepository.save(description);
+			}
+		}
+		
+	}
+	
+	private List<CustomEventDescriptionDto> entityToDtoCustomDesc(List<CustomEventDescriptionEntity> eventCustDesc){
+		return eventCustDesc.stream().map(x -> entityToDtoCustDesc(x)).collect(Collectors.toList());
+	}
+	
+	private CustomEventDescriptionDto entityToDtoCustDesc(CustomEventDescriptionEntity custDesc) {
+		CustomEventDescriptionDto res = new CustomEventDescriptionDto();
+		res.setUserName(custDesc.getUserName());
+		res.setContent(custDesc.getDescription());
+		return res;
+	}
+
 }

@@ -9,7 +9,9 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CanAddCustomDescriptionDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CommentDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventCommentDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
@@ -131,5 +133,8 @@ public class UserTransactionalService {
 		this.userService.updateOrganiserInformations(dtoToEntity(organiser), name);
 	}
 
-
+	public CanAddCustomDescriptionDto userCanaddDescription(Long eventId,String name) {
+		return this.userService.userCanaddDescription(eventId, name);
+		
+	}
 }

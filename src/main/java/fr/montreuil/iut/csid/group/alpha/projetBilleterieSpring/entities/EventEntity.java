@@ -42,6 +42,9 @@ public class EventEntity {
 
     @Column(name = "user_id")
 	private String userId;
+    
+	@javax.persistence.Transient
+	private CustomEventDescriptionEntity[] userCustomDescriptions;
 
     public EventEntity() {
     }
@@ -133,4 +136,13 @@ public class EventEntity {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+
+	public CustomEventDescriptionEntity[] getUserCustomDescriptions() {
+		return userCustomDescriptions;
+	}
+
+	public void setUserCustomDescriptions(CustomEventDescriptionEntity[] userCustomDescriptions) {
+		this.userCustomDescriptions = userCustomDescriptions;
+	}
+	
 }

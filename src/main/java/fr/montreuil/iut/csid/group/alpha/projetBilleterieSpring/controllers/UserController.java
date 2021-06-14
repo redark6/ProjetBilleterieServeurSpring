@@ -1,5 +1,6 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CanAddCustomDescriptionDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventCommentDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
@@ -137,4 +138,10 @@ public class UserController {
 	public List<EventCommentDto> getCurrentUserComments(Principal principal) {
 		return eventCommentService.getCurrentUserComments(principal.getName());
 	}
+	
+	@GetMapping("/canaddpersonnaldescription/{id}")
+	public CanAddCustomDescriptionDto userCanaddDescription(@PathVariable Long id,Principal principal) {
+		return userTransactionalService.userCanaddDescription(id,principal.getName());
+	}
+	
 }

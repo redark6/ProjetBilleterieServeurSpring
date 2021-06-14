@@ -1,7 +1,10 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CanAddCustomDescriptionDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.AuthorityRepository;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CustomEventDescriptionRepository;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CustomEventDescriptionRightRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.OrganiserRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.AuthorityEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CustomEventDescriptionEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CustomEventDescriptionRightEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.LoginEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.OrganiserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
@@ -33,15 +38,20 @@ public class UserService {
 	private final OrganiserRepository organiserRepository;
 	private final JdbcUserDetailsManager jdbcUserDetailsManager;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	private final CustomEventDescriptionRightRepository customEventDescriptionRightRepository;
+	private final CustomEventDescriptionRepository customEventDescriptionRepository;
 
 	
 	@Autowired
-	public UserService(JdbcUserDetailsManager jdbcUserDetailsManager, UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder,UserRepository userRepository,AuthorityRepository authorityRepository,OrganiserRepository organiserRepository) {
+	public UserService(JdbcUserDetailsManager jdbcUserDetailsManager, UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder,UserRepository userRepository,AuthorityRepository authorityRepository,OrganiserRepository organiserRepository,CustomEventDescriptionRightRepository customEventDescriptionRightRepository,CustomEventDescriptionRepository customEventDescriptionRepository) {
 		this.userRepository=userRepository;
 		this.authorityRepository = authorityRepository;
 		this.organiserRepository = organiserRepository;
 		this.jdbcUserDetailsManager = jdbcUserDetailsManager;
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+		this.customEventDescriptionRightRepository = customEventDescriptionRightRepository;
+		this.customEventDescriptionRepository = customEventDescriptionRepository;
 	}
 
 	public Optional<UserEntity> getCurrentThreadUser(String email) {
@@ -175,6 +185,30 @@ public class UserService {
 		if(organiser.getProCountry()!= null)
 			organiserEntity.setProCountry(organiser.getProCountry());
 
+	}
+
+	public CanAddCustomDescriptionDto userCanaddDescription(Long eventId, String name) {
+		Optional<CustomEventDescriptionRightEntity> right = customEventDescriptionRightRepository.findByEventIdAndUserId(eventId,name);
+		Optional<CustomEventDescriptionEntity> content = customEventDescriptionRepository.findByEventIdAndUserId(eventId,name);
+		
+		CanAddCustomDescriptionDto response = new CanAddCustomDescriptionDto();
+		
+		if(!right.isEmpty()) {
+			response.setCanAddDescription(right.get().isCanCreate());
+		}else {
+			response.setCanAddDescription(false);
+		}
+		
+		if(!content.isEmpty()){
+			response.setDescriptionAlreadyExist(true);
+			response.setContent(content.get().getDescription());
+		}else{
+			response.setDescriptionAlreadyExist(false);
+			response.setContent("");
+		}
+		
+		return response;
+		
 	}
 
 

@@ -41,4 +41,5 @@ public class RatingController {
         ratingService.rate(ratingDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    
 }

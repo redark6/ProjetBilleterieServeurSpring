@@ -2,10 +2,12 @@ package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.AuthorityEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.Comment
 public class CommentTransactionnalService {
 	
 	private final CommentService commentService;
+
 	
 	@Autowired
 	public CommentTransactionnalService(CommentService commentService){
@@ -41,8 +44,8 @@ public class CommentTransactionnalService {
 		return entityToDto(commentService.updateComment(dtoToEntity(comment, user),user,commentId));
 	}
 	
-	public Object deleteComment(String user,Long commentId) {
-		return commentService.deleteComment(user,commentId);
+	public void disableComment(String user, Long commentId) {
+		commentService.disableComment(user,commentId);
 
 	}
 	
@@ -115,5 +118,4 @@ public class CommentTransactionnalService {
 		res.setLikeType(likeType);
 		return res;
 	}
-
 }

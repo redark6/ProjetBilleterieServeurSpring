@@ -101,4 +101,11 @@ public class EventController {
         return eventTransactionalService.getUserEvents(principal.getName());
     }
 
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<Long> deleteEvent(@PathVariable Long id,Principal principal) {
+        eventTransactionalService.deleteEvent(principal.getName(),id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
 }

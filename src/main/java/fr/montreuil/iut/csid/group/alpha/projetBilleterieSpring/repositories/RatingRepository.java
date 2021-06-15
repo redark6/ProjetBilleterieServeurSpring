@@ -2,6 +2,7 @@ package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.RatingEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +18,9 @@ public interface RatingRepository extends JpaRepository<RatingEntity,Integer> {
 
     @Query(value = "select rating from rating where event_id = ?1 and user_id = ?2", nativeQuery = true)
     Optional<Integer> getUserNote(Long id, String email);
+
+    @Modifying
+    @Query(value = "DELETE FROM rating where event_id = ?1",
+            nativeQuery = true)
+    void deleteAllByEventId(Long id);
 }

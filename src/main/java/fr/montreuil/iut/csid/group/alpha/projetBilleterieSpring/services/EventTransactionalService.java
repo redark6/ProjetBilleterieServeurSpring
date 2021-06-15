@@ -3,8 +3,9 @@ package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices.EventSearchService;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.AuthorityEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.EventRepository;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +29,21 @@ public class EventTransactionalService {
 
 	public final EventRepository eventRepository;
 	public final EventSearchService eventSearchService;
+	public final EventImageRepository eventImageRepository;
+	public final CommentRepository commentRepository;
+	public final CommentLikeRepository commentLikeRepository;
+	private final RatingRepository ratingRepository;
+	private final AuthorityRepository authorityRepository;
 
 	@Autowired
-	public EventTransactionalService(EventRepository eventRepository, EventSearchService eventSearchService) {
+	public EventTransactionalService(EventRepository eventRepository, EventSearchService eventSearchService, EventImageRepository eventImageRepository, CommentRepository commentRepository, CommentLikeRepository commentLikeRepository, RatingRepository ratingRepository, AuthorityRepository authorityRepository) {
 		this.eventRepository = eventRepository;
 		this.eventSearchService = eventSearchService;
+		this.eventImageRepository = eventImageRepository;
+		this.commentRepository = commentRepository;
+		this.commentLikeRepository = commentLikeRepository;
+		this.ratingRepository = ratingRepository;
+		this.authorityRepository = authorityRepository;
 	}
 
 	public Optional<EventDto> findEvent(Long id) {
@@ -135,4 +146,18 @@ public class EventTransactionalService {
 		List<EventEntity> userEventsEntities = eventRepository.findTitleAndCreationDateAndRegionAndCategoryByUserIdOrderByCreationDateDesc(name);
 		return entitiesToDtos(userEventsEntities);
 	}
+
+    public void deleteEvent(String user, Long id) {
+
+		Optional<AuthorityEntity> authority= authorityRepository.findById(user);
+
+		if(authority.get().getAuthority().equals("ADMIN")) {
+			eventImageRepository.deleteAllByEventId(id);
+			commentLikeRepository.deleteAllByEventId(id);
+			commentRepository.deleteAllByEventId(id);
+			ratingRepository.deleteAllByEventId(id);
+			eventRepository.deleteById(id);
+		}
+
+    }
 }

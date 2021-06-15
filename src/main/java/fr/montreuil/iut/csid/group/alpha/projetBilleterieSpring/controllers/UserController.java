@@ -7,9 +7,9 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventCommentService;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.ImageService;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserTransactionalService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -100,8 +100,7 @@ public class UserController {
 
 	@PatchMapping("/patchOrganiser")
 	@ResponseBody
-	public ResponseEntity<Object> updateOrganiserInformations(@RequestBody @Valid OrganiserDto updateForm,BindingResult result){
-		Principal principal = (Principal) SecurityContextHolder.getContext().getAuthentication();
+	public ResponseEntity<Object> updateOrganiserInformations(@RequestBody @Valid OrganiserDto updateForm,Principal principal){
 		userTransactionalService.updateOrganiserInformations(updateForm,principal.getName());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
@@ -136,5 +135,19 @@ public class UserController {
 	@GetMapping("/usercomments")
 	public List<EventCommentDto> getCurrentUserComments(Principal principal) {
 		return eventCommentService.getCurrentUserComments(principal.getName());
+	}
+
+	@GetMapping("/organiser/{username}")
+	public OrganiserDto getOrganiser(@PathVariable String username){
+		System.out.print("test controller");
+		return userTransactionalService.getOrganiser(username);
+	}
+
+	@GetMapping("/organiserPhoto")
+	public ResponseEntity<byte[]> organiserPhotoGet(String username){
+		return userTransactionalService.organiserPhotoGet(username)
+				.map(imageByteArray ->ResponseEntity.ok().contentLength(imageByteArray.length)
+						.contentType(MediaType.IMAGE_JPEG).body(imageByteArray))
+				.orElse(ResponseEntity.notFound().build());
 	}
 }

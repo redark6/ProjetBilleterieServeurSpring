@@ -1,21 +1,17 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CommentDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.LoginEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.OrganiserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -131,5 +127,13 @@ public class UserTransactionalService {
 		this.userService.updateOrganiserInformations(dtoToEntity(organiser), name);
 	}
 
+	public OrganiserDto getOrganiser(String username){
+		OrganiserEntity organiserEntity = this.userService.getOrganiser(username);
+		return entityToDto(organiserEntity);
+	}
+
+	public Optional<byte[]> organiserPhotoGet(String username){
+		return userService.organiserPhotoGet(username);
+	}
 
 }

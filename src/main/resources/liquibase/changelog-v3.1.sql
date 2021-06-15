@@ -5,7 +5,6 @@ create table participation (
     id SERIAL PRIMARY KEY,
     user_id varchar(50),
     event_id int,
-    rating integer,
      CONSTRAINT fk_user_id_participation
           FOREIGN KEY(user_id)
     	  REFERENCES users(username),

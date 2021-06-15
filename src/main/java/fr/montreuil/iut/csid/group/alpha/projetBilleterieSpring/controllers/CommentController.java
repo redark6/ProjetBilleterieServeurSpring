@@ -46,7 +46,7 @@ public class CommentController {
 	@PatchMapping("/{commentId}")
 	@ResponseBody
 	public ResponseEntity<Object> disableComment(@PathVariable Long commentId, Principal principal) {
-		this.commentTransactionnalService.disableComment("test@test.test", commentId);
+		this.commentTransactionnalService.disableComment(principal.getName(), commentId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

@@ -1,11 +1,9 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 
-import javax.persistence.Column;
-
 public class ParticipationDto {
     private Long id;
 
-    private int eventId;
+    private Long eventId;
 
     private String userId;
 
@@ -22,11 +20,11 @@ public class ParticipationDto {
         this.id = id;
     }
 
-    public int getEventId() {
+    public Long getEventId() {
         return eventId;
     }
 
-    public void setEventId(int eventId) {
+    public void setEventId(Long eventId) {
         this.eventId = eventId;
     }
 

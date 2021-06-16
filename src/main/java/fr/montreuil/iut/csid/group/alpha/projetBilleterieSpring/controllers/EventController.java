@@ -1,6 +1,7 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.ParticipationDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventTransactionalService;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.ImageService;
@@ -115,5 +116,10 @@ public class EventController {
     public ResponseEntity<Object> participate(@PathVariable Long eventId, Principal principal) throws Exception {
         participationService.participate(eventId,principal.getName());
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/participations")
+    public List<ParticipationDto> participations(Principal principal){
+        return participationService.getParticipation(principal.getName());
     }
 }

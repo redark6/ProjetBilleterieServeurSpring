@@ -1,6 +1,5 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.ParticipationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,4 +12,6 @@ public interface ParticipationRepository extends JpaRepository<ParticipationEnti
 
 
     Optional<ParticipationEntity> findByUserIdAndEventId(String name,Long id);
+
+    List<ParticipationEntity> findAllByUserId(String id);
 }

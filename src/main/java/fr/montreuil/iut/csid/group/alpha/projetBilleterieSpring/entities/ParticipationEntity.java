@@ -19,6 +19,9 @@ public class ParticipationEntity {
 
     @Column(name= "boughtticket")
     private int boughtticket;
+    
+	@javax.persistence.Transient
+	private String eventName;
 
     public ParticipationEntity() {
     }
@@ -60,4 +63,14 @@ public class ParticipationEntity {
     public void setBoughtticket(int boughtTicket) {
         this.boughtticket = boughtTicket;
     }
+
+	public String getEventName() {
+		return eventName;
+	}
+
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
+	}
+    
+    
 }

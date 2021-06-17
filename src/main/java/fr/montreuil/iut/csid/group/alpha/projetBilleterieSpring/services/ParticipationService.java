@@ -43,7 +43,13 @@ public class ParticipationService {
     public List<ParticipationDto> getParticipation(String id){
 
         List<ParticipationEntity> participationEntities = participationRepository.findAllByUserId(id);
-
+        
+        for (int i = 0; i < participationEntities.size(); i++) {
+        	ParticipationEntity entity = participationEntities.get(i);
+        	EventEntity event = eventRepository.findById(entity.getEventId()).get();
+        	entity.setEventName(event.getTitle());
+        }
+        
         return entitiesToDtos(participationEntities);
     }
 
@@ -53,6 +59,7 @@ public class ParticipationService {
         res.setBoughtticket(participationEntity.getBoughtticket());
         res.setEventId(participationEntity.getEventId());
         res.setUserId(participationEntity.getUserId());
+        res.setEventName(participationEntity.getEventName());
         return res;
     }
 

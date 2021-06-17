@@ -2,6 +2,7 @@ package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CanAddCustomDescriptionDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventCommentDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventCustomizationRightDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
@@ -164,4 +165,22 @@ public class UserController {
 						.contentType(MediaType.IMAGE_JPEG).body(imageByteArray))
 				.orElse(ResponseEntity.notFound().build());
 	}
+	
+	@GetMapping("/usercustomizationeventright")
+	public List<EventCustomizationRightDto> getUserEventCustomizationRight(Principal principal){
+		return userTransactionalService.getUserEventCustomizationRight(principal.getName());
+	}
+	
+	@PostMapping("/giveusercustomizationeventright/{author}/{eventId}")
+	public Object giveUserEventCustomizationRight(@PathVariable String author,@PathVariable Long eventId){
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if(auth.getAuthorities().toArray()[0].toString().contains("ADMIN")) {
+			userTransactionalService.giveUserEventCustomizationRight(author,eventId);
+			return new ResponseEntity<>(HttpStatus.OK);  
+		}
+		return new ResponseEntity<>(HttpStatus.CONFLICT);  
+	}
+	
+	
+
 }

@@ -19,6 +19,8 @@ public class OrganiserDto {
     private String proCity;
 
     private String proCountry;
+    
+    private String userName;
 
     public OrganiserDto(){}
 
@@ -106,6 +108,14 @@ public class OrganiserDto {
     public void setProCountry(String proCountry) {
         this.proCountry = proCountry;
     }
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 }
 

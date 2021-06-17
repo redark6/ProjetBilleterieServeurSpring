@@ -6,6 +6,7 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CustomEventDescriptionEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CustomEventDescriptionRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CustomEventDescriptionRightRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.EventRepository;
@@ -55,10 +56,13 @@ public class EventTransactionalService {
         for (int i = 0; i < customDescriptions.size(); i++) {
             customDescriptions.get(i).setUserName(userRepository.getByEmail(customDescriptions.get(i).getUserId()).get().getUserName());
         }
+        
+        Optional<UserEntity> user = userRepository.getByEmail(entity.get().getUserId());
 		
 		List<CustomEventDescriptionDto> customDescriptionDto = entityToDtoCustomDesc(customDescriptions);
 		Optional<EventDto> dto = entityToDto(entity);
 		dto.get().setCustomeDescription(customDescriptionDto);
+		dto.get().setUserId(user.get().getUserName());
 		return dto;
 	}
 
@@ -68,14 +72,14 @@ public class EventTransactionalService {
 	}
 
 	public SearchResultDto<EventDto> searchEventsWithFilters(String search, int category, int region,String startDate, String endDate,
-			int minPrice, int maxPrice, String orderBy, int page, int eventsPerPage) throws ParseException {
+			int minPrice, int maxPrice, String orderBy, int page, int eventsPerPage,String owner,boolean allEvent) throws ParseException {
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		Date finalStartDate = null;
 		Date finalEndDate = null;
 		if(startDate != null) {finalStartDate = formatter.parse(startDate);}
 		if(endDate != null){finalEndDate = formatter.parse(endDate);}
 		SearchResultDto<EventEntity> res = eventSearchService.findEventsByCriterias(search, category, region, finalStartDate,
-				finalEndDate, minPrice, maxPrice,orderBy, page, eventsPerPage);
+				finalEndDate, minPrice, maxPrice,orderBy, page, eventsPerPage,owner,allEvent);
 		return entitiesToDtos(res);
 	}
 
@@ -91,6 +95,7 @@ public class EventTransactionalService {
 		res.setEndDate(eventEntity.getEndDate());
 		res.setPrice(eventEntity.getPrice());
 		res.setNbOfTicket(eventEntity.getNbOfTicket());
+		res.setUserId(eventEntity.getUserId());
 		return res;
 	}
 

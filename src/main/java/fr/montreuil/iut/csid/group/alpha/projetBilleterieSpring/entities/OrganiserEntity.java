@@ -36,6 +36,9 @@ public class OrganiserEntity {
 
     @Column(name = "pro_country")
     private String proCountry;
+    
+	@javax.persistence.Transient
+	private String userName;
 
     public OrganiserEntity(){}
 
@@ -122,6 +125,14 @@ public class OrganiserEntity {
     public void setProCountry(String proCountry) {
         this.proCountry = proCountry;
     }
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 
 }

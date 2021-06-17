@@ -2,26 +2,23 @@ package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CanAddCustomDescriptionDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.AuthorityEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.LoginEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.OrganiserEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.AuthorityRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CustomEventDescriptionRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CustomEventDescriptionRightRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.OrganiserRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.stereotype.Service;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.AuthorityEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CustomEventDescriptionEntity;
@@ -29,6 +26,7 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CustomE
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.LoginEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.OrganiserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -166,25 +164,74 @@ public class UserService {
 	}
 
 	public void updateOrganiserInformations(OrganiserEntity organiser, String name) {
-		OrganiserEntity organiserEntity = organiserRepository.findById(name).get();
+		Optional<OrganiserEntity> organiserEntity = organiserRepository.findById(name);
 
-		if (organiser.getJobTitle()!= null)
-			organiserEntity.setJobTitle(organiser.getJobTitle());
-		if (organiser.getPhoneNumber()!= null)
-			organiserEntity.setPhoneNumber(organiser.getPhoneNumber());
-		if (organiser.getWebsite()!= null)
-			organiserEntity.setWebsite(organiser.getWebsite());
-		if (organiser.getCompany()!= null)
-			organiserEntity.setCompany(organiser.getCompany());
-		if (organiser.getBlog()!= null)
-			organiserEntity.setBlog(organiser.getBlog());
-		if (organiser.getProAddress()!= null)
-			organiserEntity.setProAddress(organiser.getProAddress());
-		if (organiser.getProCity()!= null)
-			organiserEntity.setProCity(organiser.getProCity());
-		if(organiser.getProCountry()!= null)
-			organiserEntity.setProCountry(organiser.getProCountry());
+		if(organiserEntity.isEmpty()){
+			organiser.setId(name);
+			this.organiserRepository.save(organiser);
+		}
+		else {
+			OrganiserEntity organiserEntityPatch = organiserEntity.get();
+			if (organiser.getJobTitle() != null)
+				organiserEntityPatch.setJobTitle(organiser.getJobTitle());
+			if (organiser.getPhoneNumber() != null)
+				organiserEntityPatch.setPhoneNumber(organiser.getPhoneNumber());
+			if (organiser.getWebsite() != null)
+				organiserEntityPatch.setWebsite(organiser.getWebsite());
+			if (organiser.getCompany() != null)
+				organiserEntityPatch.setCompany(organiser.getCompany());
+			if (organiser.getBlog() != null)
+				organiserEntityPatch.setBlog(organiser.getBlog());
+			if (organiser.getProAddress() != null)
+				organiserEntityPatch.setProAddress(organiser.getProAddress());
+			if (organiser.getProCity() != null)
+				organiserEntityPatch.setProCity(organiser.getProCity());
+			if (organiser.getProCountry() != null)
+				organiserEntityPatch.setProCountry(organiser.getProCountry());
 
+		}
+
+	}
+
+	public OrganiserEntity getOrganiser(String username){
+		Optional<UserEntity> userEntity = userRepository.getByUserName(username);
+		if (userEntity.isPresent()) {
+			Optional<OrganiserEntity> organiserEntity = organiserRepository.getById(userEntity.get().getEmail());
+			return organiserEntity.get();
+
+		}
+		else {
+		return null;
+		}
+	}
+	
+	public List<OrganiserEntity> getOrganiserList(String username){
+		
+		List<UserEntity> user;
+			
+		if(username == "" || username == null) {
+			user = userRepository.findAll();
+		}else {
+			user = userRepository.getByUserNameContaining(username);
+		}
+		 
+		List<OrganiserEntity> organiserList = new ArrayList<OrganiserEntity>();
+		
+        for (int i = 0; i < user.size(); i++) {
+        	UserEntity userentity = user.get(i);
+        	Optional<OrganiserEntity> organiserEntity = organiserRepository.getById(userentity.getEmail());
+        	if(!organiserEntity.isEmpty()) {
+        		OrganiserEntity entity = organiserEntity.get();
+        		entity.setUserName(userentity.getUserName());
+        		organiserList.add(entity);
+        	}
+        }
+		return organiserList;
+	}
+	
+
+	public Optional<byte[]> organiserPhotoGet(String username){
+		return userRepository.getByUserName(username).map(UserEntity::getProfilPicture);
 	}
 
 	public CanAddCustomDescriptionDto userCanaddDescription(Long eventId, String name) {

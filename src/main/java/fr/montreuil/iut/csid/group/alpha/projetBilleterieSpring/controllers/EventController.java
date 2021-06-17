@@ -77,10 +77,12 @@ public class EventController {
     	@RequestParam(value = "minPrice", required = false, defaultValue = "-1") int minPrice,
     	@RequestParam(value = "maxPrice", required = false, defaultValue = "-1") int maxPrice,
     	@RequestParam(value = "orderBy", required = false, defaultValue = "recent") String orderBy,
+    	@RequestParam(value = "owner", required = false, defaultValue = "-1") String owner,
+    	@RequestParam(value = "allEvent", required = false, defaultValue = "false") boolean allEvent,
     	@RequestParam(value = "page", required = false, defaultValue ="1") int page,
     	@RequestParam(value = "eventsPerPage", required = false, defaultValue ="20") int eventsPerPage
     ) throws ParseException{
-    	return eventTransactionalService.searchEventsWithFilters(search,catgory,region,startDate,endDate,minPrice,maxPrice,orderBy,page,eventsPerPage);
+    	return eventTransactionalService.searchEventsWithFilters(search,catgory,region,startDate,endDate,minPrice,maxPrice,orderBy,page,eventsPerPage,owner,allEvent);
     }
 
     @PatchMapping("/patch/{id}")

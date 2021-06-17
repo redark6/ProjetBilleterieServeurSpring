@@ -25,7 +25,7 @@ public class EventSearchService {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	public SearchResultDto<EventEntity> findEventsByCriterias(String search,int category,int region,Date startDate,Date endDate,int minPrice,int maxPrice,String orderBy,int page,int eventsPerPage) {
+	public SearchResultDto<EventEntity> findEventsByCriterias(String search,int category,int region,Date startDate,Date endDate,int minPrice,int maxPrice,String orderBy,int page,int eventsPerPage,String owner,boolean allEvent) {
 		
 		CriteriaBuilderHelper<EventEntity> h = new CriteriaBuilderHelper<>(entityManager,EventEntity.class,"events");
 		Map<String,Object> params = new HashMap<>();
@@ -35,7 +35,8 @@ public class EventSearchService {
 		Root<EventEntity> root = q.from(EventEntity.class);
 		root.alias("events");
 		
-		h.OrderBy(orderBy);
+		h.OrderBy(orderBy);		
+		//h.optionalOwnedBy("userId", owner);
 		
 		h.optionalLike("title", search);
 		h.optionalAddEqual("category",category);
@@ -57,8 +58,11 @@ public class EventSearchService {
 
 		int numberFound = finalQuery.getResultList().size();
 		
-		finalQuery.setFirstResult((page-1) * eventsPerPage); 
-		finalQuery.setMaxResults(eventsPerPage);
+		if(allEvent != true) {
+			finalQuery.setFirstResult((page-1) * eventsPerPage); 
+			finalQuery.setMaxResults(eventsPerPage);
+		}
+
 		
 		
 		List<EventEntity> resultList = finalQuery.getResultList();

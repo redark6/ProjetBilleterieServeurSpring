@@ -3,6 +3,7 @@ package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -18,6 +19,12 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.LoginEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.OrganiserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -79,7 +86,12 @@ public class UserTransactionalService {
 		res.setProAddress(organiser.getProAddress());
 		res.setProCity(organiser.getProCity());
 		res.setProCountry(organiser.getProCountry());
+		res.setUserName(organiser.getUserName());
 		return res;
+	}
+	
+	private List<OrganiserDto> entitiesToDtos(List<OrganiserEntity> entities) {
+		return entities.stream().map(x -> entityToDto(x)).collect(Collectors.toList());
 	}
 
 	private Optional<OrganiserDto> organiserEntityToDto(Optional<OrganiserEntity> entity) {
@@ -133,8 +145,26 @@ public class UserTransactionalService {
 		this.userService.updateOrganiserInformations(dtoToEntity(organiser), name);
 	}
 
+
 	public CanAddCustomDescriptionDto userCanaddDescription(Long eventId,String name) {
 		return this.userService.userCanaddDescription(eventId, name);
 		
 	}
+
+	public OrganiserDto getOrganiser(String username){
+		OrganiserEntity organiserEntity = this.userService.getOrganiser(username);
+		return entityToDto(organiserEntity);
+	}
+	
+	public List<OrganiserDto> getOrganiserList(String username){
+		List<OrganiserEntity> organiserEntity = this.userService.getOrganiserList(username);
+		return entitiesToDtos(organiserEntity);
+	}
+	
+	
+
+	public Optional<byte[]> organiserPhotoGet(String username){
+		return userService.organiserPhotoGet(username);
+	}
+
 }

@@ -85,9 +85,7 @@ public class CriteriaBuilderHelper<T> {
 	}
 
 	public void optionalOwnedBy(String ownerName, String owner) {
-		System.out.println(ownerName);
-		System.out.println(owner);
-		if(ownerName != "-1") {
+		if(!ownerName.equals("-1")) {
 			predicates.add(builder.equal(root.get(ownerName), owner));
 		}
 		

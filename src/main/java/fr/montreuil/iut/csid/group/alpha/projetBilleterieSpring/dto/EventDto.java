@@ -1,6 +1,7 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto;
 
 import java.util.Date;
+import java.util.List;
 
 public class EventDto {
 
@@ -15,6 +16,7 @@ public class EventDto {
     private float price;
     private int nbOfTicket;
     private String userId;
+    private List<CustomEventDescriptionDto> customeDescription;
     
     public EventDto(Long id, String title, int category, String description, int region, Date creationDate,
 			Date startDate, Date endDate, float price, int nbOfTicket, String userId) {
@@ -121,4 +123,13 @@ public class EventDto {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+
+	public List<CustomEventDescriptionDto> getCustomeDescription() {
+		return customeDescription;
+	}
+
+	public void setCustomeDescription(List<CustomEventDescriptionDto> customeDescription) {
+		this.customeDescription = customeDescription;
+	}
+	
 }

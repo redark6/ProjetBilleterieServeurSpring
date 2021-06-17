@@ -10,6 +10,7 @@ import java.util.List;
 public interface EventRepository extends JpaRepository<EventEntity, Long> {
 
 
-    //@Query(value = "select title, creationDate, region, category  from events where user_id = ?1 ", nativeQuery = true)
-    List<EventEntity> findTitleAndCreationDateAndRegionAndCategoryByUserId(String name);
+	//@Query(value = "select title, creationDate, region, category  from events where user_id = ?1 ", nativeQuery = true)
+    List<EventEntity> findTitleAndCreationDateAndRegionAndCategoryByUserIdOrderByCreationDateDesc(String name);
+
 }

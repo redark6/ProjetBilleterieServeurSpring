@@ -5,9 +5,8 @@ public class EventCommentDto {
 	private Long eventId;
 	private String eventTitle;
 	private String userComment;
-	
-	
-	
+
+
 	public EventCommentDto(Long eventId, String eventTitle, String userComment) {
 		this.eventId = eventId;
 		this.eventTitle = eventTitle;
@@ -23,7 +22,7 @@ public class EventCommentDto {
 	}
 
 	public String getEventTitle() {
-		return eventTitle;
+		return this.eventTitle;
 	}
 
 	public void setEventTitle(String eventTitle) {
@@ -31,7 +30,7 @@ public class EventCommentDto {
 	}
 
 	public String getUserComment() {
-		return userComment;
+		return this.userComment;
 	}
 
 	public void setUserComment(String userComment) {

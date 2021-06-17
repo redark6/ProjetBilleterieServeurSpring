@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="alpha" id="19">
+    <createTable tableName="customeventdescriptionright">
+        <column autoIncrement="true" name="rightid" type="integer">
+        	<constraints nullable="false" primaryKey="true" primaryKeyName="right_pkey"/>
+        </column>
+        <column name="userid" type="varchar(100)"/>
+        <column name="eventid" type="integer"/>
+        <column name="cancreate" type="boolean"/>
+    </createTable>
+    
+       <createTable tableName="customeventdescription">
+        <column autoIncrement="true" name="customdescritionid" type="integer">
+        	<constraints nullable="false" primaryKey="true" primaryKeyName="custdescription_pkey"/>
+        </column>
+        <column name="userid" type="varchar(100)"/>
+        <column name="eventid" type="integer"/>
+        <column name="description" type="varchar(4000)"/>
+    </createTable>
+	
+	<addForeignKeyConstraint baseColumnNames="userid" baseTableName="customeventdescriptionright" constraintName="fk_userusername_descright" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="username" referencedTableName="users" validate="true"/>   
+	<addForeignKeyConstraint baseColumnNames="eventid" baseTableName="customeventdescriptionright" constraintName="fk_eventid_descright" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="events" validate="true"/>   
+	
+	<addForeignKeyConstraint baseColumnNames="userid" baseTableName="customeventdescription" constraintName="fk_userusername_desccontent" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="username" referencedTableName="users" validate="true"/>   	
+	<addForeignKeyConstraint baseColumnNames="eventid" baseTableName="customeventdescription" constraintName="fk_eventid_desccontent" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="events" validate="true"/>   
+	
+    
+    </changeSet>
+</databaseChangeLog>

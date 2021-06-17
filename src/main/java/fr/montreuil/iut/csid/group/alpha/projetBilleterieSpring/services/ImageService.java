@@ -72,7 +72,7 @@ public class ImageService {
 	}
 
 	public void modifyImageEvent(MultipartFile picture, int id) throws IOException {
-		Optional<EventImageEntity> img = this.eventImageRepository.findById(id);
+		Optional<EventImageEntity> img = this.eventImageRepository.findByEventid(id);
 		if(img.isEmpty()) {
 			eventImageRepository.save(new EventImageEntity(0,id,picture.getBytes()));
 		}

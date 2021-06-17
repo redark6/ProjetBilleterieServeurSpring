@@ -3,19 +3,33 @@ package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CanAddCustomDescriptionDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CommentDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventCommentDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventCustomizationRightDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RegisterFormDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.UserDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CustomEventDescriptionEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CustomEventDescriptionRightEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.LoginEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.OrganiserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -77,7 +91,12 @@ public class UserTransactionalService {
 		res.setProAddress(organiser.getProAddress());
 		res.setProCity(organiser.getProCity());
 		res.setProCountry(organiser.getProCountry());
+		res.setUserName(organiser.getUserName());
 		return res;
+	}
+	
+	private List<OrganiserDto> entitiesToDtos(List<OrganiserEntity> entities) {
+		return entities.stream().map(x -> entityToDto(x)).collect(Collectors.toList());
 	}
 
 	private Optional<OrganiserDto> organiserEntityToDto(Optional<OrganiserEntity> entity) {
@@ -129,6 +148,49 @@ public class UserTransactionalService {
 
 	public void updateOrganiserInformations(OrganiserDto organiser, String name) {
 		this.userService.updateOrganiserInformations(dtoToEntity(organiser), name);
+	}
+
+
+	public CanAddCustomDescriptionDto userCanaddDescription(Long eventId,String name) {
+		return this.userService.userCanaddDescription(eventId, name);
+		
+	}
+
+	public OrganiserDto getOrganiser(String username){
+		OrganiserEntity organiserEntity = this.userService.getOrganiser(username);
+		return entityToDto(organiserEntity);
+	}
+	
+	public List<OrganiserDto> getOrganiserList(String username){
+		List<OrganiserEntity> organiserEntity = this.userService.getOrganiserList(username);
+		return entitiesToDtos(organiserEntity);
+	}
+
+	public Optional<byte[]> organiserPhotoGet(String username){
+		return userService.organiserPhotoGet(username);
+	}
+	
+	public List<EventCustomizationRightDto> getUserEventCustomizationRight(String userId) {
+		return entitiesToDtosright(userService.getUserEventCustomizationRight(userId));
+		
+	}
+	
+	private EventCustomizationRightDto entityToDto(CustomEventDescriptionRightEntity right) {
+		EventCustomizationRightDto res = new EventCustomizationRightDto();
+		res.setId(right.getId());
+		res.setEventId(right.getEventId());
+		res.setCanCreate(right.isCanCreate());
+		res.setEventName(right.getEventName());
+		res.setUserId(right.getUserId());
+		return res;
+	}
+	
+	private List<EventCustomizationRightDto> entitiesToDtosright(List<CustomEventDescriptionRightEntity> entities) {
+		return entities.stream().map(x -> entityToDto(x)).collect(Collectors.toList());
+	}
+
+	public void giveUserEventCustomizationRight(String author, Long eventId) {
+		userService.giveUserEventCustomizationRight(author,eventId);
 	}
 
 

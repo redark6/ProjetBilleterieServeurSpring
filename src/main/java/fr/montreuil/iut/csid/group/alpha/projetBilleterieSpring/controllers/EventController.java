@@ -1,9 +1,12 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RatingDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.ParticipationDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventTransactionalService;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.ImageService;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.ParticipationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,11 +31,13 @@ public class EventController {
 
     private final EventTransactionalService eventTransactionalService;
     private final ImageService imageService;
+    private final ParticipationService participationService;
 
     @Autowired
-    public EventController(EventTransactionalService eventTransactionalService, ImageService imageService) {
+    public EventController(EventTransactionalService eventTransactionalService, ImageService imageService, ParticipationService participationService) {
         this.eventTransactionalService = eventTransactionalService;
         this.imageService = imageService;
+        this.participationService = participationService;
     }
 
     @PostMapping("/create")
@@ -76,10 +81,12 @@ public class EventController {
     	@RequestParam(value = "minPrice", required = false, defaultValue = "-1") int minPrice,
     	@RequestParam(value = "maxPrice", required = false, defaultValue = "-1") int maxPrice,
     	@RequestParam(value = "orderBy", required = false, defaultValue = "recent") String orderBy,
+    	@RequestParam(value = "owner", required = false, defaultValue = "-1") String owner,
+    	@RequestParam(value = "allEvent", required = false, defaultValue = "false") boolean allEvent,
     	@RequestParam(value = "page", required = false, defaultValue ="1") int page,
     	@RequestParam(value = "eventsPerPage", required = false, defaultValue ="20") int eventsPerPage
     ) throws ParseException{
-    	return eventTransactionalService.searchEventsWithFilters(search,catgory,region,startDate,endDate,minPrice,maxPrice,orderBy,page,eventsPerPage);
+    	return eventTransactionalService.searchEventsWithFilters(search,catgory,region,startDate,endDate,minPrice,maxPrice,orderBy,page,eventsPerPage,owner,allEvent);
     }
 
     @PatchMapping("/patch/{id}")
@@ -101,4 +108,28 @@ public class EventController {
         return eventTransactionalService.getUserEvents(principal.getName());
     }
 
+    
+    @PatchMapping("/patchalternatifdescription/{id}")
+    public ResponseEntity<Object> patchAlternatifDescription(@RequestBody String content, @PathVariable Long id,Principal principal){
+    	this.eventTransactionalService.patchAlternatifDescription(id,principal.getName(),content);
+    	return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<Long> deleteEvent(@PathVariable Long id,Principal principal) {
+        eventTransactionalService.deleteEvent(principal.getName(),id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
+    @PostMapping("/participate/{eventId}")
+    public ResponseEntity<Object> participate(@PathVariable Long eventId, Principal principal) throws Exception {
+        participationService.participate(eventId,principal.getName());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/participations")
+    public List<ParticipationDto> participations(Principal principal){
+        return participationService.getParticipation(principal.getName());
+    }
 }

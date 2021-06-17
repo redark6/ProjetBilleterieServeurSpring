@@ -2,8 +2,6 @@ package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -24,11 +22,6 @@ public class EventSearchService {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	private final UserRepository userRepository;
-
-	public EventSearchService(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
 
 	public SearchResultDto<EventEntity> findEventsByCriterias(String search,int category,int region,Date startDate,Date endDate,int minPrice,int maxPrice,String orderBy,int page,int eventsPerPage,String owner,boolean allEvent) {
 		
@@ -40,12 +33,7 @@ public class EventSearchService {
 		Root<EventEntity> root = q.from(EventEntity.class);
 		root.alias("events");
 		
-		h.OrderBy(orderBy);
-
-		if(owner != "-1"){
-			UserEntity user = userRepository.getByUserName(owner).get();
-			h.optionalOwnedBy("userId", user.getEmail());
-		}
+		h.OrderBy(orderBy);		
 		//h.optionalOwnedBy("userId", owner);
 		
 		h.optionalLike("title", search);

@@ -8,6 +8,8 @@ public class ParticipationDto {
     private String userId;
 
     private int boughtticket;
+    
+    private String eventName;
 
     public ParticipationDto() {
     }
@@ -43,4 +45,13 @@ public class ParticipationDto {
     public void setBoughtticket(int boughtticket) {
         this.boughtticket = boughtticket;
     }
+
+	public String getEventName() {
+		return eventName;
+	}
+
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
+	}
+    
 }

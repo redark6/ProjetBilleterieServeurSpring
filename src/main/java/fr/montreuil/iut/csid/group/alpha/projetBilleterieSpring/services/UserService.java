@@ -5,10 +5,12 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.OrganiserDto
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.AuthorityEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.LoginEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.OrganiserEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.ParticipationEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.AuthorityRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CustomEventDescriptionRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CustomEventDescriptionRightRepository;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.EventRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.OrganiserRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.AuthorityEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CustomEventDescriptionEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CustomEventDescriptionRightEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.LoginEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.OrganiserEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
@@ -36,13 +39,13 @@ public class UserService {
 	private final OrganiserRepository organiserRepository;
 	private final JdbcUserDetailsManager jdbcUserDetailsManager;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+	public final EventRepository eventRepository;
 	private final CustomEventDescriptionRightRepository customEventDescriptionRightRepository;
 	private final CustomEventDescriptionRepository customEventDescriptionRepository;
 
 	
 	@Autowired
-	public UserService(JdbcUserDetailsManager jdbcUserDetailsManager, UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder,UserRepository userRepository,AuthorityRepository authorityRepository,OrganiserRepository organiserRepository,CustomEventDescriptionRightRepository customEventDescriptionRightRepository,CustomEventDescriptionRepository customEventDescriptionRepository) {
+	public UserService(JdbcUserDetailsManager jdbcUserDetailsManager, UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder,UserRepository userRepository,AuthorityRepository authorityRepository,OrganiserRepository organiserRepository,CustomEventDescriptionRightRepository customEventDescriptionRightRepository,CustomEventDescriptionRepository customEventDescriptionRepository, EventRepository eventRepository) {
 		this.userRepository=userRepository;
 		this.authorityRepository = authorityRepository;
 		this.organiserRepository = organiserRepository;
@@ -50,6 +53,7 @@ public class UserService {
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.customEventDescriptionRightRepository = customEventDescriptionRightRepository;
 		this.customEventDescriptionRepository = customEventDescriptionRepository;
+		this.eventRepository = eventRepository;
 	}
 
 	public Optional<UserEntity> getCurrentThreadUser(String email) {
@@ -256,6 +260,28 @@ public class UserService {
 		
 		return response;
 		
+	}
+	
+	public List<CustomEventDescriptionRightEntity> getUserEventCustomizationRight(String userId) {
+		List<CustomEventDescriptionRightEntity> userRightList = customEventDescriptionRightRepository.getByUserId(userId);
+		
+        for (int i = 0; i < userRightList.size(); i++) {
+        	CustomEventDescriptionRightEntity entity = userRightList.get(i);
+        	EventEntity event = eventRepository.findById(entity.getEventId()).get();
+        	entity.setEventName(event.getTitle());
+        }
+        
+        return userRightList;
+	}
+
+	public void giveUserEventCustomizationRight(String author, Long eventId) {
+		
+		CustomEventDescriptionRightEntity right = new CustomEventDescriptionRightEntity();
+		right.setId(0L);
+		right.setEventId(eventId);
+		right.setUserId(author);
+		right.setCanCreate(true);
+		customEventDescriptionRightRepository.save(right);
 	}
 
 

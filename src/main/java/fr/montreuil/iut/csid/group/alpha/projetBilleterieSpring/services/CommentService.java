@@ -1,25 +1,15 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services;
 
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.*;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CommentDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CommentEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CommentLikeEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CommentReportEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CommentLikeRepository;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CommentReportRepository;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CommentRepository;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
 
 @Service
 public class CommentService {
@@ -28,13 +18,17 @@ public class CommentService {
 	private final CommentLikeRepository commentLikeRepository;
 	private final CommentReportRepository commentReportRepository;
 	private final UserRepository userRepository;
+	private final AuthorityRepository authorityRepository;
 	
 	@Autowired
-	public CommentService(CommentRepository commentRepository,CommentLikeRepository commentLikeRepository,CommentReportRepository commentReportRepository,UserRepository userRepository){
+	public CommentService(CommentRepository commentRepository, CommentLikeRepository commentLikeRepository,
+						  CommentReportRepository commentReportRepository, UserRepository userRepository,
+						  AuthorityRepository authorityRepository){
 		this.commentRepository = commentRepository;
 		this.commentLikeRepository = commentLikeRepository;
 		this.commentReportRepository = commentReportRepository;
 		this.userRepository = userRepository;
+		this.authorityRepository = authorityRepository;
 	}
 
 	public CommentEntity addComment(CommentEntity comment) {
@@ -119,13 +113,13 @@ public class CommentService {
 		return null;
 	}
 
-	public boolean deleteComment(String user, Long commentId) {
+	public void disableComment(String user, Long commentId) {
 		Optional<CommentEntity> entity = commentRepository.findById(commentId);
-		if(!entity.isEmpty() && entity.get().getAuthor() == user) {
-			commentRepository.deleteById(commentId);
-			return true;
+		Optional<AuthorityEntity> authority= authorityRepository.findById(user);
+
+		if(!entity.isEmpty() && authority.get().getAuthority().equals("ADMIN")) {
+			entity.get().setBlocked(true);
 		}
-		return false;
 	}
 
 	public void reportComment(CommentReportEntity reportEntity) {
@@ -154,6 +148,4 @@ public class CommentService {
 			commentLikeRepository.save(entityToSave);
 		}
 	}
-
-
 }

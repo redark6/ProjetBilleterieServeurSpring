@@ -4,6 +4,7 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices.E
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CustomEventDescriptionDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
+
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CustomEventDescriptionEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
@@ -11,7 +12,9 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.Cus
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CustomEventDescriptionRightRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.EventRepository;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
-
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.AuthorityEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,15 +41,26 @@ public class EventTransactionalService {
 	public final CustomEventDescriptionRepository customEventDescriptionRepository;
 	public final CustomEventDescriptionRightRepository customEventDescriptionRightRepository;
 	public final UserRepository userRepository;
-	
+	public final EventImageRepository eventImageRepository;
+	public final CommentRepository commentRepository;
+	public final CommentLikeRepository commentLikeRepository;
+	private final RatingRepository ratingRepository;
+	private final AuthorityRepository authorityRepository;
 
+	
 	@Autowired
-	public EventTransactionalService(EventRepository eventRepository, EventSearchService eventSearchService,CustomEventDescriptionRepository customEventDescriptionRepository, CustomEventDescriptionRightRepository customEventDescriptionRightRepository,UserRepository userRepository) {
+	public EventTransactionalService(EventRepository eventRepository, EventSearchService eventSearchService, EventImageRepository eventImageRepository, CommentRepository commentRepository, CommentLikeRepository commentLikeRepository, RatingRepository ratingRepository, AuthorityRepository authorityRepository,CustomEventDescriptionRepository customEventDescriptionRepository, CustomEventDescriptionRightRepository customEventDescriptionRightRepository,UserRepository userRepository) {
 		this.eventRepository = eventRepository;
 		this.eventSearchService = eventSearchService;
+		this.eventImageRepository = eventImageRepository;
+		this.commentRepository = commentRepository;
+		this.commentLikeRepository = commentLikeRepository;
+		this.ratingRepository = ratingRepository;
+		this.authorityRepository = authorityRepository;
 		this.customEventDescriptionRepository = customEventDescriptionRepository;
 		this.customEventDescriptionRightRepository = customEventDescriptionRightRepository;
 		this.userRepository = userRepository;
+		
 	}
 
 	public Optional<EventDto> findEvent(Long id) {
@@ -127,9 +141,6 @@ public class EventTransactionalService {
 		return res;
 	}
 
-
-
-
 	public void updateEvent(EventDto event, Long id){
 
 		EventEntity eventEntity = eventRepository.findById(id).get();
@@ -194,5 +205,19 @@ public class EventTransactionalService {
 		res.setContent(custDesc.getDescription());
 		return res;
 	}
+
+	public void deleteEvent(String user, Long id) {
+
+		Optional<AuthorityEntity> authority= authorityRepository.findById(user);
+
+		if(authority.get().getAuthority().equals("ADMIN")) {
+			eventImageRepository.deleteAllByEventId(id);
+			commentLikeRepository.deleteAllByEventId(id);
+			commentRepository.deleteAllByEventId(id);
+			ratingRepository.deleteAllByEventId(id);
+			eventRepository.deleteById(id);
+		}
+
+    }
 
 }

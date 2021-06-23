@@ -1,16 +1,13 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * SOLID: This class do only one thing : it helps creating jpa dynamic querys
@@ -31,7 +28,7 @@ public class CriteriaBuilderHelper<T> {
     
 	public void optionalAddEqual(String fieldName, int fieldValue) {
 		if(fieldValue != -1) {
-			//predicates.add(builder.equal(root.get(fieldName), fieldValue));
+			predicates.add(builder.equal(root.get(fieldName), fieldValue));
 		}
 	}
 	

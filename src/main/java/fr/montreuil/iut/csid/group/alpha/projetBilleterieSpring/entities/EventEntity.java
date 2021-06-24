@@ -1,10 +1,11 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
 
 @Entity
-@Table(name = "event")
+@Table(name = "events")
 public class EventEntity {
 
     @Id
@@ -12,102 +13,136 @@ public class EventEntity {
     @Column(name = "id", unique = true)
     private Long id;
 
-    @Column(name = "titre")
-    private String titre;
+    @Column(name = "title")
+    private String title;
 
-    @Column(name = "type")
-    private String type;
+    @Column(name = "category")
+    private int category;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "region")
-    private String region;
+    private int region;
 
-    @Column(name = "date_creation")
-    private LocalDateTime date;
+    @Column(name = "creationdate")
+    private Date creationDate;
+    
+    @Column(name = "startdate")
+    private Date startDate;
+    
+    @Column(name = "enddate")
+    private Date endDate;
 
-    @Column(name = "prix")
-        private float prix;
+    @Column(name = "price")
+    private float price;
 
-    @Column(name = "nmb_ticket")
-    private int nmbTicket;
+    @Column(name = "nbofticket")
+    private int nbOfTicket;
 
-    public EventEntity(Long id, String titre, String type, String description, String region, LocalDateTime date, float prix, int nmbTicket) {
-        this.id = id;
-        this.titre = titre;
-        this.type = type;
-        this.description = description;
-        this.region = region;
-        this.date = date;
-        this.prix = prix;
-        this.nmbTicket = nmbTicket;
-    }
+    @Column(name = "user_id")
+	private String userId;
+    
+	@javax.persistence.Transient
+	private CustomEventDescriptionEntity[] userCustomDescriptions;
 
     public EventEntity() {
     }
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getTitre() {
-        return titre;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setTitre(String titre) {
-        this.titre = titre;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public int getCategory() {
+		return category;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setCategory(int category) {
+		this.category = category;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public String getRegion() {
-        return region;
-    }
+	public int getRegion() {
+		return region;
+	}
 
-    public void setRegion(String region) {
-        this.region = region;
-    }
+	public void setRegion(int region) {
+		this.region = region;
+	}
 
-    public LocalDateTime getDate() {
-        return date;
-    }
+	public Date getCreationDate() {
+		return creationDate;
+	}
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
+	public void setCreationDate() {
+		this.creationDate = Calendar.getInstance().getTime();
+	}
 
-    public float getPrix() {
-        return prix;
-    }
+	public Date getStartDate() {
+		return startDate;
+	}
 
-    public void setPrix(int prix) {
-        this.prix = prix;
-    }
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
 
-    public int getNmbTicket() {
-        return nmbTicket;
-    }
+	public Date getEndDate() {
+		return endDate;
+	}
 
-    public void setNmbTicket(int nmbTicket) {
-        this.nmbTicket = nmbTicket;
-    }
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public float getPrice() {
+		return price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
+	}
+
+	public int getNbOfTicket() {
+		return nbOfTicket;
+	}
+
+	public void setNbOfTicket(int nbOfTicket) {
+		this.nbOfTicket = nbOfTicket;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public CustomEventDescriptionEntity[] getUserCustomDescriptions() {
+		return userCustomDescriptions;
+	}
+
+	public void setUserCustomDescriptions(CustomEventDescriptionEntity[] userCustomDescriptions) {
+		this.userCustomDescriptions = userCustomDescriptions;
+	}
+	
 }

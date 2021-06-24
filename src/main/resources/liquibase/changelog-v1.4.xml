@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+                      
+                      
+        <changeSet author="alpha" id="15">
+               <modifyDataType tableName="comments" columnName="creationdatehours" newDataType="timestamp with time zone"/>
+               <modifyDataType tableName="comments" columnName="lastmodificationdatehours" newDataType="timestamp with time zone"/>
+        </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+
+        <changeSet author="alpha" id="10">
+                <createTable tableName="comments">
+                        <column autoIncrement="true" name="id" type="integer">
+                                <constraints nullable="false" primaryKey="true" primaryKeyName="comments_pkey"/>
+                        </column>
+                        <column name="author" type="VARCHAR(50)"></column>
+                        <column name="creationdatehours" type="date"></column>
+                        <column name="parentcomment" type="integer"></column>                        
+                        <column name="eventid" type="integer"></column>                       
+                        <column name="comment" type="VARCHAR(500)"></column>                     
+                        <column name="lastmodificationdatehours" type="date"></column>
+                        <column name="isblocked" type="BOOLEAN"></column>
+                </createTable>
+                
+                <createTable tableName="commentslike">
+                        <column autoIncrement="true" name="id" type="integer">
+                        	<constraints nullable="false" primaryKey="true" primaryKeyName="commentsLike_pkey"/>
+                        </column>
+                        <column name="commentid" type="integer"/>
+						<column name="userid" type="VARCHAR(50)"/>
+						<column name="liketype" type="integer"/>
+                </createTable>
+                
+                <createTable tableName="commentsreport">
+                        <column autoIncrement="true" name="id" type="integer">
+                        	<constraints nullable="false" primaryKey="true" primaryKeyName="commentsReport_pkey"/>
+                        </column>
+                        <column name="commentid" type="integer"/>
+						<column name="userid" type="VARCHAR(50)"/>
+                </createTable>
+                
+                <addForeignKeyConstraint baseColumnNames="author" baseTableName="comments" constraintName="fk_comment_author" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="username" referencedTableName="users" validate="true"/>                
+                <addForeignKeyConstraint baseColumnNames="eventid" baseTableName="comments" constraintName="fk_comment_event" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="events" validate="true"/>                  
+                
+                <addForeignKeyConstraint baseColumnNames="userid" baseTableName="commentslike" constraintName="fk_commentslike_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="username" referencedTableName="users" validate="true"/>   
+                <addForeignKeyConstraint baseColumnNames="commentid" baseTableName="commentslike" constraintName="fk_commentslike_event" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="comments" validate="true"/>   
+                
+                <addForeignKeyConstraint baseColumnNames="userid" baseTableName="commentsreport" constraintName="fk_commentsreport_user" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="username" referencedTableName="users" validate="true"/>   
+                <addForeignKeyConstraint baseColumnNames="commentid" baseTableName="commentsreport" constraintName="fk_commentsreport_event" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="comments" validate="true"/>   
+                
+        </changeSet>
+        
+</databaseChangeLog>

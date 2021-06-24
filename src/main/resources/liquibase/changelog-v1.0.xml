@@ -6,12 +6,21 @@
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
 
-        <!--<changeSet id="us2-1" author="Milou">
-            <createTable tableName="testliquid">
-                <column name="id" type="number">
-                    <constraints primaryKey="true" primaryKeyName="text_id"></constraints>
-                </column>
-            </createTable>
-        </changeSet>-->
+        <changeSet author="alpha" id="7">
+                <createTable tableName="organiser">
+                        <column name="id" type="VARCHAR(50)">
+                                <constraints nullable="false" primaryKey="true" primaryKeyName="oragniser_pkey"/>
+                        </column>
+                        <column name="job_title" type="VARCHAR(50)"></column>
+                        <column name="phone_number" type="VARCHAR(50)"></column>
+                        <column name="website" type="VARCHAR(50)"></column>
+                        <column name="company" type="VARCHAR(50)"></column>
+                        <column name="blog" type="VARCHAR(50)"></column>
+                        <column name="pro_address" type="VARCHAR(50)"></column>
+                        <column name="pro_city" type="VARCHAR(50)"></column>
+                        <column name="pro_country" type="VARCHAR(50)"></column>
+
+                </createTable>
+        </changeSet>
 
 </databaseChangeLog>

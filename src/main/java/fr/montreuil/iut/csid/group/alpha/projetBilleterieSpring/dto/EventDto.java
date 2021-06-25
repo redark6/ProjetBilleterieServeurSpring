@@ -16,10 +16,11 @@ public class EventDto {
     private float price;
     private int nbOfTicket;
     private String userId;
+    private boolean active;
     private List<CustomEventDescriptionDto> customeDescription;
     
     public EventDto(Long id, String title, int category, String description, int region, Date creationDate,
-			Date startDate, Date endDate, float price, int nbOfTicket, String userId) {
+			Date startDate, Date endDate, float price, int nbOfTicket, String userId, boolean active) {
 		this.id = id;
 		this.title = title;
 		this.category = category;
@@ -31,6 +32,7 @@ public class EventDto {
 		this.price = price;
 		this.nbOfTicket = nbOfTicket;
 		this.userId = userId;
+		this.active = active;
 	}
 
 	public EventDto() {
@@ -122,6 +124,14 @@ public class EventDto {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public boolean getActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public List<CustomEventDescriptionDto> getCustomeDescription() {

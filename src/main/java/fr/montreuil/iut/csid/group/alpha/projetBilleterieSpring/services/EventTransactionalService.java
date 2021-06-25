@@ -4,16 +4,10 @@ import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices.E
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.CustomEventDescriptionDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
-
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.AuthorityEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.CustomEventDescriptionEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CustomEventDescriptionRepository;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.CustomEventDescriptionRightRepository;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.EventRepository;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.AuthorityEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,6 +75,7 @@ public class EventTransactionalService {
 	}
 
 	public EventDto createEvent(EventDto eventDto, String username){
+		eventDto.setActive(true);
 		EventEntity Entity = eventRepository.save(DtoToEntity(eventDto,username));
 		return entityToDto(Entity);
 	}
@@ -110,6 +105,7 @@ public class EventTransactionalService {
 		res.setPrice(eventEntity.getPrice());
 		res.setNbOfTicket(eventEntity.getNbOfTicket());
 		res.setUserId(eventEntity.getUserId());
+		res.setActive(eventEntity.getActive());
 		return res;
 	}
 
@@ -138,6 +134,7 @@ public class EventTransactionalService {
 		res.setPrice(dto.getPrice());
 		res.setNbOfTicket(dto.getNbOfTicket());
 		res.setUserId(username);
+		res.setActive(dto.getActive());
 		return res;
 	}
 
@@ -219,5 +216,22 @@ public class EventTransactionalService {
 		}
 
     }
+
+    public boolean eventManageActivation(EventDto eventDto) {
+
+		EventEntity eventEntity = eventRepository.findById(eventDto.getId()).get();
+
+		if (eventEntity.getActive()){
+
+			eventEntity.setActive(false);
+			return false;
+		}
+		else if(!eventEntity.getActive()){
+
+			eventEntity.setActive(true);
+			return true;
+		}
+		return true;
+	}
 
 }

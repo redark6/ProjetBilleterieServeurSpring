@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,10 +13,14 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
 /**
  *  SOLID: This class do only one thing: it performs simple search with criterias in database
  */
@@ -24,6 +29,12 @@ public class EventSearchService {
 
 	@PersistenceContext
 	private EntityManager entityManager;
+	private final UserRepository userRepository;
+	
+	 @Autowired
+	public EventSearchService(UserRepository userRepository){
+		this.userRepository = userRepository;
+	}
 
 	public SearchResultDto<EventEntity> findEventsByCriterias(String search,int category,int region,Date startDate,Date endDate,int minPrice,int maxPrice,String orderBy,int page,int eventsPerPage,String owner,boolean allEvent) {
 		
@@ -35,8 +46,12 @@ public class EventSearchService {
 		Root<EventEntity> root = q.from(EventEntity.class);
 		root.alias("events");
 		
-		h.OrderBy(orderBy);		
-		//h.optionalOwnedBy("userId", owner);
+		h.OrderBy(orderBy);
+		
+		if(!owner.equals("-1")) {
+			UserEntity user = userRepository.getByUserName(owner).get();
+			h.optionalOwnedBy("userId", user.getEmail());
+		}
 		
 		h.optionalLike("title", search);
 		h.optionalAddEqual("category",category);
@@ -58,7 +73,7 @@ public class EventSearchService {
 
 		int numberFound = finalQuery.getResultList().size();
 		
-		if(allEvent != true) {
+		if(allEvent == false) {
 			finalQuery.setFirstResult((page-1) * eventsPerPage); 
 			finalQuery.setMaxResults(eventsPerPage);
 		}
@@ -70,6 +85,12 @@ public class EventSearchService {
 			page=0;
 			numberOfPages=0;
 		}
+		
+		 for (int i = 0; i < resultList.size(); i++) {
+	            System.out.println(resultList.get(i).getCategory());
+	     }
+		 
+		
 		return new SearchResultDto<>(search,numberFound,resultList,page,numberOfPages);
 
 	}

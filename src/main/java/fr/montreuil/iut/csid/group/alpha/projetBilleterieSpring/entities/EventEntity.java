@@ -42,6 +42,9 @@ public class EventEntity {
 
     @Column(name = "user_id")
 	private String userId;
+
+    @Column(name = "active")
+	private boolean active;
     
 	@javax.persistence.Transient
 	private CustomEventDescriptionEntity[] userCustomDescriptions;
@@ -135,6 +138,14 @@ public class EventEntity {
 
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public boolean getActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public CustomEventDescriptionEntity[] getUserCustomDescriptions() {

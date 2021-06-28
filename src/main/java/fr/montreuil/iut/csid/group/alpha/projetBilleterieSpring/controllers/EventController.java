@@ -1,7 +1,6 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.controllers;
 
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.EventDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.RatingDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.ParticipationDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
 import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.EventTransactionalService;
@@ -132,4 +131,10 @@ public class EventController {
     public List<ParticipationDto> participations(Principal principal){
         return participationService.getParticipation(principal.getName());
     }
+
+    @PatchMapping("/eventManagment")
+    public boolean eventManagment(@RequestBody EventDto eventDto){
+        return eventTransactionalService.eventManageActivation(eventDto);
+    }
+
 }

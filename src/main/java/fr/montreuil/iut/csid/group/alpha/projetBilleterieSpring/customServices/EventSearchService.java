@@ -1,11 +1,11 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices;
 
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,10 +13,15 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
 /**
  *  SOLID: This class do only one thing: it performs simple search with criterias in database
  */
@@ -43,12 +48,10 @@ public class EventSearchService {
 		root.alias("events");
 		
 		h.OrderBy(orderBy);
-
 		if(!owner.equals("-1")) {
 			UserEntity user = userRepository.getByUserName(owner).get();
 			h.optionalOwnedBy("userId", user.getEmail());
 		}
-		//h.optionalOwnedBy("userId", owner);
 		
 		h.optionalLike("title", search);
 		h.optionalAddEqual("category",category);
@@ -70,7 +73,7 @@ public class EventSearchService {
 
 		int numberFound = finalQuery.getResultList().size();
 		
-		if(allEvent != true) {
+		if(allEvent == false) {
 			finalQuery.setFirstResult((page-1) * eventsPerPage); 
 			finalQuery.setMaxResults(eventsPerPage);
 		}
@@ -82,6 +85,12 @@ public class EventSearchService {
 			page=0;
 			numberOfPages=0;
 		}
+		
+		 for (int i = 0; i < resultList.size(); i++) {
+	            System.out.println(resultList.get(i).getCategory());
+	     }
+		 
+		
 		return new SearchResultDto<>(search,numberFound,resultList,page,numberOfPages);
 
 	}

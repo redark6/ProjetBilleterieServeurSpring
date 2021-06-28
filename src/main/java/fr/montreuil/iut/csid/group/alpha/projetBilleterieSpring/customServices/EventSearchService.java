@@ -1,11 +1,11 @@
 package fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.customServices;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
+import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,15 +13,10 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.dto.SearchResultDto;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.EventEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.entities.UserEntity;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.repositories.UserRepository;
-import fr.montreuil.iut.csid.group.alpha.projetBilleterieSpring.services.UserService;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  *  SOLID: This class do only one thing: it performs simple search with criterias in database
  */
@@ -87,7 +82,7 @@ public class EventSearchService {
 		}
 		
 		 for (int i = 0; i < resultList.size(); i++) {
-	            System.out.println(resultList.get(i).getCategory());
+	            // System.out.println(resultList.get(i).getCategory());
 	     }
 		 
 		

@@ -41,7 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.cors().configurationSource(corsConfigurationSource());
 
-        http.authorizeRequests().antMatchers("/login", "/user/logeduser", "/user/create","/user/sessionvalid", "/user/authority" ,"/event/{id}","/event/search","/comment/{id}","/event/type/{type}","/event/Recent","/rate/{id}","/commondata/regions","/event/isOwner/{eventId}","/event/isOwner/{eventId}/{email}","/event/patch/{eventId}","/event/participate/{eventId}","/user/organiser/{username}","/user/organiserPhoto","/user/organiserlist", "/event/participations", "/event/participate/{eventId}").permitAll()
+        http.authorizeRequests().antMatchers("/login", "/user/logeduser", "/user/create","/user/sessionvalid", "/user/authority" ,"/event/{id}","/event/search", "/event/**","/comment/{id}","/event/type/{type}","/event/Recent","/rate/{id}","/commondata/regions","/event/isOwner/{eventId}","/event/isOwner/{eventId}/{email}","/event/patch/{eventId}","/event/participate/{eventId}","/user/organiser/{username}","/user/organiserPhoto","/user/organiserlist", "/event/participations", "/event/participate/{eventId}").permitAll()
 
                 .anyRequest()
                 .authenticated()

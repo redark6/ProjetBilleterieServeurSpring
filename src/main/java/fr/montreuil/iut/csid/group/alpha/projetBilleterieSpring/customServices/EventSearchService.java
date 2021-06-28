@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -30,8 +31,8 @@ public class EventSearchService {
 	@PersistenceContext
 	private EntityManager entityManager;
 	private final UserRepository userRepository;
-	
-	 @Autowired
+
+	@Autowired
 	public EventSearchService(UserRepository userRepository){
 		this.userRepository = userRepository;
 	}
@@ -47,7 +48,6 @@ public class EventSearchService {
 		root.alias("events");
 		
 		h.OrderBy(orderBy);
-		
 		if(!owner.equals("-1")) {
 			UserEntity user = userRepository.getByUserName(owner).get();
 			h.optionalOwnedBy("userId", user.getEmail());
